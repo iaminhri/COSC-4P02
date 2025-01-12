@@ -6,8 +6,8 @@
 
 ## Group Project:  
 **Software Engineering Process:** SCRUM Methodology  
-**Title:** AI-Powered Newsletter and Social Media Content Generator  
-**Project Name:** Trend Tailor  
+**Title: AI-Powered Newsletter and Social Media Content Generator  
+**Project Name: Trend Tailor  
 
 ---
 
