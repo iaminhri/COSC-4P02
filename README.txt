@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Content Platform</title>
+</head>
+<body>
 <h1>COSC 4P02: Software Engineering II</h1><br>
 <h1>Professor: Naser Ezzati-Jivan</h1><br>
 
@@ -71,3 +79,5 @@
         environment to interact and receive personalized generated content in the proper format. 
         We will also be able to share the news with other media platforms.
     </p>
+</body>
+</html>
