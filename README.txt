@@ -46,5 +46,3 @@ This ensures both relevance and platform compatibility. Additionally, users will
 - Share generated content with other media platforms.
 
 ---
-
-Feel free to use this as the foundation for your GitHub project README. Let me know if you'd like to add additional sections like installation instructions, features, or usage examples!
