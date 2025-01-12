@@ -1,11 +1,11 @@
 # COSC 4P02: Software Engineering II
 
-**Professor:** Naser Ezzati-Jivan  
+**Professor: Naser Ezzati-Jivan  
 
 ---
 
 ## Group Project:  
-**Software Engineering Process:** SCRUM Methodology  
+**Software Engineering Process: SCRUM Methodology  
 **Title: AI-Powered Newsletter and Social Media Content Generator  
 **Project Name: Trend Tailor  
 
