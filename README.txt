@@ -46,3 +46,5 @@ This ensures both relevance and platform compatibility. Additionally, users will
 - Share generated content with other media platforms.
 
 ---
+
+### Contribution of team members is located inside the /contributions/Contributions Sheet.pdf
