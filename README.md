@@ -126,7 +126,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * [![Python][Python-icon]][Python-url]
 * [![HTML5][HTML-icon]][HTML-url]
 * [![CSS3][CSS-icon]][CSS-url]
-* [![Bootstrap][Bootstrap-icon]][Bootstrap-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -288,8 +288,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [CSS-icon]: https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg
 [CSS-url]: https://developer.mozilla.org/en-US/docs/Web/CSS
 
-[Bootstrap-icon]: https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg
-[Bootstrap-url]: https://getbootstrap.com/
-
 [Django-icon]: https://upload.wikimedia.org/wikipedia/commons/7/75/Django_logo.svg
 [Django-url]: https://www.djangoproject.com/
+[Bootstrap-url]: https://getbootstrap.com
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
