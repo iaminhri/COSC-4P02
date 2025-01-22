@@ -37,7 +37,7 @@
   <h3 align="center">AI-powered Newsletter and Social Media Content Generator</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Read Project Report
     <br />
     <a href="reports/"><strong>Explore the docs »</strong></a>
     <br />
