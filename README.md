@@ -122,10 +122,10 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Django][Django-icon]][Django-url]
-* [![Python][Python-icon]][Python-url]
-* [![HTML5][HTML-icon]][HTML-url]
-* [![CSS3][CSS-icon]][CSS-url]
+* [![Django][Django.com]][Django-url]
+* [![Python][Python.com]][Python-url]
+* [![HTML][HTML.com]][HTML-url]
+* [![CSS][CSS.com]][CSS-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 
 
@@ -279,16 +279,18 @@ Use this space to list resources you find helpful and would like to give credit 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
-[Python-icon]: https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg
+[Django.com]: https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green
+[Django-url]: https://www.djangoproject.com/
+
+[Python.com]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://www.python.org/
 
-[HTML-icon]: https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg
+[HTML.com]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 [HTML-url]: https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5
 
-[CSS-icon]: https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg
+[CSS.com]: https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white
 [CSS-url]: https://developer.mozilla.org/en-US/docs/Web/CSS
 
-[Django-icon]: https://upload.wikimedia.org/wikipedia/commons/7/75/Django_logo.svg
-[Django-url]: https://www.djangoproject.com/
-[Bootstrap-url]: https://getbootstrap.com
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com
+
