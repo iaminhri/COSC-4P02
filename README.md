@@ -156,7 +156,7 @@ First Install Virtual Environment, makes life easier.
   ```sh
   git clone https://github.com/iaminhri/COSC-4P02.git
   ```
-4. Change git remote url to avoid accidental pushes to base project. For more git operation refer to this [Documentation](resources/GitHub Commands.pdf)
+4. Change git remote url to avoid accidental pushes to base project. For more git operation refer to this [Documentation]([resources/GitHub Commands.pdf](https://github.com/iaminhri/COSC-4P02/blob/master/resources/GitHub%20Commands.pdf))
   ```sh
    git remote set-url origin github_username/repo_name
    git remote -v # confirm the changes
@@ -205,7 +205,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
     - [ ] Chinese
     - [ ] Spanish
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/iaminhri/COSC-4P02/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
