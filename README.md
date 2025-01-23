@@ -163,20 +163,25 @@ First Install Virtual Environment, makes life easier.
   ```
   
 5. Some Django Application Useful Commands
+* Shows all subcommands available
   ```sh
-   django-admin -> shows all subcommands available
+   django-admin -> 
   ```
+* Starts a new project
   ```sh
-   django-admin startproject file_name -> starts a new project
+   django-admin startproject file_name
   ```
+* To run the project
   ```sh
-   python manage.py runserver -> to run the project
+   python manage.py runserver 
   ```
+* Change the port to access the localhost website
   ```sh
-   python manage.py runserver 1313 -> change the port to access the localhost website
+   python manage.py runserver 1313
   ```
+* Creates an App functionality
   ```sh
-   python manage.py startapp app_name -> creates an App functionality
+   python manage.py startapp app_name 
   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
