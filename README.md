@@ -141,34 +141,43 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+First Install Virtual Environment, makes life easier. 
+1. Python Virtual Environment for MAC or Linux, For windows use VSCode virtual environment
   ```sh
-  npm install npm@latest -g
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install --upgrade pip
   ```
-
-### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
+2. Install The requirements file
+  ```sh
+  pip install requirements.txt
+  ```
+3. Use Git Clone to create a local repo
+  ```sh
+  git clone https://github.com/iaminhri/COSC-4P02.git
+  ```
+4. Change git remote url to avoid accidental pushes to base project
+  ```sh
    git remote set-url origin github_username/repo_name
    git remote -v # confirm the changes
-   ```
+  ```
+  
+5. Some Django Application Useful Commands
+  ```sh
+  * django-admin -> shows all subcommands available
+  ```
+  ```sh
+  * django-admin startproject file_name -> starts a new project
+  ```
+  ```sh
+  * python manage.py runserver -> to run the project
+  ```
+  ```sh
+  * python manage.py runserver 1313 -> change the port to access the localhost website
+  ```
+  ```sh
+  * python manage.py startapp app_name -> creates an App functionality
+  ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
