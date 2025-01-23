@@ -165,7 +165,7 @@ First Install Virtual Environment, makes life easier.
 5. Some Django Application Useful Commands
 * Shows all subcommands available
   ```sh
-   django-admin -> 
+   django-admin
   ```
 * Starts a new project
   ```sh
