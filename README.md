@@ -9,6 +9,8 @@
 -->
 
 ![GitHub followers](https://img.shields.io/github/followers/iaminhri?style=for-the-badge&logo=github)
+![GitHub issue/pull request detail](https://img.shields.io/github/issues/detail/state/iaminhri/COSC-4P02/13?style=for-the-badge&logo=github&color=red)
+
 
 <!-- PROJECT SHIELDS -->
 <!--
