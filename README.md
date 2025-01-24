@@ -8,7 +8,7 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-
+![GitHub followers](https://img.shields.io/github/followers/iaminhri?style=for-the-badge&logo=github)
 
 <!-- PROJECT SHIELDS -->
 <!--
