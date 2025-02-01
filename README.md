@@ -157,7 +157,7 @@ First Install Virtual Environment, makes life easier.
   ```
 4. Install The requirements file
   ```sh
-  pip install requirements.txt
+  pip install -r requirements.txt
   ```
 
   
