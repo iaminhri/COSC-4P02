@@ -1,2 +1,9 @@
 COSC 4P02 2025 Gradebook.pdf
 .DS_Store
+trendtailor/trendApp/bin/*
+trendtailor/trendApp/include/*
+trendtailor/trendApp/lib/*
+trendtailor/trendApp/trendApp/__pycache__/*
+trendtailor/trendApp/pyvenv.cfg
+trendtailor/trendApp/UserPreferenceApp/__pycache__/*
+trendtailor/trendApp/UserPreferenceApp/migrations/*

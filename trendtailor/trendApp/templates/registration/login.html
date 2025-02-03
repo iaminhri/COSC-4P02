@@ -1,0 +1,28 @@
+<!-- templates/registration/login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="id_username">Username:</label>
+        <input type="text" name="username" id="id_username"/><br/>
+
+        <label for="id_password">Password:</label>
+        <input type="password" name="password" id="id_password"/><br/>
+
+        <button type="submit">Log in</button>
+    </form>
+
+    {% if form.errors %}
+        <p style="color:red;">{{ form.errors }}</p>
+    {% endif %}
+
+    <!-- Optional 'next' parameter handling -->
+    <input type="hidden" name="next" value="{{ next }}">
+
+</body>
+</html>

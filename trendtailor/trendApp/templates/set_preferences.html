@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences</title>
+</head>
+<body>
+    <h1>Set Your Preferences</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="sources">Preferred News Sources:</label><br>
+        <input type="text" id="sources" name="sources" placeholder="e.g., BBC, CNN"><br><br>
+
+        <label for="topics">Preferred Topics:</label><br>
+        <input type="text" id="topics" name="topics" placeholder="e.g., Technology, Politics"><br><br>
+
+        <label for="keywords">Preferred Keywords:</label><br>
+        <input type="text" id="keywords" name="keywords" placeholder="e.g., AI, Blockchain"><br><br>
+
+        <button type="submit">Save Preferences</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!-- templates/news_results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News Results</title>
+</head>
+<body>
+    <h1>Relevant News Articles</h1>
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+                    <p>{{ article.summary }}...</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No articles found matching your preferences.</p>
+    {% endif %}
+</body>
+</html>
