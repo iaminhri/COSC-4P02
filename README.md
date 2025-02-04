@@ -8,6 +8,10 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
+![GitHub followers](https://img.shields.io/github/followers/iaminhri?style=for-the-badge&logo=github)
+![GitHub issue/pull request detail](https://img.shields.io/github/issues/detail/state/iaminhri/COSC-4P02/13?style=for-the-badge&logo=github&color=red)
+![GitHub commit merge status](https://img.shields.io/github/commit-status/iaminhri/COSC-4P02/master/16992ed940d07678f1a3d2bbb85d2843eba7c668?style=for-the-badge&logo=github)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/iaminhri/COSC-4P02?style=for-the-badge&logo=github)
 
 
 <!-- PROJECT SHIELDS -->
@@ -18,20 +22,13 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="reports/">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="logo.png" alt="Logo" width="200" height="140">
   </a>
 
   <h3 align="center">AI-powered Newsletter and Social Media Content Generator</h3>
@@ -141,34 +138,50 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+1. Use Git Clone to create a local repo
   ```sh
-  npm install npm@latest -g
+  git clone https://github.com/iaminhri/COSC-4P02.git
   ```
-
-### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
+2. Change git remote url to avoid accidental pushes to base project. For more git operation refer to this [Documentation]([resources/GitHub Commands.pdf](https://github.com/iaminhri/COSC-4P02/blob/master/resources/GitHub%20Commands.pdf))
+  ```sh
    git remote set-url origin github_username/repo_name
    git remote -v # confirm the changes
-   ```
+  ```
+
+First Install Virtual Environment, makes life easier. 
+3. Python Virtual Environment for MAC or Linux, For windows use VSCode virtual environment
+  ```sh
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install --upgrade pip
+  ```
+4. Install The requirements file
+  ```sh
+  pip install -r requirements.txt
+  ```
+
+  
+5. Some Django Application Useful Commands
+* Shows all subcommands available
+  ```sh
+   django-admin
+  ```
+* Starts a new project
+  ```sh
+   django-admin startproject file_name
+  ```
+* To run the project
+  ```sh
+   python manage.py runserver 
+  ```
+* Change the port to access the localhost website
+  ```sh
+   python manage.py runserver 1313
+  ```
+* Creates an App functionality
+  ```sh
+   python manage.py startapp app_name 
+  ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -179,7 +192,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [Documentation](https://github.com/iaminhri/COSC-4P02/tree/master/reports)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -196,7 +209,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
     - [ ] Chinese
     - [ ] Spanish
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/iaminhri/COSC-4P02/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -266,19 +279,7 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+
 [Django.com]: https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green
 [Django-url]: https://www.djangoproject.com/
 
