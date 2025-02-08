@@ -1,24 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-#from .models import UserPreference
+from .models import Preferences
 
-def home(request):
-    return render(request, 'home.html')
+def index(request):
+    return HttpResponse("Welcome to the AI-Powered News Platform!")
 
-def dashboard(request):
-    return render(request, 'dashboard.html')
+# Scrum 2 task 1&2: Create input fields for sources, topics, and keywords & Implement a database to store user preferences.
+def preferences(request):
+    if request.method == "POST":
+        # Get data
+        sources = request.POST.get('sources')
+        topics = request.POST.get('topics')
+        keywords = request.POST.get('keywords')
+
+        # Save data to database
+        Preferences.objects.create(sources=sources, topics=topics, keywords=keywords)
+
+        return HttpResponse("Preferences saved successfully!")
+
+    return render(request, 'preferences.html')
 
 
-# myapp/views.py
-from django.shortcuts import render
-from .utils import fetch_articles_from_api
-
-
-def aggregate_content(request):
-    topics = ["AI", "Quantum Computing"]
-    keywords = ["Technology"]
-
-    articles = fetch_articles_from_api(topics, keywords)
-
-    return render(request, 'news_results.html', {"articles": articles})
