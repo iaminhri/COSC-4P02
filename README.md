@@ -138,28 +138,26 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-1. Use Git Clone to create a local repo
-  ```sh
-  git clone https://github.com/iaminhri/COSC-4P02.git
-  ```
-2. Change git remote url to avoid accidental pushes to base project. For more git operation refer to this [Documentation]([resources/GitHub Commands.pdf](https://github.com/iaminhri/COSC-4P02/blob/master/resources/GitHub%20Commands.pdf))
-  ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
-  ```
-
 First Install Virtual Environment, makes life easier. 
-3. Python Virtual Environment for MAC or Linux, For windows use VSCode virtual environment
+1. Python Virtual Environment for MAC or Linux, For windows use VSCode virtual environment
   ```sh
   python3 -m venv venv
   source venv/bin/activate
   pip install --upgrade pip
   ```
-4. Install The requirements file
+2. Install The requirements file
   ```sh
-  pip install -r requirements.txt
+  pip install requirements.txt
   ```
-
+3. Use Git Clone to create a local repo
+  ```sh
+  git clone https://github.com/iaminhri/COSC-4P02.git
+  ```
+4. Change git remote url to avoid accidental pushes to base project. For more git operation refer to this [Documentation]([resources/GitHub Commands.pdf](https://github.com/iaminhri/COSC-4P02/blob/master/resources/GitHub%20Commands.pdf))
+  ```sh
+   git remote set-url origin github_username/repo_name
+   git remote -v # confirm the changes
+  ```
   
 5. Some Django Application Useful Commands
 * Shows all subcommands available
