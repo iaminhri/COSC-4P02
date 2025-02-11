@@ -24,7 +24,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('news-api/', views.aggregate_content, name='news_api_view'),
     path('', include('UserPreferenceApp.urls')),
-
+    path('accounts/', include('accountsApp.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 
 ]
