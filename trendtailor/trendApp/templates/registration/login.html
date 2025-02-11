@@ -1,28 +1,23 @@
-<!-- templates/registration/login.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <label for="id_username">Username:</label>
-        <input type="text" name="username" id="id_username"/><br/>
+    <h2>Login</h2>
 
-        <label for="id_password">Password:</label>
-        <input type="password" name="password" id="id_password"/><br/>
+    <form action="/accounts/login/" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-        <button type="submit">Log in</button>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Login</button>
     </form>
 
-    {% if form.errors %}
-        <p style="color:red;">{{ form.errors }}</p>
-    {% endif %}
-
-    <!-- Optional 'next' parameter handling -->
-    <input type="hidden" name="next" value="{{ next }}">
-
+    <p>Don't have an account? <a href="register.html">Register here</a></p>
 </body>
 </html>
