@@ -21,4 +21,12 @@ def preferences(request):
 
     return render(request, 'preferences.html')
 
+# Scrum 3 task1: Generate email template
+def email_template_1(request):
+    return render(request, 'email_template_1.html')
+def email_template_2(request):
+    return render(request, 'email_template_2.html')
+def email_template_3(request):
+    return render(request, 'email_template_3.html')
+
 
