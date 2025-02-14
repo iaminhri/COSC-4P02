@@ -7,14 +7,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import UserPreference
 from .forms import UserPreferenceForm
+from .utils import fetch_articles_from_api
 
 
 
 def preferences_success(request):
     return render(request, 'preferences_success.html')
 
-@login_required
-def fetch_news_view(request):
+"""def fetch_news_view(request):
     try:
         user_pref = UserPreference.objects.get(user=request.user)
     except UserPreference.DoesNotExist:
@@ -55,8 +55,7 @@ def fetch_news_view(request):
                 })
 
     return render(request, 'news_results.html', {'articles' : relevant_articles})
-
-
+"""
 
 @login_required
 def set_preferences_view(request):
@@ -86,3 +85,11 @@ def preferences(request):
         return HttpResponse("Preferences saved successfully!")
 
     return render(request, 'set_preferences.html')
+
+def aggregate_content(request):
+    topics = ["AI", "Quantum Computing"]
+    keywords = ["Technology"]
+
+    articles = fetch_articles_from_api(topics, keywords)
+
+    return render(request, 'news_results.html', {"articles": articles})
