@@ -17,3 +17,4 @@ def fetch_articles_from_api(topics, keywords):
         except Exception as e:
             all_articles.append(f"Error fetching topic {topic}: {e}")
     return all_articles
+

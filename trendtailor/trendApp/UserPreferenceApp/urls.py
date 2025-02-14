@@ -4,5 +4,4 @@ from . import views
 
 urlpatterns = [
     path('preferences/', views.preferences, name='set_preferences'),
-
 ]

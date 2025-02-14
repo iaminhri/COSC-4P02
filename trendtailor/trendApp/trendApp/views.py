@@ -12,13 +12,3 @@ def dashboard(request):
 
 # myapp/views.py
 from django.shortcuts import render
-from .utils import fetch_articles_from_api
-
-
-def aggregate_content(request):
-    topics = ["AI", "Quantum Computing"]
-    keywords = ["Technology"]
-
-    articles = fetch_articles_from_api(topics, keywords)
-
-    return render(request, 'news_results.html', {"articles": articles})

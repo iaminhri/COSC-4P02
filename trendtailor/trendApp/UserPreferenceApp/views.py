@@ -1,13 +1,12 @@
 # myapp/views.py
 from pydoc_data.topics import topics
 
-import newspaper
+# import newspaper
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import UserPreference
 from .forms import UserPreferenceForm
-
 
 
 def preferences_success(request):
@@ -57,7 +56,6 @@ def fetch_news_view(request):
     return render(request, 'news_results.html', {'articles' : relevant_articles})
 
 
-
 @login_required
 def set_preferences_view(request):
     # Try to get existing preferences or create a blank record
@@ -74,7 +72,6 @@ def set_preferences_view(request):
     return render(request, 'set_preferences.html', {'form': form})
 
 
-
 def preferences(request):
     if request.method == "POST":
         sources = request.POST.get('sources')
@@ -86,3 +83,13 @@ def preferences(request):
         return HttpResponse("Preferences saved successfully!")
 
     return render(request, 'set_preferences.html')
+
+
+def aggregate_content(request):
+    topics = ["AI", "Quantum Computing"]
+    keywords = ["Technology"]
+
+    articles = fetch_articles_from_api(topics, keywords)
+
+    return render(request, 'news_results.html', {"articles": articles})
+
