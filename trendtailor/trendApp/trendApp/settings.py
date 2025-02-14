@@ -9,12 +9,13 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from email.policy import default
 from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -26,6 +27,11 @@ SECRET_KEY = 'django-insecure-lmd9^sl@ic)k0(a1d=tu^iok$jon5)cs956@2&4owi#pk9xbj+
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+NEWS_API_KEY=config('NEWS_API_KEY',default=None)
+GNEWS_API_KEY = config('GNEWS_API_KEY',default=None)
+CURRENT_API_KEY=config('CURRENT_API_KEY',default=None)
+
 
 
 # Application definition

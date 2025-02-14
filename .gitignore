@@ -10,3 +10,4 @@ trendtailor/trendApp/UserPreferenceApp/migrations/*
 trendtailor/trendApp/trendApp/__pycache__/*
 trendtailor/trendApp/accountsApp/__pycache__/*
 trendtailor/trendApp/trendApp/__pycache__/*
+/trendtailor/trendApp/.env
