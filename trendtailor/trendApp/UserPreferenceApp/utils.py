@@ -3,8 +3,6 @@ from django.conf import settings
 
 def fetch_articles_from_api(topics, keywords):
     """Fetch articles using an external News API, filtered by topics/keywords."""
-
-    #news api
     # Hard-coded API key
     api_key = getattr(settings,'NEWS_API_KEY',None)
 
@@ -48,7 +46,6 @@ def fetch_articles_from_api(topics, keywords):
     #current news
     currents_api_key = getattr(settings, 'CURRENT_API_KEY',None)
     currents_url = "https://api.currentsapi.services/v1/search"
-
 
     #all_articles = []
     for term in topics + keywords:

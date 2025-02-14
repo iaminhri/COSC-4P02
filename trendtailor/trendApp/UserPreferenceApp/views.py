@@ -10,7 +10,6 @@ from .forms import UserPreferenceForm
 from .utils import fetch_articles_from_api
 
 
-
 def preferences_success(request):
     return render(request, 'preferences_success.html')
 
@@ -28,7 +27,6 @@ def preferences_success(request):
 
     filter_terms = [term.lower() for term in (topics + keywords)]
     relevant_articles = []
-
 
     for source in sources:
         try:
@@ -55,6 +53,7 @@ def preferences_success(request):
                 })
 
     return render(request, 'news_results.html', {'articles' : relevant_articles})
+
 """
 
 @login_required
@@ -84,6 +83,7 @@ def preferences(request):
         return HttpResponse("Preferences saved successfully!")
 
     return render(request, 'set_preferences.html')
+
 
 def aggregate_content(request):
     topics = ["AI", "Quantum Computing"]
