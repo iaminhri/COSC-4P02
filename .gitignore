@@ -7,3 +7,4 @@ trendtailor/trendApp/trendApp/__pycache__/*
 trendtailor/trendApp/pyvenv.cfg
 trendtailor/trendApp/UserPreferenceApp/__pycache__/*
 trendtailor/trendApp/UserPreferenceApp/migrations/*
+trendtailor/trendApp/.env
