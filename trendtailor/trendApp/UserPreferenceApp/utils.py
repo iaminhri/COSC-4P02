@@ -64,4 +64,24 @@ def fetch_articles_from_api(topics, keywords):
         except Exception as e:
             all_articles.append(f"Error fetching '{term}' from Currents API: {e}")
 
+    #News data news
+    newsdata_api_key = getattr(settings,'NEWS_DATA_API',None)
+    newsdata_url = "https://newsdata.io/api/1/latest"
+
+    for term in topics +keywords:
+        params = {
+            "apikey": newsdata_api_key,
+            "q": term,
+            "language": "en"  # adjust as needed
+        }
+        try:
+            response = requests.get(newsdata_url, params=params, timeout=5)
+            data = response.json()
+            # NewsData.io returns articles under the "results" key
+            articles = data.get("results", [])
+            for art in articles:
+                all_articles.append(art.get("title", "No Title"))
+        except Exception as e:
+            all_articles.append(f"Error fetching '{term}' from NewsData.io API: {e}")
+
     return all_articles

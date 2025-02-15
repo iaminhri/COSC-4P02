@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 NEWS_API_KEY=config('NEWS_API_KEY',default=None)
 GNEWS_API_KEY = config('GNEWS_API_KEY',default=None)
 CURRENT_API_KEY=config('CURRENT_API_KEY',default=None)
+NEWS_DATA_API=config("NEWS_DATA_API",default=None)
 
 
 
