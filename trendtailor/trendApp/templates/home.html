@@ -1,11 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1> Home Page </h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %} 
+    {% block body %}   
+        <header class="bg-secondary text-white text-center py-5">
+            <h1>AI Newsletter and Social Media Content Generator</h1>
+            <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
+            <form class="d-flex justify-content-center">
+                <input type="email" class="form-control w-25" placeholder="Enter your email" required>
+                <button class="btn btn-light ms-2">Subscribe</button>
+            </form>
+        </header>
+
+        <!-- Featured Content -->
+        <section class="container my-5">
+            <h2 class="text-center">Featured Articles</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Article 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Latest Instagram Algorithm Update</h5>
+                            <p class="card-text">Find out how to optimize your content for Instagram's latest algorithm changes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Article 2">
+                        <div class="card-body">
+                            <h5 class="card-title">5 Growth Hacks for Twitter</h5>
+                            <p class="card-text">Boost your engagement and followers with these expert tips.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Article 3">
+                        <div class="card-body">
+                            <h5 class="card-title">TikTok Marketing Trends 2025</h5>
+                            <p class="card-text">Stay ahead with the latest trends shaping TikTok marketing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="bg-light py-5">
+            <div class="container text-center">
+                <h2>What Our Subscribers Say</h2>
+                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
+                <figcaption class="blockquote-footer">Alex Johnson, Social Media Marketer</figcaption>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3">
+            <p>Follow us on:
+                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
+                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
+            </p>
+            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
+        </footer>
+
+    {% endblock body %}
