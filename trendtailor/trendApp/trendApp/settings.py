@@ -28,9 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-NEWS_API_KEY = config('NEWS_API_KEY',default=None)
+NEWS_API_KEY=config('NEWS_API_KEY',default=None)
 GNEWS_API_KEY = config('GNEWS_API_KEY',default=None)
-CURRENT_API_KEY = config('CURRENT_API_KEY',default=None)
+CURRENT_API_KEY=config('CURRENT_API_KEY',default=None)
+NEWS_DATA_API=config("NEWS_DATA_API",default=None)
+
+
 
 # Application definition
 
@@ -43,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trendApp',
     'UserPreferenceApp',
-    'accountsApp',
+    'accountsApp'
 ]
 
 MIDDLEWARE = [
@@ -122,10 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-import os
 STATIC_URL = 'static/'
-STATICFILES_DIRS=(os.path.join('static'),)
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
