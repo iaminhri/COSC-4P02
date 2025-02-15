@@ -1,29 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
+{% extends "base.html" %}
+{% load static %}
 
-    <form action="/accounts/register/" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+{% block body %}
+<body class="bg-secondary">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg p-4 mb-5 bg-white rounded" style="background: url({% static 'images/form-bg.jpg' %}); background-size: cover; border: none;">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4 text-black">Create Your Account</h2>
+                        <form action="{% url 'register' %}" method="POST" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            <div class="bg-white p-3 rounded">
+                                {% for field in form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {{ field }}
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <label for="password2">Confirm Password:</label>
-        <input type="password" id="password2" name="password2" required>
-
-        <button type="submit">Register</button>
-    </form>
-
-    <p>Already have an account? <a href="login.html">Login here</a></p>
+                                        {% if field.help_text %}
+                                            <div class="form-text">{{ field.help_text }}</div>
+                                        {% endif %}
+                                        
+                                        {% for error in field.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                                <button class="btn btn-secondary w-100" type="submit">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center text-black mt-3">
+                        <p>Already have an account? <a href="{% url 'login' %}" class="text-primary">Sign in</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-</html>
+{% endblock %}

@@ -1,42 +1,57 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import RegisterForm, LoginForm
 
 # ✅ Registration View
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Registration successful. You can now log in.")
-            return redirect('login')
-        else:
-            messages.error(request, "Please correct the errors below.")
+def register(request):  
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     else:
-        form = RegisterForm()
+        if request.method == "POST":
+            form = RegisterForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Registration successful. You can now log in.")
+                return redirect('login')
+            else:
+                messages.error(request, "Please correct the errors below.")
+        else:
+            form = RegisterForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
+        return render(request, 'registration/register.html', {'form': form})
 
 # ✅ Login View
 def user_login(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-
-            user = authenticate(username=email, password=password)
-
-            if user:
-                login(request, user)
-                return redirect('dashboard')
-            else:
-                messages.error(request, "Invalid email or password.")
-        else:
-            messages.error(request, "Please correct the errors below.")
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     else:
-        form = LoginForm()
+        if request.method == "POST":
+            form = LoginForm(request = request, data = request.POST)
 
-    return render(request, 'accounts/login.html', {'form': form})
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+
+                user = authenticate(username=username, password=password)
+
+                if user is not None:
+                    login(request, user)
+                    return redirect('dashboard')
+        else:
+            form = LoginForm()
+
+        return render(request, 'registration/login.html', {'form': form})
+
+def dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    else:
+        return render(request, 'dashboard.html')
+
+def user_profile(request):
+    return render(request, 'registration/profile.html')
+
+def auth_logout(request):
+    logout(request)
+    return redirect('login')
