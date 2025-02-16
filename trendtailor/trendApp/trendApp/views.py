@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse 
 from UserPreferenceApp.utils import fetch_articles_from_api_3 as fetchArticles
-from UserPreferenceApp.scripts import fetchContentsFromPrimary
 from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
