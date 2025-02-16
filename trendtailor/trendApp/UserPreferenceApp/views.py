@@ -124,7 +124,7 @@ def user_contents(request):
     topics = preferences.topics
     keywords = preferences.keywords
 
-    contents = check_articles(request.user, topics, keywords)
+    contents = check_articles(topics, keywords)
 
     paginator = Paginator(contents, 8)
     pageNumber = request.GET.get('p', 1)
@@ -132,7 +132,7 @@ def user_contents(request):
     
     return render(request, 'users/user_contents.html', {'articles': articlePageObj})
 
-def check_articles(user, topics, keywords):
+def check_articles(topics, keywords):
     topics_list = [topic.strip() for topic in topics.split(',') if topic.strip()]
     keywords_list = [keyword.strip() for keyword in keywords.split(',') if keyword.strip()]
     
@@ -140,7 +140,7 @@ def check_articles(user, topics, keywords):
     for term in topics_list + keywords_list:
         query |= Q(title__icontains=term) | Q(description__icontains=term)
     
-    existingArticles = Article.objects.filter(query, user=user)
+    existingArticles = Article.objects.filter(query)
 
     print("Length: ", len(existingArticles))
 
