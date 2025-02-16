@@ -1,19 +1,10 @@
 {% extends "base.html" %}
 {% load static %} 
     {% block body %}   
-        <header class="bg-secondary bg-gradient text-white text-center py-5">
-            <h1>AI Newsletter and Social Media Content Generator</h1>
-            <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
-            <form class="d-flex justify-content-center">
-                <input type="email" class="form-control w-25" placeholder="Enter your email" required>
-                <button class="btn btn-light ms-2">Subscribe</button>
-            </form>
-        </header>
-
         <!-- Featured Content -->
         <section class="container-fluid my-4 px-5">
             <div class="row ">
-                <h2 class="text-center mb-4">Featured Articles</h2>
+                <h2 class="text-center mb-4"> Preferred Articles </h2>
             </div>
             <div class="row">
                 {% for article in articles %}
@@ -68,23 +59,5 @@
                 {% endif %}
             </ul>
         </nav>
-
-        <!-- Testimonials -->
-        <section class="bg-secondary bg-gradient py-5">
-            <div class="container text-center text-white">
-                <h2>What Our Subscribers Say</h2>
-                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
-                <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-dark text-white text-center py-3">
-            <p>Follow us on:
-                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
-                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
-            </p>
-            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
-        </footer>
 
     {% endblock body %}

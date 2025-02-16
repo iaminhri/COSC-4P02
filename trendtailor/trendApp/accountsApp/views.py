@@ -12,14 +12,14 @@ def register(request):
             form = RegisterForm(request.POST)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Registration successful. You can now log in.")
+                # messages.success(request, "Registration successful. You can now log in.")
                 return redirect('login')
             else:
                 messages.error(request, "Please correct the errors below.")
         else:
             form = RegisterForm()
 
-        return render(request, 'registration/register.html', {'form': form})
+        return render(request, 'accounts/register.html', {'form': form})
 
 # ✅ Login View
 def user_login(request):
@@ -41,7 +41,7 @@ def user_login(request):
         else:
             form = LoginForm()
 
-        return render(request, 'registration/login.html', {'form': form})
+        return render(request, 'accounts/login.html', {'form': form})
 
 def dashboard(request):
     if not request.user.is_authenticated:
@@ -50,7 +50,10 @@ def dashboard(request):
         return render(request, 'dashboard.html')
 
 def user_profile(request):
-    return render(request, 'registration/profile.html')
+    if not request.user.is_authenticated:
+        return redirect('home')
+    else:
+        return render(request, 'accounts/profile.html')
 
 def auth_logout(request):
     logout(request)

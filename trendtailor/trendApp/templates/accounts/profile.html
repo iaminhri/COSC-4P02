@@ -1,0 +1,56 @@
+    {% extends "base.html" %}
+    {% load static %} 
+        {% block body %}   
+        <body class="bg-dark text-light">
+            <!-- Profile Content -->
+            <div class="container mt-5">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                        <img src="{% static 'images/TrendTailor.png' %}" alt="Profile Picture" class="img-thumbnail rounded-circle mb-4" style="width: 300px; height: 300px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card bg-secondary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Arif Zaman</h5>
+                                <p class="card-text">Role: Front End Developer</p>
+                                <p class="card-text">Email: arif.zaman@gmail.com</p>
+                                <p class="card-text">Phone: +1 (123) 456-7890</p>
+                                <p class="card-text">Address: 123 Main Street, Toronto, ON</p>
+                                <a href="#" class="btn btn-info mt-3">Edit Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Summary Section -->
+                <div class="card bg-secondary text-white mt-4">
+                    <div class="card-body">
+                        <h5 class="mb-3 text-warning">Profile Summary</h5>
+                        <p id="profile-summary">
+                            Experienced Front End Developer with a strong background in building interactive and dynamic user interfaces using modern web technologies. Passionate about creating user-friendly experiences and optimizing website performance.
+                        </p>
+                        <button class="btn btn-info" onclick="editSummary()">Update Profile Summary</button>
+                    </div>
+                </div>
+
+                <!-- Account Settings Section -->
+                <div class="card bg-secondary text-white mt-4">
+                    <div class="card-body">
+                        <h5 class="mb-3 text-warning">Account Settings</h5>
+                        <p>Manage your account settings, password, and privacy preferences.</p>
+                        <a href="#" class="btn btn-info">Account Settings</a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function editSummary() {
+                    const currentSummary = document.getElementById('profile-summary').innerText;
+                    const newSummary = prompt('Update your profile summary:', currentSummary);
+                    if (newSummary !== null && newSummary.trim() !== '') {
+                        document.getElementById('profile-summary').innerText = newSummary;
+                    }
+                }
+            </script>
+        </body>
+        {% endblock body %}
