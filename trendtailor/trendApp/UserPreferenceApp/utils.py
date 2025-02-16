@@ -144,13 +144,13 @@ def fetch_articles_from_api_4(topics, keywords):
 # def fetchArticlesFromApi(user, api_key, api_url, apiHead, maxQuery):
 #     all_articles = []
 
-    # existingArticles = Article.objects.filter(user=user, title__in=topics + keywords)
-    # if existingArticles.exists():
-    #     print(list(existingArticles))
-    #     return list(existingArticles)
+#     # existingArticles = Article.objects.filter(user=user, title__in=topics + keywords)
+#     # if existingArticles.exists():
+#     #     print(list(existingArticles))
+#     #     return list(existingArticles)
 
-    # gnews_api_key = getattr(settings, 'GNEWS_API_KEY', None)
-    # gnews_url = "https://gnews.io/api/v4/top-headlines"
+#     # gnews_api_key = getattr(settings, 'GNEWS_API_KEY', None)
+#     # gnews_url = "https://gnews.io/api/v4/top-headlines"
 
     # for idx in range(maxQuery):
     #     params = {
@@ -165,16 +165,17 @@ def fetch_articles_from_api_4(topics, keywords):
 
     #             articles = data.get(apiHead, [])
 
-    #             for article in articles:
-    #                 new_article, created = Article.objects.get_or_create(
-    #                     user=user,
-    #                     title=article['title'],
-    #                     defaults={
-    #                         'description': article['description'],
-    #                         'url': article.get('url'),
-    #                         'urlToImage': article.get('image'),
-    #                     }
-    #                 )
-    #                 all_articles.append(new_article)
-    #     except Exception as e:
-    #         all_articles.append(f"Error fetching '{term}' from Currents API: {e}")
+#     #             for article in articles:
+#     #                 new_article, created = Article.objects.get_or_create(
+#     #                     user=user,
+#     #                     title=article['title'],
+#     #                     defaults={
+#     #                         'description': article['description'],
+#     #                         'url': article.get('url'),
+#     #                         'urlToImage': article.get('image'),
+#     #                     }
+#     #                 )
+#     #                 all_articles.append(new_article)
+#     #     except Exception as e:
+#     #         all_articles.append(f"Error fetching '{term}' from Currents API: {e}")
+# 
