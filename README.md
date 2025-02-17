@@ -232,8 +232,9 @@ Don't forget to give the project a star! Thanks again!
 ### Top contributors:
 
 <a href="https://github.com/iaminhri/COSC-4P02/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=othneildrew/Best-README-Template" alt="contrib.rocks image" />
+  <img src="https://contrib.rocks/image?repo=iaminhri/COSC-4P02" />
 </a>
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
