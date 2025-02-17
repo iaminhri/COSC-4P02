@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template 3 - Bakery</title>
+    <style>
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 450px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            max-width: 500px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        p {
+            font-size: 15px;
+            font-weight: normal;
+            max-width: 550px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #FEF7EA;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+        .header {
+            background-color: #3C1E0F;
+            color: white;
+            padding: 20px;
+        }
+        .logo {
+            max-width: 150px;
+        }
+        .cta-button {
+            background-color: #3C1E0F;
+            color: #fff;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            display: inline-block;
+            text-decoration: none;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            background-color: #444;
+        }
+        .image-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding-top: 20px;
+            border-radius: 8px;
+        }
+        .footer {
+            background-color: #3C1E0F;
+            color: white;
+            padding: 5px;
+            font-size: 10px;
+        }
+        .offer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 30px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .offer-card {
+            width: 50%;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .offer-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="email-container">
+        <!-- Logo -->
+        <div class="header">
+            <img src="{% static 'pics_email_template/logo_white.png' %}" alt="Logo Here" class="logo">
+        </div>
+
+        <!-- Main Heading -->
+        <img src="{% static 'pics_email_template/T3_pic1.png' %}" alt="Main Image" class="image-container">
+        <h1>Welcome to <strong>[[Bakery Name]]</strong>!</h1>
+        <p>
+            We hope this email finds you well and craving something sweet! At <strong>[[Bakery Name]]</strong>, 
+            we’re all about baking up smiles, and we’ve got some exciting news to share with you.
+        </p>
+
+        <!-- Section 1 -->
+        <div class="offer-container">
+            <!-- (1) -->
+            <div class="offer-card">
+                <img src="{% static 'pics_email_template/T3_pic2.jpeg' %}" alt="Sourdough Loaf">
+                <h3>This Week’s Special:</h3>
+                <p>
+                    <strong>Buy One, Get One Free</strong> on our famous Sourdough Loaf – a customer favorite! Made fresh every morning.
+                </p>
+                <a href="#" class="cta-button">LEARN MORE</a> <!-- Here should let user add their own link url -->
+            </div>
+    
+            <!-- (2) -->
+            <div class="offer-card">
+                <img src="{% static 'pics_email_template/T3_pic3.jpeg' %}" alt="Bakery Selection">
+                <h3>Exclusive Offer for You:</h3>
+                <p>
+                    <strong>Enjoy 15% OFF</strong> your next purchase when you use code SWEET15 at checkout – valid both in-store and online.
+                </p>
+                <a href="#" class="cta-button">LEARN MORE</a> <!-- Here should let user add their own link url -->
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <h2>What's New</h2>
+        <img src="{% static 'pics_email_template/T3_pic4.jpeg' %}" alt="Fourth Image" class="image-container">
+        <p>Pumpkin Spice Muffins are back for fall!</p>
+        <p>Now offering gluten-free options for select items.</p>
+        <a href="#" class="cta-button">LEARN MORE</a> <!-- Here should let user add their own link url -->
+        <br>
+
+        <!-- Section 3 -->
+        <div class="divider"><divider>.......................................................</divider></div>
+        <p>We can’t wait to see you in-store soon!</p>
+        <p>Follow us on Instagram [@bakeryname] to stay updated on our latest creations and promotions.</p>
+        <br>
+        
+        <!-- footer -->
+        <div class="footer">
+            <footer>Copyright &copy; [Year] [Company Name]. All rights reserved.</footer>
+            <br>
+            <footer>Want to change how you receive these emails? <a href="#" style="color: white;">Unsubscribe</a></footer>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 
+
 def home(request):
     topics_and_keywords = {
         "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
@@ -63,3 +64,14 @@ def check_articles(user, topics, keywords):
         return articles_list
     else:
         return []
+
+from .models import Preferences
+
+# Scrum 3 task1: Generate email template
+def email_template_1(request):
+    return render(request, 'email_template_1.html')
+def email_template_2(request):
+    return render(request, 'email_template_2.html')
+def email_template_3(request):
+    return render(request, 'email_template_3.html')
+

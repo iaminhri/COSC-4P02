@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template 2 - Real Property</title>
+    <style>
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 450px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            max-width: 500px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        p {
+            font-size: 15px;
+            font-weight: normal;
+            max-width: 550px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            color: white;
+            padding: 20px;
+        }
+        .logo {
+            max-width: 150px;
+        }
+        .cta-button {
+            background-color: white;
+            color: #1C4066;
+            border-color: #1C4066;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            display: inline-block;
+            text-decoration: none;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            background-color: #abccee;
+        }
+        .image-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding-top: 20px;
+            border-radius: 8px;
+        }
+        .footer {
+            background-color: #1C4066;
+            color: white;
+            padding: 5px;
+            font-size: 10px;
+        }
+        .divider {
+            color: #1C4066;
+        }
+        .link {
+            font-size: 13px;
+            padding-top: 15px;
+            margin: auto;
+        }
+        .article-section {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            margin: 20px auto;
+            max-width: 550px;
+        }
+        .article-number {
+            width: 50px;
+            height: 50px;
+            background-color: #1C4066;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .article-content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="email-container">
+        <!-- Logo -->
+        <div class="header">
+            <img src="{% static 'pics_email_template/logo_black.png' %}" alt="Logo Here" class="logo">
+        </div>
+
+        <!-- Main Heading -->
+        <img src="{% static 'pics_email_template/T2_pic1.jpeg' %}" alt="Main Image" class="image-container">
+        <h1>Explore the Future of Real Estate in 2024!</h1>
+        <p>
+            Curious about the upcoming housing market trends? Our experts predict what's on the horizon, providing insights 
+            that empower your property decisions. Stay ahead in the real estate game!
+        </p>
+        <a href="#" class="cta-button">Read Our Blog</a> <!-- Here should let user add their own link url -->
+        <div class="divider"><divider>------------------------</divider></div>
+
+        <!-- Section 1 -->
+        <h1>Empowering Tools to Begin Your Real Estate Journey</h1>
+       
+        <!-- (1) -->
+        <div class="article-section">
+            <div class="article-number">1</div>
+            <div class="article-content">
+                <h2>Helpful Checklist for New Homeowners</h2>
+                <p>
+                    Embarking on the journey of homeownership? This guide, inspired by valuable insights from a seasoned homeowner, 
+                    offers a comprehensive checklist to navigate the exciting process of maintaining your home.
+                </p>
+                <div class="link"><a href="#" style="color: #308CEA;">Read the Article</a></div><!-- Here should let user add their own link url -->
+            </div>
+        </div>
+
+        <!-- (2) -->
+        <div class="article-section">
+            <div class="article-number">2</div>
+            <div class="article-content">
+                <h2>Essential Tips for First-Time Homebuyers</h2>
+                <p>
+                    Embarking on the journey of buying your first home is an exciting yet complex endeavor. To help you navigate this 
+                    significant milestone, this article curates essential tips and insights to ensure a smooth and informed homebuying experience.
+                </p>
+                <div class="link"><a href="#" style="color: #308CEA;">Read the Article</a></div><!-- Here should let user add their own link url -->
+            </div>
+        </div>
+
+        <!-- (3) -->
+        <div class="article-section">
+            <div class="article-number">3</div>
+            <div class="article-content">
+                <h2>Using a Home Equity Loan for Investment Properties</h2>
+                <p>
+                    Exploring ways to leverage your home's equity for investment? This guide delves into the strategic use of home equity loans 
+                    for funding your real estate ventures, providing key insights and considerations for a successful investment journey.
+                </p>
+                <div class="link"><a href="#" style="color: #308CEA;">Read the Article</a></div><!-- Here should let user add their own link url -->
+            </div>
+        </div>
+
+        <!-- (4) -->
+        <div class="article-section">
+            <div class="article-number">4</div>
+            <div class="article-content">
+                <h2>Navigating Inflation's Impact on Property, Stocks, and Gold</h2>
+                <p>
+                    Inflation's influence on investment choices is a hot topic. This survey-based article delves into how investors view the 
+                    effects of inflation on property, stocks, and gold, offering valuable insights for strategic financial planning.
+                </p>
+                <div class="link"><a href="#" style="color: #308CEA;">Read the Article</a></div><!-- Here should let user add their own link url -->
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <img src="{% static 'pics_email_template/T2_pic2.png' %}" alt="Second Image" class="image-container">
+        <p style="color: #1C4066;">STAY CONNECTED!</p>
+        <br>
+
+        <!-- footer -->
+        <div class="footer">
+            <footer>Copyright &copy; [Year] [Company Name]. All rights reserved.</footer>
+            <br>
+            <footer>Want to change how you receive these emails? <a href="#" style="color: white;">Unsubscribe</a></footer><!-- Here should let user add their own link url -->
+        </div>
+    </div>
+
+</body>
+</html>
