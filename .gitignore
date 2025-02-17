@@ -17,3 +17,5 @@ trendtailor/trendApp/trendApp/__pycache__/*
 trendtailor/trendApp/accountsApp/__pycache__/*
 trendtailor/trendApp/trendApp/__pycache__/*
 myenv/*
+trendtailor/venv/
+trendtailor/trendApp/staticfiles
