@@ -30,3 +30,6 @@ trendtailor/trendApp/trendApp/migrations/__pycache__/*
 trendtailor\trendApp\db.sqlite3
 trendtailor/trendApp/accountsApp/migrations/*
 trendtailor/trendApp/trendApp/migrations/*
+myenv/*
+trendtailor/venv/*
+trendtailor/trendApp/db.sqlite3
