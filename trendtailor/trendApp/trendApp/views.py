@@ -5,44 +5,42 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 
-
 def home(request):
     topics_and_keywords = {
         "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
-        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        "Science": ["Experiment", "Theory"],
+        "Technology": ["Innovation", "Gadgets"],
+        "Health": ["Wellness", "Medicine"],
+        "Education": ["Learning", "Schools"],
+        "Environment": ["Conservation", "Climate"],
+        "Arts": ["Painting", "Sculpture", "Photography"],
+        "Business": ["Entrepreneurship", "Startups", "Mergers", "Acquisitions"],
+        "Politics": ["Elections", "Legislation", "Diplomacy", "Policies"],
+        "Sports": ["Football", "Basketball", "Olympics", "Tennis"],
+        "Culture": ["Literature", "Cinema", "Traditions", "Festivals"],
+        "Economics": ["Markets", "Stocks", "Trade", "Economic Growth"],
+        "Psychology": ["Cognitive", "Behavioral", "Therapy", "Mental Health"],
+        "Technology": ["Robotics", "Machine Learning", "Blockchain", "Cybersecurity"],
+        "Environment": ["Renewable Energy", "Wildlife Conservation", "Climate Change"],
+        "Food": ["Cuisine", "Recipes", "Nutrition", "Veganism"],
+        "Travel": ["Destinations", "Adventure", "Cultural Experiences", "Travel Tips"],
+        "Fashion": ["Trends", "Designers", "Runways", "Sustainable Fashion"]
     }
-
-    # topics_and_keywords = {
-    #     "Science": ["Experiment", "Theory"],
-    #     "Technology": ["Innovation", "Gadgets"],
-    #     "Health": ["Wellness", "Medicine"],
-    #     "Education": ["Learning", "Schools"],
-    #     "Environment": ["Conservation", "Climate"],
-    #     "Arts": ["Painting", "Sculpture", "Photography"],
-    #     "Business": ["Entrepreneurship", "Startups", "Mergers", "Acquisitions"],
-    #     "Politics": ["Elections", "Legislation", "Diplomacy", "Policies"],
-    #     "Sports": ["Football", "Basketball", "Olympics", "Tennis"],
-    #     "Culture": ["Literature", "Cinema", "Traditions", "Festivals"],
-    #     "Economics": ["Markets", "Stocks", "Trade", "Economic Growth"],
-    #     "Psychology": ["Cognitive", "Behavioral", "Therapy", "Mental Health"],
-    #     "Technology": ["Robotics", "Machine Learning", "Blockchain", "Cybersecurity"],
-    #     "Environment": ["Renewable Energy", "Wildlife Conservation", "Climate Change"],
-    #     "Food": ["Cuisine", "Recipes", "Nutrition", "Veganism"],
-    #     "Travel": ["Destinations", "Adventure", "Cultural Experiences", "Travel Tips"],
-    #     "Fashion": ["Trends", "Designers", "Runways", "Sustainable Fashion"]
-    # }
 
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_1([topics], keywords)
-        
-    # articles = check_articles(request.user, topics, keywords)
-    # articles = fetch_articles_from_api_1(request.user, topics, keywords)
+
+    # for topics, keywords in topics_and_keywords.items():
+    #     articles = fetch_articles_from_api_2([topics], keywords)
+
+    # for topics, keywords in topics_and_keywords.items():
+    #     articles = fetch_articles_from_api_3([topics], keywords)   
 
     articles = fetch_all_articles()
 
-    print("Articles: ", articles)
+    print("Max Number of Pages", len(articles) / 50)
     
-    paginator = Paginator(articles, 8)
+    paginator = Paginator(articles, 52)
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
 
