@@ -87,29 +87,26 @@ from UserPreferenceApp.models import Article
 
 #     return render(request, 'set_preferences.html')
 
-@login_required
 def preferences(request):
-    # Try to retrieve existing preferences if they exist
-    try:
-        user_pref = UserPreference.objects.get(user=request.user)
-    except UserPreference.DoesNotExist:
-        user_pref = None
-    
-    if request.method == "POST":
-        form = UserPreferenceForm(request.POST, instance=user_pref)
-        if form.is_valid():
-            user_pref = form.save(commit=False)
-            user_pref.user = request.user  
-            user_pref.save()
-            messages.success(request, "Preferences Saved Successfully!")
-            return redirect('preferences')
+    if not request.user.is_authenticated:
+        return redirect('login')
     else:
-        if user_pref:
-            form = UserPreferenceForm(instance=user_pref)
-        else:
-            form = UserPreferenceForm()
+        user_pref, created = UserPreference.objects.get_or_create(user=request.user)
+        
+        if request.method == "POST":
 
-    return render(request, 'set_preferences.html', {'form': form})
+            form = UserPreferenceForm(request.POST, instance=user_pref)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Preferences Saved Successfully!")
+        else:    
+            if user_pref: 
+                form = UserPreferenceForm(instance=user_pref)
+            else:
+                form = UserPreferenceForm()
+
+        return render(request, 'set_preferences.html', {'form': form})
 
 def aggregate_content(request):
     topics = ["AI", "Quantum Computing"]

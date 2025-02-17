@@ -10,7 +10,31 @@
                     <div class="card bg-secondary text-white">
                         <div class="card-body">
                             <h5 class="card-title">User Preferences</h5>
+                            <div class="card-group">
+                                <div class="card text-white bg-dark mb-3">
+                                    <div class="card-header">News Sources</div>
+                                    <div class="card-body text-info">
+                                        <h5 class="card-title">{{ preferences.sources }}</h5>
+                                    </div>
+                                </div>
+                                <div class="card text-white bg-dark mb-3">
+                                    <div class="card-header">Topics</div>
+                                    <div class="card-body text-info">
+                                        <h5 class="card-title">{{ preferences.topics }}</h5>
+                                    </div>
+                                </div>
+                                <div class="card text-white bg-dark mb-3">
+                                    <div class="card-header">Keywords</div>
+                                    <div class="card-body text-info">
+                                        <h5 class="card-title">{{ preferences.keywords }}</h5>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <form action="{% url 'preferences' %}" method="POST" class="needs-validation">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
+                        </form>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">

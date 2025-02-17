@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class UserPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    sources = models.TextField(blank=True, help_text="Comma-separated list of news source URLs..")
-    topics = models.TextField(blank=True, help_text="Comma-separated list of topics.")
-    keywords = models.TextField(blank=True, help_text="Comma-separated list of keywords.")
+    sources = models.TextField(help_text="Comma-separated list of news source URLs..")
+    topics = models.TextField(help_text="Comma-separated list of topics.")
+    keywords = models.TextField(help_text="Comma-separated list of keywords.")
 
     def get_sources_list(self):
         return [source.strip() for source in self.sources.spilt(',') if source.strip()]
@@ -19,7 +19,6 @@ class UserPreference(models.Model):
 
     def __str__(self):
         return f"Sources: {self.sources}, Topics: {self.topics}, Keywords: {self.keywords}"
-
 
 class Article(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')  # Optional, for user-specific articles

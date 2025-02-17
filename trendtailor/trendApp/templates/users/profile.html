@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block body %}   
+<body class="bg-dark text-light">
+    <!-- Profile Content -->
+    <div class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center">
+                <img src="{{ profileimage.image.url }}" alt="Profile Picture" class="img-thumbnail rounded-circle mb-4" style="width: 300px; height: 300px; object-fit: cover;">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    Upload Profile Picture
+                </button>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success mt-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Modal -->
+                <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadModalLabel">Update Profile Picture</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{% url 'edit_image' %}" method="POST" enctype="multipart/form-data" class="needs-validation">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Choose Image</label>
+                                        <input type="file" class="form-control" id="image" name="image" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Upload Image</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h3 class="card-title">Name: {{ profile.user.first_name}} {{ profile.user.last_name}}</h3>
+                        <h5 class="card-title">Username: {{ profile.user.username}}</h5>
+                        <p class="card-text">Role: {{ profile.role }}</p>
+                        <p class="card-text">Email: {{ profile.user.email }}</p>
+                        <p class="card-text">Phone: {{ profile.phone_number }}</p>
+                        <p class="card-text">Address: {{ profile.street_address }}, {{ profile.city }}, {{ profile.province }}, {{ profile.postal_code }}</p>
+                        <a href="{% url 'edit_profile' %}" class="btn btn-info mt-3">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Summary Section -->
+        <div class="card bg-secondary text-white mt-4">
+            <div class="card-body">
+                <h5 class="mb-3 text-warning">Profile Summary</h5>
+                <p id="profile-summary">
+                    {{ profile.bio }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Account Settings Section -->
+        <div class="card bg-secondary text-white mt-4">
+            <div class="card-body">
+                <h5 class="mb-3 text-warning">Account Settings</h5>
+                <p>Manage your account settings, password, and privacy preferences.</p>
+                <a href="{% url 'settings' %}" class="btn btn-info">Account Settings</a>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock body %}
