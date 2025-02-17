@@ -4,7 +4,6 @@ from .models import Article
 
 def fetch_articles_from_api_1(topics, keywords):
     """Fetch articles using an external News API, filtered by topics/keywords."""
-    # Hard-coded API key
     api_key = getattr(settings,'NEWS_API_KEY',None)
 
     if not api_key:
@@ -21,17 +20,21 @@ def fetch_articles_from_api_1(topics, keywords):
             if response.status_code == 200:
                 data = response.json()
                 articles = data.get('articles', [])
+
                 for article in articles:
-                    all_articles.append({
-                        'title': article['title'],
-                        'description': article['description'],
-                        'url': article.get('url'), 
-                        'urlToImage': article.get('urlToImage'),
-                    })
+                    new_article, created = Article.objects.get_or_create(
+                        title=article['title'],
+                        defaults={
+                            'description': article['description'],
+                            'contents': article.get('content', ''),
+                            'url': article.get('url'),
+                            'urlToImage': article.get('urlToImage'),
+                        }
+                    )
+                    all_articles.append(new_article)
             else:
                 return -1
         except requests.RequestException as e:
-            # Handle requests exceptions
             all_articles.append(f"Error fetching articles for {query}: {str(e)}")
 
 def fetch_articles_from_api_2(topics, keywords):
@@ -71,13 +74,13 @@ def fetch_articles_from_api_2(topics, keywords):
     
     return all_articles
 
-def fetch_articles_from_api_3(user, topics, keywords):
+def fetch_articles_from_api_3(topics, keywords):
     all_articles = []
 
-    existingArticles = Article.objects.filter(user=user, title__in=topics + keywords)
-    if existingArticles.exists():
-        print(list(existingArticles))
-        return list(existingArticles)
+    # existingArticles = Article.objects.filter(user=user, title__in=topics + keywords)
+    # if existingArticles.exists():
+    #     print(list(existingArticles))
+    #     return list(existingArticles)
 
     gnews_api_key = getattr(settings, 'GNEWS_API_KEY', None)
     gnews_url = "https://gnews.io/api/v4/top-headlines"
@@ -100,10 +103,10 @@ def fetch_articles_from_api_3(user, topics, keywords):
 
                 for article in articles:
                     new_article, created = Article.objects.get_or_create(
-                        user=user,
                         title=article['title'],
                         defaults={
                             'description': article['description'],
+                            'contents': article.get('content', ''),
                             'url': article.get('url'),
                             'urlToImage': article.get('image'),
                         }

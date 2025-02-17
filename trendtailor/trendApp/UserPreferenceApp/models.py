@@ -24,6 +24,7 @@ class Article(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')  # Optional, for user-specific articles
     title = models.CharField(max_length=500)
     description = models.TextField(blank=True, null=True)
+    contents = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=500)
     urlToImage = models.URLField(max_length=500, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True) 

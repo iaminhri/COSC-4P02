@@ -31,7 +31,17 @@
                             <div class="card-body">
                                 <h5 class="card-title text-truncate">{{ article.title }}</h5>
                                 <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                                <a href="{{ article.url }}" class="btn btn-primary stretched-link">Read More</a>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
+                                    <div>
+                                        <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
+                                            <i class="fa fa-share"></i> Share
+                                        </button>
+                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
+                                            <i class="fa fa-thumbs-up"></i> Like
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                      </div>

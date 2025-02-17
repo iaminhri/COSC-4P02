@@ -139,8 +139,6 @@ def check_articles(topics, keywords):
     
     existingArticles = Article.objects.filter(query)
 
-    print("Length: ", len(existingArticles))
-
     if existingArticles.exists():
         articles_list = list(existingArticles)
         return articles_list

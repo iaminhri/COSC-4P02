@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse 
-from UserPreferenceApp.utils import fetch_articles_from_api_3 as fetchArticles
+from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_3
 from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 
 
 def home(request):
-    # topics = ["Science", "Computer Science", "Health", "Education", "Politics", "Environment"]
-    # keywords = ["AI", "Blockchain"]
+    topics_and_keywords = {
+        "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],
+    }
 
     # topics_and_keywords = {
     #     "Science": ["Experiment", "Theory"],
@@ -16,10 +18,6 @@ def home(request):
     #     "Health": ["Wellness", "Medicine"],
     #     "Education": ["Learning", "Schools"],
     #     "Environment": ["Conservation", "Climate"],
-    #     "Computer Science": ["technology", "Artificial Intelligence", "AI", "Research", "University"]
-    # }
-
-    # topics_and_keywords = {
     #     "Arts": ["Painting", "Sculpture", "Photography"],
     #     "Business": ["Entrepreneurship", "Startups", "Mergers", "Acquisitions"],
     #     "Politics": ["Elections", "Legislation", "Diplomacy", "Policies"],
@@ -35,11 +33,14 @@ def home(request):
     # }
 
     # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetchArticles(request.user, [topics], keywords)
+    #     articles = fetch_articles_from_api_1([topics], keywords)
         
     # articles = check_articles(request.user, topics, keywords)
-    # articles = fetchArticles(request.user, topics, keywords)
+    # articles = fetch_articles_from_api_1(request.user, topics, keywords)
+
     articles = fetch_all_articles()
+
+    print("Articles: ", articles)
     
     paginator = Paginator(articles, 8)
     pageNumber = request.GET.get('p', 1)
@@ -51,23 +52,16 @@ def fetch_all_articles():
     all_articles = Article.objects.all()
     return all_articles
 
-def check_articles(user, topics, keywords):
-    print("Topics:", topics)
-    print("Keywords:", keywords)
-    print("Combined Search:", topics + keywords)
-
-    # Creating a Q object for complex queries
+def check_articles(user, topics, keywords):    
     query = Q()
+    # Assuming topics and keywords are lists
     for term in topics + keywords:
-        query |= Q(title__icontains=term) | Q(description__icontains=term)  # Search both title and description
+        query |= Q(title__icontains=term) | Q(description__icontains=term)
     
-    existingArticles = Article.objects.filter(query, user=user)
-    print("SQL Query:", existingArticles.query)  # Outputs the SQL query
+    existingArticles = Article.objects.filter(query)
 
     if existingArticles.exists():
         articles_list = list(existingArticles)
-        print("Found Articles:", articles_list)
         return articles_list
     else:
-        print("No articles found.")
         return []

@@ -5,6 +5,9 @@ from .forms import RegisterForm, LoginForm, ProfileForm, ProfileImageForm
 from .models import Profile, ProfileImage
 from UserPreferenceApp.models import UserPreference
 from UserPreferenceApp.forms import UserPreferenceForm
+from trendApp.views import check_articles
+from django.core.paginator import Paginator
+from UserPreferenceApp.models import Article 
 
 # ✅ Registration View
 def register(request):  
@@ -14,7 +17,9 @@ def register(request):
         if request.method == "POST":
             form = RegisterForm(request.POST)
             if form.is_valid():
-                form.save()
+                user = form.save()
+                Profile.objects.create(user=user)
+                ProfileImage.objects.create(user=user)
                 # messages.success(request, "Registration successful. You can now log in.")
                 return redirect('login')
             else:
@@ -37,7 +42,6 @@ def user_login(request):
                 password = form.cleaned_data['password']
 
                 user = authenticate(username=username, password=password)
-
                 if user is not None:
                     login(request, user)
                     return redirect('dashboard')
@@ -56,7 +60,22 @@ def dashboard(request):
             dashboard_pref = None
             messages.info(request, "No Preferences Set")
 
-        return render(request, 'dashboard.html', {'preferences': dashboard_pref})
+        try:
+            preferences, create = UserPreference.objects.get_or_create(user=request.user)
+            
+            topics = preferences.topics.split(',') if preferences.topics else []
+            keywords = preferences.keywords.split(',') if preferences.keywords else []
+            
+            contents = check_articles(request.user, topics, keywords)
+
+            paginator = Paginator(contents, 4)
+            pageNumber = request.GET.get('p', 1)
+            articlePageObj = paginator.get_page(pageNumber)
+
+        except:
+            articlePageObj = None
+            messages.error(request, "Something is wrong !!!")
+        return render(request, 'dashboard.html', {'preferences': dashboard_pref, 'articles': articlePageObj})
 
 def user_profile(request):
     if not request.user.is_authenticated:

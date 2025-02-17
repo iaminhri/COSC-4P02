@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-
+{% comment %} 
             <div class="row">
                 <div class="col-12">
                     <ul class="nav nav-tabs">
@@ -88,7 +88,50 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div> {% endcomment %}
+
+            <section class="container-fluid my-3 px-1">
+                <div class="row ">
+                    <h2 class="text-center mb-4">My Preferred Articles</h2>
+                </div>
+                <div class="row">
+                    {% for article in articles %}
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 6px solid #000;'>
+                                {% if article.urlToImage %}
+                                <div class="ratio ratio-16x9">
+                                    <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                                </div>
+                                {% else %}
+                                <div class="ratio ratio-16x9">
+                                    <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                                </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                                    <p class="card-text">{{ article.description|truncatechars:70 }}</p>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
+                                        <div>
+                                            <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
+                                                <i class="fa fa-share"></i> Share
+                                            </button>
+                                            <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
+                                                <i class="fa fa-thumbs-up"></i> Like
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}               
+                </div>
+                <br>
+               <form action="{% url 'content_view' %}" method="POST" class="needs-validation d-flex justify-content-center">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Show More</button>
+                </form>
+            </section>
         </div>
     </body>
     {% endblock body %}
