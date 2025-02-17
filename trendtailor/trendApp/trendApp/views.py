@@ -65,8 +65,6 @@ def check_articles(user, topics, keywords):
     else:
         return []
 
-from .models import Preferences
-
 # Scrum 3 task1: Generate email template
 def email_template_1(request):
     return render(request, 'email_template_1.html')
