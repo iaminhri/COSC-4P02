@@ -21,3 +21,8 @@ trendtailor/trendApp/trendApp/migrations/__pycache__/*
 myenv/*
 trendtailor/venv/*
 trendtailor/trendApp/db.sqlite3
+
+trendtailor/trendApp/db.sqlite3
+__pycache__/
+*.pyc
+*.pyo
