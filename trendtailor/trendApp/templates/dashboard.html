@@ -1,137 +1,198 @@
 {% extends "base.html" %}
 {% load static %} 
-    {% block body %}   
-    <body class="bg-dark text-light">
+{% block body %}   
 
-        <!-- Main Content Area -->
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">User Preferences</h5>
-                            <div class="card-group">
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">News Sources</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.sources }}</h5>
-                                    </div>
+<body style="background-color: #1e1e1e; color: #f0f0f0;"> <!-- Dark grey background -->
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card bg-dark text-white border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">User Preferences</h5>
+                        <div class="card-group">
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-header">News Sources</div>
+                                <div class="card-body text-light">
+                                    <h5 class="card-title">{{ preferences.sources }}</h5>
                                 </div>
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">Topics</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.topics }}</h5>
-                                    </div>
+                            </div>
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-header">Topics</div>
+                                <div class="card-body text-light">
+                                    <h5 class="card-title">{{ preferences.topics }}</h5>
                                 </div>
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">Keywords</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.keywords }}</h5>
-                                    </div>
+                            </div>
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-header">Keywords</div>
+                                <div class="card-body text-light">
+                                    <h5 class="card-title">{{ preferences.keywords }}</h5>
                                 </div>
                             </div>
                         </div>
-                        <form action="{% url 'preferences' %}" method="POST" class="needs-validation">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
-                        </form>
                     </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">Performance Monitoring</h5>
-                        </div>
-                    </div>
+                    <form action="{% url 'preferences' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
+                    </form>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-                    </div>
-                </div>
-            </div>
-{% comment %} 
-            <div class="row">
-                <div class="col-12">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Entries</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Add Content</a>
-                        </li>
-                    </ul>
-                    <table class="table table-dark table-striped mt-3">
-                        <thead>
-                            <tr>
-                                <th scope="col">Content ID</th>
-                                <th scope="col">Content Name</th>
-                                <th scope="col">Last Updated</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>101</td>
-                                <td>Tech Innovations</td>
-                                <td>2025-01-26</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <!-- Additional rows as needed -->
-                        </tbody>
-                    </table>
-                </div>
-            </div> {% endcomment %}
-
-            <section class="container-fluid my-3 px-1">
-                <div class="row ">
-                    <h2 class="text-center mb-4">My Preferred Articles</h2>
-                </div>
-                <div class="row">
-                    {% for article in articles %}
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 6px solid #000;'>
-                                {% if article.urlToImage %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                                {% else %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title text-truncate">{{ article.title }}</h5>
-                                    <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                        <div>
-                                            <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
-                                                <i class="fa fa-share"></i> Share
-                                            </button>
-                                            <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                                <i class="fa fa-thumbs-up"></i> Like
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}               
-                </div>
-                <br>
-               <form action="{% url 'content_view' %}" method="POST" class="needs-validation d-flex justify-content-center">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Show More</button>
-                </form>
-            </section>
         </div>
-    </body>
-    {% endblock body %}
+
+        <!-- Preferred Articles Section -->
+        <section class="container-fluid my-3 px-1">
+            <div class="row">
+                <h2 class="text-center mb-4">My Preferred Articles</h2>
+            </div>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                {% for article in articles %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm bg-dark text-white border-0">
+                            {% if article.urlToImage %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                            </div>
+                            {% else %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                                <p class="card-text flex-grow-1">{{ article.description|truncatechars:70 }}</p>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
+                                                data-title="{{ article.title }}" data-url="{{ article.url }}">
+                                            <i class="fa fa-share"></i> Share
+                                        </button>
+                                        <button class="btn btn-outline-light btn-sm ms-2">
+                                            <i class="fa fa-thumbs-up"></i> Like
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}               
+            </div>
+            <br>
+           <form action="{% url 'content_view' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Show More</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Floating Email Share Modal -->
+    <div id="customShareModal" class="custom-modal d-none">
+        <div class="custom-modal-content rounded-4 p-3 text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold">Share via Email</h5>
+                <button type="button" class="btn-close btn-light" id="closeModalBtn"></button>
+            </div>
+            <p class="small text-muted mb-2">Enter an email address to share this article.</p>
+            <form id="shareEmailForm">
+                <div class="mb-3">
+                    <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
+                    <input type="email" class="form-control rounded-3 text-white bg-dark" id="recipientEmail" required>
+                </div>
+                <input type="hidden" id="articleTitle">
+                <input type="hidden" id="articleURL">
+                <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
+            </form>
+            <div class="d-flex justify-content-between mt-3">
+                <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
+                    <i class="fa fa-envelope"></i> Gmail
+                </a>
+                <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
+                    <i class="fa fa-envelope"></i> Outlook
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Center Modal */
+        .custom-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-modal-content {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .custom-modal-content input[type="email"] {
+            color: #f0f0f0 !important;
+            background-color: #333 !important;
+            border: 1px solid #ccc;
+        }
+
+        .custom-modal-content input::placeholder {
+            color: #fff !important;
+        }
+
+        .custom-modal-content p {
+            color: #ffffff !important;
+        }
+
+
+        .d-none {
+            display: none !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var shareButtons = document.querySelectorAll(".share-btn");
+            var modal = document.getElementById("customShareModal");
+            var closeModalBtn = document.getElementById("closeModalBtn");
+
+            shareButtons.forEach(button => {
+                button.addEventListener("click", function(event) {
+                    let title = button.getAttribute("data-title");
+                    let url = button.getAttribute("data-url");
+
+                    document.getElementById("articleTitle").value = title;
+                    document.getElementById("articleURL").value = url;
+
+                    let subject = encodeURIComponent("Check out this article: " + title);
+                    let body = encodeURIComponent("Hey! I found this interesting article: " + url);
+
+                    document.getElementById("gmailLink").href = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+                    document.getElementById("outlookLink").href = `https://outlook.office.com/mail/deeplink/compose?subject=${subject}&body=${body}`;
+
+                    modal.classList.remove("d-none");
+                    modal.classList.add("d-flex");
+                });
+            });
+
+            closeModalBtn.addEventListener("click", function() {
+                modal.classList.remove("d-flex");
+                modal.classList.add("d-none");
+            });
+        });
+    </script>
+
+</body>
+{% endblock body %}

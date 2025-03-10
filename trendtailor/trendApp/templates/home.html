@@ -1,100 +1,207 @@
 {% extends "base.html" %}
 {% load static %} 
-    {% block body %}   
-        <header class="bg-secondary bg-gradient text-white text-center py-5">
-            <h1>AI Newsletter and Social Media Content Generator</h1>
-            <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
-            <form class="d-flex justify-content-center">
-                <input type="email" class="form-control w-25" placeholder="Enter your email" required>
-                <button class="btn btn-light ms-2">Subscribe</button>
-            </form>
-        </header>
+{% block body %}   
+    <header class="bg-secondary bg-gradient text-white text-center py-5">
+        <h1>AI Newsletter and Social Media Content Generator</h1>
+        <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
+        <form class="d-flex justify-content-center">
+            <input type="email" class="form-control w-25" placeholder="Enter your email" required>
+            <button class="btn btn-light ms-2">Subscribe</button>
+        </form>
+    </header>
 
-        <!-- Featured Content -->
-        <section class="container-fluid my-4 px-5">
-            <div class="row ">
-                <h2 class="text-center mb-4">Featured Articles</h2>
-            </div>
-            <div class="row">
-                {% for article in articles %}
-                    <div class="col-md-3 mb-3">
-                        <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 8px solid #000;'>
-                            {% if article.urlToImage %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                            {% else %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                            {% endif %}
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate">{{ article.title }}</h5>
-                                <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                    <div>
-                                        <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
-                                            <i class="fa fa-share"></i> Share
-                                        </button>
-                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                            <i class="fa fa-thumbs-up"></i> Like
-                                        </button>
-                                    </div>
+    <!-- Featured Content -->
+    <section class="container-fluid my-4 px-5">
+        <div class="row">
+            <h2 class="text-center mb-4">Featured Articles</h2>
+        </div>
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 8px solid #000;'>
+                        {% if article.urlToImage %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                            </div>
+                        {% else %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                            <p class="card-text">{{ article.description|truncatechars:70 }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
+                                <div>
+                                    <!-- Share Button -->
+                                    <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
+                                            data-title="{{ article.title }}" data-url="{{ article.url }}">
+                                        <i class="fa fa-share"></i> Share
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm ms-2" aria-label="Like">
+                                        <i class="fa fa-thumbs-up"></i> Like
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                     </div>
-                {% endfor %}                
+                    </div>
+                 </div>
+            {% endfor %}                
+        </div>
+    </section>
+
+    <!-- Floating Email Share Modal -->
+    <div id="customShareModal" class="custom-modal d-none">
+        <div class="custom-modal-content rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold">Share via Email</h5>
+                <button type="button" class="btn-close" id="closeModalBtn"></button>
             </div>
-        </section>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                {% if articles.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{ articles.previous_page_number }}" aria-disabled="true">Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{ articles.previous_page_number }}"> {{ articles.previous_page_number }} </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                {% endif %}   
-
-                <li class="page-item">
-                    <a class="page-link" href="?p={{ articles.number }}"> {{ articles.number }} </a>
-                </li>             
-                
-                {% if articles.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{ articles.next_page_number }}"> {{ articles.next_page_number }} </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{ articles.next_page_number }}">Next</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-
-        <!-- Testimonials -->
-        <section class="bg-secondary bg-gradient py-5">
-            <div class="container text-center text-white">
-                <h2>What Our Subscribers Say</h2>
-                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
-                <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
+            <p class="small text-muted mb-2">Enter an email address to share this article.</p>
+            <form id="shareEmailForm">
+                <div class="mb-3">
+                    <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
+                    <input type="email" class="form-control rounded-3" id="recipientEmail" required>
+                </div>
+                <input type="hidden" id="articleTitle">
+                <input type="hidden" id="articleURL">
+                <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
+            </form>
+            <!-- Email App Links -->
+            <div class="d-flex justify-content-between mt-3">
+                <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
+                    <i class="fa fa-envelope"></i> Gmail
+                </a>
+                <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
+                    <i class="fa fa-envelope"></i> Outlook
+                </a>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- Footer -->
-        <footer class="bg-dark text-white text-center py-3">
-            <p>Follow us on:
-                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
-                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
-            </p>
-            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
-        </footer>
+    <style>
+        /* Custom Modal Styling */
+        .custom-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
 
-    {% endblock body %}
+        .custom-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .custom-modal-content input[type="email"] {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: 1px solid #ccc;
+        }
+
+        .custom-modal-content input::placeholder {
+            color: #666 !important;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var shareButtons = document.querySelectorAll(".share-btn");
+            var modal = document.getElementById("customShareModal");
+            var closeModalBtn = document.getElementById("closeModalBtn");
+
+            shareButtons.forEach(button => {
+                button.addEventListener("click", function(event) {
+                    let title = button.getAttribute("data-title");
+                    let url = button.getAttribute("data-url");
+
+                    document.getElementById("articleTitle").value = title;
+                    document.getElementById("articleURL").value = url;
+
+                    let subject = encodeURIComponent("Check out this article: " + title);
+                    let body = encodeURIComponent("Hey! I found this interesting article: " + url);
+
+                    document.getElementById("gmailLink").href = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+                    document.getElementById("outlookLink").href = `https://outlook.office.com/mail/deeplink/compose?subject=${subject}&body=${body}`;
+
+                    modal.classList.remove("d-none");
+                    modal.classList.add("d-flex");
+                });
+            });
+
+            // Close modal when clicking the close button
+            closeModalBtn.addEventListener("click", function() {
+                modal.classList.remove("d-flex");
+                modal.classList.add("d-none");
+            });
+
+            // Close modal when clicking outside it
+            modal.addEventListener("click", function(event) {
+                if (event.target === modal) {
+                    modal.classList.remove("d-flex");
+                    modal.classList.add("d-none");
+                }
+            });
+
+            document.getElementById("shareEmailForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                fetch("/send-email/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("recipientEmail").value,
+                        title: document.getElementById("articleTitle").value,
+                        url: document.getElementById("articleURL").value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("❌ " + data.error);
+                    } else {
+                        alert("✅ " + data.message);
+                        document.getElementById("shareEmailForm").reset();
+                        closeModal();
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+
+            function getCSRFToken() {
+                let cookieValue = null;
+                const cookies = document.cookie.split(";");
+                cookies.forEach(cookie => {
+                    if (cookie.trim().startsWith("csrftoken=")) {
+                        cookieValue = cookie.split("=")[1];
+                    }
+                });
+                return cookieValue;
+            }
+        });
+    </script>
+
+{% endblock body %}
