@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Summarization</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-dark text-light">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Upload Content</h5>
+                        <form action="{% url 'summarize' %}" method="POST" enctype="multipart/form-data" class="needs-validation">
+                            <div class="mb-3">
+                                <label for="contentFile" class="form-label">Upload a File</label>
+                                <input type="file" class="form-control" id="contentFile" name="contentFile" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Or Paste Text</label>
+                                <textarea class="form-control" id="textInput" name="textInput" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Summarize</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Summary Output</h5>
+                        <div class="card bg-dark text-white p-3">
+                            <p id="summaryText">Your summarized content will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h2 class="text-center">Recent Summaries</h2>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">Nvidia Stock Price Down</h5>
+                        <p class="card-text">Recent fluctuations in Nvidia's stock price have investors concerned...</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary">View</button>
+                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">iPhone 16 Release</h5>
+                        <p class="card-text">Apple is set to unveil the iPhone 16 with groundbreaking new features...</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary">View</button>
+                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">DeepSeek Takes Over OpenAI</h5>
+                        <p class="card-text">DeepSeek's acquisition of OpenAI is shaking up the AI industry...</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary">View</button>
+                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">Microsoft Releases New Chipset</h5>
+                        <p class="card-text">Microsoft has announced its latest in-house chipset for better performance...</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary">View</button>
+                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">Brightspace Server Issues</h5>
+                        <p class="card-text">Students are reporting widespread outages in Brightspace servers...</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary">View</button>
+                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
