@@ -78,10 +78,10 @@
                 {% endfor %}               
             </div>
             <br>
-           <form action="{% url 'content_view' %}" method="POST">
+            <form action="{% url 'content_view' %}" method="POST" class="d-flex justify-content-center">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Show More</button>
-            </form>
+            </form>            
         </section>
     </div>
 

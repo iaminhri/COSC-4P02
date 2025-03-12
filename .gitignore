@@ -37,3 +37,5 @@ __pycache__/
 *.pyc
 *.pyo
 trendtailor\trendApp\db.sqlite3
+trendtailor\trendApp\venv\*
+trendtailor\venv\*
