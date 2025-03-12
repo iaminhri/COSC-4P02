@@ -41,7 +41,7 @@
                                         
                                         <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
                                             data-title="{{ article.title }}" data-url="{{ article.url }}">
-                                            <i class="fa fa-share"></i> Share
+                                            <i class="fa fa-share"></i> Share 2
                                         </button>
 
                                         <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
@@ -86,90 +86,95 @@
             </ul>
         </nav>
 
-        {% for article in articles %}
-        <!-- Share Modal for each article -->
-        <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Choose a Share Template</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row g-1"> 
-                            {% for template_id in "123456"|make_list %}
-                                <div class="col-md-4 mb-1 px-1">  
-                                    <div class="card preview-card">
-                                        <div class="preview-container">
-                                            <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
-                                        </div>
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title">Template {{ template_id }}</h6>
-                                            <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>                                   
-                    </div>
-                </div>
-                <input type="hidden" id="articleTitle">
-                <input type="hidden" id="articleURL">
-                <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
-            </form>
-            <!-- Email App Links -->
-            <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center align-items-center">
-                <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
-                    <i class="fa fa-envelope"></i> Gmail
-                </a>
-                <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
-                    <i class="fa fa-envelope"></i> Outlook
-                </a>
-                <a id="facebookLink" href="#" target="_blank" class="btn btn-facebook mb-2">
-                    <i class="fa fa-facebook"></i> Facebook
-                </a>
-    
-                <a id="twitterLink" href="#" target="_blank" class="btn btn-twitter mb-2">
-                    <i class="fa fa-twitter"></i> Twitter
-                </a>
-    
-                <a id="redditLink" href="#" target="_blank" class="btn btn-reddit">
-                    <i class="fa fa-reddit"></i> Reddit
-                </a>
-            </div> 
-        </div>  
-    </div>
+        <!-- Testimonials -->
+        <section class="bg-secondary bg-gradient py-5">
+            <div class="container text-center text-white">
+                <h2>What Our Subscribers Say</h2>
+                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
+                <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
+            </div>
+        </section>
 
-    {% for article in articles %}
-        <!-- Share Modal for each article -->
-        <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Choose a Share Template</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3">
+            <p>Follow us on:
+                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
+                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
+            </p>
+            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
+        </footer>
+
+        <!-- Floating Email Share Modal -->
+        <div id="customShareModal" class="custom-modal d-none">
+            <div class="custom-modal-content rounded-4 p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold">Share via Email</h5>
+                    <button type="button" class="btn-close" id="closeModalBtn"></button>
+                </div>
+                <p class="small text-muted mb-2">Enter an email address to share this article.</p>
+                <form id="shareEmailForm">
+                    <div class="mb-3">
+                        <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
+                        <input type="email" class="form-control rounded-3" id="recipientEmail" required>
                     </div>
-                    <div class="modal-body">
-                        <div class="row g-1"> 
-                            {% for template_id in "123456"|make_list %}
-                                <div class="col-md-4 mb-1 px-1">  
-                                    <div class="card preview-card">
-                                        <div class="preview-container">
-                                            <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
-                                        </div>
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title">Template {{ template_id }}</h6>
-                                            <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
+                    <input type="hidden" id="articleTitle">
+                    <input type="hidden" id="articleURL">
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
+                </form>
+                
+                <!-- Email App Links -->
+                <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center align-items-center">
+                    <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
+                        <i class="fa fa-envelope"></i> Gmail
+                    </a>
+                    <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
+                        <i class="fa fa-envelope"></i> Outlook
+                    </a>
+                    <a id="facebookLink" href="#" target="_blank" class="btn btn-facebook mb-2">
+                        <i class="fa fa-facebook"></i> Facebook
+                    </a>
+        
+                    <a id="twitterLink" href="#" target="_blank" class="btn btn-twitter mb-2">
+                        <i class="fa fa-twitter"></i> Twitter
+                    </a>
+        
+                    <a id="redditLink" href="#" target="_blank" class="btn btn-reddit">
+                        <i class="fa fa-reddit"></i> Reddit
+                    </a>
+                </div> 
+            </div>
+        </div>
+
+        {% for article in articles %}
+            <!-- Share Modal for each article -->
+            <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Choose a Share Template</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-1"> 
+                                {% for template_id in "123456"|make_list %}
+                                    <div class="col-md-4 mb-1 px-1">  
+                                        <div class="card preview-card">
+                                            <div class="preview-container">
+                                                <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title">Template {{ template_id }}</h6>
+                                                <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>                                   
+                                {% endfor %}
+                            </div>                                   
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
 
     <style>
         /* Custom Modal Styling */
@@ -228,8 +233,6 @@
             color: #fff;
         }
 
-
-
         .btn-twitter {
             background-color: #1DA1F2;
             border: none;
@@ -244,7 +247,6 @@
             background-color: #0d95e8;
             color: #fff;
         }
-
 
         .btn-reddit {
             background-color: #FF4500;
@@ -353,28 +355,5 @@
             }
         });
     </script>
-            </div>
-        </div>
-        {% endfor %}
-
-
-
-        <!-- Testimonials -->
-        <section class="bg-secondary bg-gradient py-5">
-            <div class="container text-center text-white">
-                <h2>What Our Subscribers Say</h2>
-                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
-                <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-dark text-white text-center py-3">
-            <p>Follow us on:
-                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
-                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
-            </p>
-            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
-        </footer>
 
     {% endblock body %}
