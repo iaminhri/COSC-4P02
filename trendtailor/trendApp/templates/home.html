@@ -33,10 +33,13 @@
                                 <p class="card-text">{{ article.description|truncatechars:70 }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                    <div>
-                                        <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
+                                    <div> 
+                                        <!-- Share Button (Triggers Modal) -->
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
                                             <i class="fa fa-share"></i> Share
                                         </button>
+
+
                                         <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
                                             <i class="fa fa-thumbs-up"></i> Like
                                         </button>
@@ -78,6 +81,39 @@
                 {% endif %}
             </ul>
         </nav>
+
+        {% for article in articles %}
+        <!-- Share Modal for each article -->
+        <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Choose a Share Template</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-1"> 
+                            {% for template_id in "123456"|make_list %}
+                                <div class="col-md-4 mb-1 px-1">  
+                                    <div class="card preview-card">
+                                        <div class="preview-container">
+                                            <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title">Template {{ template_id }}</h6>
+                                            <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>                                   
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
 
         <!-- Testimonials -->
         <section class="bg-secondary bg-gradient py-5">

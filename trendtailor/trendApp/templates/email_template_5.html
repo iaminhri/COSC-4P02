@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Business Email Newsletter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+        .header {
+            background: #003366;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .logo {
+            max-width: 200px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .section {
+            padding: 20px;
+            text-align: center;
+        }
+        .section h2 {
+            color: #003366;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .two-columns {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .column {
+            width: 45%;
+            background: #e6f2ff;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .footer {
+            background: #333333;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .footer a {
+            color: #ffffff;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{% static 'pics_email_template/logo_white.png' %}" alt="Logo Here" class="logo">
+        </div>
+
+        <div class="header">
+            <h1>Join the Leading Experts in Your Industry – Build Your Future with Us!</h1>
+            <a href="#" class="button">Stay Ahead – Subscribe for Exclusive Insights</a>
+        </div>
+        <div class="section">
+            <h2>25 Years of Excellence in Innovation and Service</h2>
+            <p>For over 25 years, we've been at the forefront of innovation. Our commitment to excellence has made us a trusted name among top companies worldwide.</p>
+        </div>
+        <div class="content">
+            <h2>We’re Hiring the Best Talents</h2>
+            <p>Are you passionate about making an impact in your industry? We’re looking for driven individuals to join our growing team and help shape the future.</p>
+            <img src="{% static 'pics_email_template/T5_pic1.jpg' %}" alt="Team Photo" width="100%">
+        </div>
+        <div class="section">
+            <h2>Trusted by Top Companies Worldwide</h2>
+        </div>
+        <div class="two-columns">
+            <div class="column">
+                <h3>Dedicated and Talented Staff</h3>
+                <p>Our employees are at the heart of our success. We invest in their growth and development to drive innovation forward.</p>
+            </div>
+            <div class="column">
+                <h3>Customer-Centric Approach</h3>
+                <p>We prioritize our clients’ needs, delivering tailored solutions that drive success and create lasting partnerships.</p>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Our Business Process – Designed for Success</h2>
+            <p>From ideation to execution, our streamlined approach ensures efficiency, quality, and measurable results tailored to your business goals.</p>
+        </div>
+        <div class="section">
+            <h2>Latest Industry Insights</h2>
+            <p>Stay updated with the latest trends and developments in the industry. Our experts analyze key market shifts and emerging technologies to help you stay ahead of the competition.</p>
+            <p>Whether you're looking for growth opportunities or strategic advice, our insights provide valuable knowledge to navigate the ever-changing business landscape.</p>
+        </div>
+        <div class="footer">
+            <p>Follow us for industry insights and career opportunities:</p>
+            <a href="#">LinkedIn</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
+        </div>
+    </div>
+</body>
+</html>
