@@ -19,3 +19,10 @@ trendtailor/trendApp/trendApp/__pycache__/*
 myenv/*
 trendtailor/venv/
 trendtailor/trendApp/staticfiles
+venv/*
+trendtailor\trendApp\trendApp\migrations\*
+trendtailor\trendApp\trendApp\__pycache__\*
+trendtailor\trendApp\accountsApp\migrations\*
+trendtailor/trendApp/accountsApp/migrations/__pycache__/*
+trendtailor/trendApp/trendApp/migrations/__pycache__/*
+.vscode/
