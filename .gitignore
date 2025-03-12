@@ -33,3 +33,4 @@ trendtailor/trendApp/trendApp/migrations/*
 myenv/*
 trendtailor/venv/*
 trendtailor/trendApp/db.sqlite3
+trendtailor\trendApp\db.sqlite3
