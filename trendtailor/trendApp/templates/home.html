@@ -1,119 +1,117 @@
 {% extends "base.html" %}
 {% load static %} 
-{% block body %}   
-    <header class="bg-secondary bg-gradient text-white text-center py-5">
-        <h1>AI Newsletter and Social Media Content Generator</h1>
-        <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
-        <form class="d-flex justify-content-center">
-            <input type="email" class="form-control w-25" placeholder="Enter your email" required>
-            <button class="btn btn-light ms-2">Subscribe</button>
-        </form>
-    </header>
+    {% block body %}   
+        <header class="bg-secondary bg-gradient text-white text-center py-5">
+            <h1>AI Newsletter and Social Media Content Generator</h1>
+            <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
+            <form class="d-flex justify-content-center">
+                <input type="email" class="form-control w-25" placeholder="Enter your email" required>
+                <button class="btn btn-light ms-2">Subscribe</button>
+            </form>
+        </header>
 
-    <!-- Featured Content -->
-    <section class="container-fluid my-4 px-5">
-        <div class="row ">
-            <h2 class="text-center mb-4">Featured Articles</h2>
-        </div>
-        <div class="row">
-            {% for article in articles %}
-                <div class="col-md-3 mb-3">
-                    <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 8px solid #000;'>
-                        {% if article.urlToImage %}
-                            <div class="ratio ratio-16x9">
-                                <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                            </div>
-                        {% else %}
-                            <div class="ratio ratio-16x9">
-                                <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                            </div>
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate">{{ article.title }}</h5>
-                            <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                <div>
-                                    <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
-                                        data-title="{{ article.title }}" data-url="{{ article.url }}">
-                                        <i class="fa fa-share"></i> Share
-                                    </button>
-                                    <!-- Share Button (Triggers Modal) -->
-                                    <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
-                                        <i class="fa fa-share"></i> Share 2
-                                    </button>
-                                    <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                        <i class="fa fa-thumbs-up"></i> Like
-                                    </button>
+        <!-- Featured Content -->
+        <section class="container-fluid my-4 px-5">
+            <div class="row ">
+                <h2 class="text-center mb-4">Featured Articles</h2>
+            </div>
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 8px solid #000;'>
+                            {% if article.urlToImage %}
+                                <div class="ratio ratio-16x9">
+                                    <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                                </div>
+                            {% else %}
+                                <div class="ratio ratio-16x9">
+                                    <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                                <p class="card-text">{{ article.description|truncatechars:70 }}</p>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
+                                    <div> 
+                                        <!-- Share Button (Triggers Modal) -->
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
+                                            <i class="fa fa-share"></i> Share
+                                        </button>
+                                        
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
+                                            data-title="{{ article.title }}" data-url="{{ article.url }}">
+                                            <i class="fa fa-share"></i> Share
+                                        </button>
+
+                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
+                                            <i class="fa fa-thumbs-up"></i> Like
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    </div>
-            {% endfor %}                
-        </div>
-    </section>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            {% if articles.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?p={{ articles.previous_page_number }}" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?p={{ articles.previous_page_number }}"> {{ articles.previous_page_number }} </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-            {% endif %}   
-
-            <li class="page-item">
-                <a class="page-link" href="?p={{ articles.number }}"> {{ articles.number }} </a>
-            </li>             
-            
-            {% if articles.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?p={{ articles.next_page_number }}"> {{ articles.next_page_number }} </a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?p={{ articles.next_page_number }}">Next</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <!-- Testimonials -->
-    <section class="bg-secondary bg-gradient py-5">
-        <div class="container text-center text-white">
-            <h2>What Our Subscribers Say</h2>
-            <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
-            <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-        <p>Follow us on:
-            <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
-            <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
-        </p>
-        <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
-    </footer>
-
-    <!-- Floating Email Share Modal -->
-    <div id="customShareModal" class="custom-modal d-none">
-        <div class="custom-modal-content rounded-4 p-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold">Share via Email</h5>
-                <button type="button" class="btn-close" id="closeModalBtn"></button>
+                     </div>
+                {% endfor %}                
             </div>
-            <p class="small text-muted mb-2">Enter an email address to share this article.</p>
-            <form id="shareEmailForm">
-                <div class="mb-3">
-                    <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
-                    <input type="email" class="form-control rounded-3" id="recipientEmail" required>
+        </section>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if articles.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{ articles.previous_page_number }}" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{ articles.previous_page_number }}"> {{ articles.previous_page_number }} </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% endif %}   
+
+                <li class="page-item">
+                    <a class="page-link" href="?p={{ articles.number }}"> {{ articles.number }} </a>
+                </li>             
+                
+                {% if articles.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{ articles.next_page_number }}"> {{ articles.next_page_number }} </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{ articles.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        {% for article in articles %}
+        <!-- Share Modal for each article -->
+        <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Choose a Share Template</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-1"> 
+                            {% for template_id in "123456"|make_list %}
+                                <div class="col-md-4 mb-1 px-1">  
+                                    <div class="card preview-card">
+                                        <div class="preview-container">
+                                            <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title">Template {{ template_id }}</h6>
+                                            <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>                                   
+                    </div>
                 </div>
                 <input type="hidden" id="articleTitle">
                 <input type="hidden" id="articleURL">
@@ -355,5 +353,28 @@
             }
         });
     </script>
+            </div>
+        </div>
+        {% endfor %}
 
-{% endblock body %}
+
+
+        <!-- Testimonials -->
+        <section class="bg-secondary bg-gradient py-5">
+            <div class="container text-center text-white">
+                <h2>What Our Subscribers Say</h2>
+                <blockquote class="blockquote mt-4">"This newsletter helped me grow my social media presence by 5x!"</blockquote>
+                <figcaption class="blockquote-footer text-white">Alex Johnson, Social Media Marketer</figcaption>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3">
+            <p>Follow us on:
+                <a href="https://www.linkedin.com/in/hridoy-rahman/" class="text-white">LinkedIn</a> | 
+                <a href="https://github.com/iaminhri/COSC-4P02" class="text-white">GitHub</a>
+            </p>
+            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
+        </footer>
+
+    {% endblock body %}
