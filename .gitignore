@@ -1,6 +1,5 @@
 COSC 4P02 2025 Gradebook.pdf
 .DS_Store
-<<<<<<< HEAD
 trendtailor/trendApp/bin/*
 trendtailor/trendApp/include/*
 trendtailor/trendApp/lib/*
@@ -17,7 +16,8 @@ trendtailor/trendApp/trendApp/__pycache__/*
 /trendtailor/trendApp/.env
 trendtailor/trendApp/accountsApp/__pycache__/*
 trendtailor/trendApp/trendApp/__pycache__/*
+trendtailor/trendApp/accountsApp/migrations/__pycache__/*
+trendtailor/trendApp/trendApp/migrations/__pycache__/*
 myenv/*
-=======
 trendtailor/venv/*
->>>>>>> 69f2f4b (added git ignore)
+
