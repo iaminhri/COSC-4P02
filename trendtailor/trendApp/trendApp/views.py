@@ -1,3 +1,6 @@
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse 
+from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_3
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -7,6 +10,7 @@ import json
 from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article
 from django.db.models import Q
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 def home(request):
@@ -33,7 +37,7 @@ def check_articles(user, topics, keywords):
     else:
         return []
 
-# Scrum 3 task1: Generate email template
+# Scrum 3 task1: Generate email template with newsletter
 def email_template_1(request):
     return render(request, 'email_template_1.html')
 
@@ -42,6 +46,31 @@ def email_template_2(request):
 
 def email_template_3(request):
     return render(request, 'email_template_3.html')
+def email_template_4(request):
+    return render(request, 'email_template_4.html')
+def email_template_5(request):
+    return render(request, 'email_template_5.html')
+
+# Share article with email templates
+@xframe_options_exempt
+def share_email(request, article_id, template_id):
+    try:
+        article = Article.objects.get(id=article_id)
+    except Article.DoesNotExist:
+        return HttpResponse("Article not found", status=404)
+
+    template_map = {
+        1: "share_email1.html",
+        2: "share_email2.html",
+        3: "share_email3.html",
+        4: "share_email4.html",
+        5: "share_email5.html",
+        6: "share_email6.html",
+    }
+    
+    template_name = template_map.get(template_id, "share_email1.html") 
+    return render(request, template_name, {"article": article})
+
 
 # Send Email (Ensures only logged-in users can send emails)
 @csrf_exempt

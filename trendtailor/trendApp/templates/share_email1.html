@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share This Article</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            text-align: center;
+            padding: 20px;
+        }
+        .logo {
+            max-width: 200px;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+        .image-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="email-container">
+        <!-- Logo -->
+        <div class="header">
+            <img src="{% static 'images/TrendTailor.png' %}" alt="Logo Here" class="logo">
+        </div>
+
+        <!-- Main Heading -->
+        <h1>Welcome to TrendTailor!</h1>
+        <p>
+            A Weekly updates on trends, strategies, and platform changes.
+        </p>
+        
+        <!-- Article Image -->
+        {% if article.urlToImage %}
+            <img src="{{ article.urlToImage }}" alt="Article Image" class="image-container">
+        {% endif %}
+
+        <!-- Article Title -->
+        <h2>{{ article.title }}</h2>
+
+        <!-- Article Description -->
+        <p>{{ article.description }}</p>
+
+        <!-- Read More Button -->
+        <a href="{{ article.url }}" class="cta-button">Read Full Article</a>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
+            <p>Want to change how you receive these emails? <a href="#" style="color: white;">Unsubscribe</a></p>
+        </div>
+    </div>
+
+</body>
+</html>
