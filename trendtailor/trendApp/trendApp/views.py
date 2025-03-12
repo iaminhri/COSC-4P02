@@ -24,11 +24,16 @@ def check_articles(user, topics, keywords):
     query = Q()
     for term in topics + keywords:
         query |= Q(title__icontains=term) | Q(description__icontains=term)
+    
+    existingArticles = Article.objects.filter(query)
 
-    existing_articles = Article.objects.filter(query)
-    return list(existing_articles) if existing_articles.exists() else []
+    if existingArticles.exists():
+        articles_list = list(existingArticles)
+        return articles_list
+    else:
+        return []
 
-# Email Templates
+# Scrum 3 task1: Generate email template
 def email_template_1(request):
     return render(request, 'email_template_1.html')
 
