@@ -28,3 +28,5 @@ trendtailor/trendApp/accountsApp/migrations/__pycache__/*
 trendtailor/trendApp/trendApp/migrations/__pycache__/*
 .vscode/
 trendtailor\trendApp\db.sqlite3
+trendtailor/trendApp/accountsApp/migrations/*
+trendtailor/trendApp/trendApp/migrations/*
