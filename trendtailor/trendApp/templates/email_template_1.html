@@ -1,37 +1,58 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Template - Tech & Finance</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Email Template 1 - Tax</title>
     <style>
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 450px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            max-width: 500px;
+            padding-top: 20px;
+            margin: auto;
+        }
+        p {
+            font-size: 15px;
+            font-weight: normal;
+            max-width: 550px;
+            padding-top: 20px;
+            margin: auto;
+        }
         body {
             font-family: Arial, sans-serif;
-            background-color: #1e365f;
-            color: whitesmoke;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
         }
         .email-container {
             max-width: 600px;
             margin: 20px auto;
-            background-color: #a0a3ca;
+            background-color: #fff;
             border-radius: 8px;
             overflow: hidden;
             text-align: center;
             padding: 20px;
         }
         .header {
-            background-color: #1B3B6F;
+            background-color: #333;
+            color: white;
             padding: 20px;
         }
         .logo {
             max-width: 150px;
         }
         .cta-button {
-            background-color: #36688D;
+            background-color: #6A4835;
             color: #fff;
             padding: 12px 24px;
             font-size: 16px;
@@ -43,67 +64,117 @@
             cursor: pointer;
         }
         .cta-button:hover {
-            background-color: #A8D0DB;
-            color: black;
+            background-color: #444;
         }
         .image-container {
             width: 100%;
             max-width: 500px;
             margin: auto;
-            padding-top: 30px;
+            padding-top: 20px;
             border-radius: 8px;
         }
         .footer {
-            background-color: #1B3B6F;
+            background-color: #333;
             color: white;
-            padding: 10px;
-            font-size: 12px;
+            padding: 5px;
+            font-size: 10px;
         }
-        .article-section {
-            background-color: #36688D;
+        .service-section {
+            display: flex;
+            align-items: center;
             padding: 20px;
             border-radius: 8px;
-            text-align: left;
             margin-top: 20px;
+            text-align: left;
         }
-        .article-section h2 {
-            font-size: 22px;
+        .service-section img {
+            width: 50%;
+            border-radius: 8px;
+        }
+        .service-content {
+            width: 50%;
+            padding-left: 20px;
+        }
+        .service-content h3 {
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
         }
-        .article-section p {
-            font-size: 17px;
+        .service-content p {
+            font-size: 14px;
             line-height: 1.5;
         }
     </style>
 </head>
 <body>
+
     <div class="email-container">
+        <!-- Logo -->
         <div class="header">
-            <img src="pe" alt="Logo Here" class="logo">
+            <img src="{% static 'pics_email_template/logo_white.png' %}" alt="Logo Here" class="logo">
         </div>
 
-        <h1>Technology & Finance Insights</h1>
-        <p>Stay updated with the latest trends in technology and financial markets.</p>
-        <a href="#" class="cta-button">Subscribe Now</a>
-        
-        <img src="pexels-alesiakozik-6771120.jpg" alt="Tech Image" class="image-container">
-        
-        <div class="article-section">
-            <h2>Bitcoin ETF: Abu Dhabi Sovereign Wealth Fund Discloses $437 Million BlackRock Holdings</h2>
-            <p>
-                According to a recent filing with the United States Securities and Exchange Commission, Abu Dhabi’s sovereign wealth fund currently holds a significant amount in BlackRock’s spot Bitcoin ETF (exchange-traded fund). This purchase came in the final quarter of 2024 after asset management firm BlackRock secured the commercial license to operate in Abu Dhabi last November.
-            </p>
-            <p>
-                In 2024, the world’s largest asset manager BlackRock — with tens of trillions of dollars under management — disclosed its intentions to expand in the Middle East, focusing on the capital city Abu Dhabi and Riyadh. The recent $437 million purchase of its Bitcoin ETF accentuates BlackRock’s mission to work closely with sovereign wealth funds in the region.
-            </p>
+        <!-- Main Heading -->
+        <h1>Maximize Your Tax Benefits with Our Expertise</h1>
+        <p>
+            Welcome to <strong>[Tax Firm Name]</strong>, where we're dedicated to helping you achieve the best possible outcome 
+            for your taxes. We have an exclusive offer tailored just for you.
+        </p>
+        <a href="#" class="cta-button">Claim Your Exclusive Tax Consultation</a> <!-- Here should let user add their own link url -->
+
+        <!-- Section 1 -->
+        <h2>Your Financial Success, Our Priority</h2>
+        <p>
+            Are you ready to experience unbeatable offers and exceptional service? At <strong>[Your Business Name]</strong>, 
+            we're excited to introduce our exclusive deals for new customers. Don't miss out on this limited-time opportunity 
+            to save big and enjoy the premium services you deserve.
+        </p>
+        <img src="{% static 'pics_email_template/T1_pic1.jpeg' %}" alt="Main Image" class="image-container">
+
+        <!-- Section 2 -->
+        <h2>Schedule your Appointment Today to Take Advantage of our New Customer Deals</h2>
+        <p>
+            Are you ready to experience unbeatable offers and exceptional service? At <strong>[Your Business Name]</strong>, 
+            we're excited to introduce our exclusive deals for new customers. Don't miss out on this limited-time opportunity 
+            to save big and enjoy the premium services you deserve.
+        </p>
+        <a href="#" class="cta-button">Book Now</a>
+        <img src="{% static 'pics_email_template/T1_pic2.jpeg' %}" alt="Second Image" class="image-container">
+
+        <!-- Section 3 -->
+        <h2>Explore Our Comprehensive Tax Services</h2>
+        <p>
+            <strong>[Tax Firm Name]</strong> offers a wide range of tax services to meet your needs.
+        </p>
+        <!-- (1) -->
+        <div class="service-section">
+            <img src="{% static 'pics_email_template/T1_pic3.png' %}" alt="Personal Tax Preparation">
+            <div class="service-content">
+                <h3>Personal Tax Preparation</h3>
+                <p>
+                    Ensure you get the most out of your personal tax returns with our experienced tax professionals for the fiscal year.
+                </p>
+            </div>
         </div>
-        
+        <!-- (2) -->
+        <div class="service-section" style="flex-direction: row-reverse;">
+            <img src="{% static 'pics_email_template/T1_pic4.png' %}" alt="Business Tax Services">
+            <div class="service-content">
+                <h3>Business Tax Services</h3>
+                <p>
+                    Navigate the complexities of business taxes with confidence, from corporate returns to strategic tax planning.
+                </p>
+            </div>
+        </div>
+        <br>
+
+        <!-- footer -->
         <div class="footer">
-            <footer>&copy; 2025 TrendTailor. All rights reserved.</footer>
+            <footer>Copyright &copy; [Year] [Company Name]. All rights reserved.</footer>
             <br>
             <footer>Want to change how you receive these emails? <a href="#" style="color: white;">Unsubscribe</a></footer>
         </div>
     </div>
+
 </body>
 </html>

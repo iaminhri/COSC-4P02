@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article
 from django.db.models import Q
 
+
 def home(request):
     articles = fetch_all_articles()
     paginator = Paginator(articles, 52)
