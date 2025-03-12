@@ -19,4 +19,9 @@ trendtailor/trendApp/trendApp/__pycache__/*
 myenv/*
 trendtailor/venv/
 trendtailor/trendApp/staticfiles
+<<<<<<< HEAD
 trendtailor\trendApp\db.sqlite3
+=======
+trendtailor/trendApp/accountsApp/migrations/*
+trendtailor/trendApp/trendApp/migrations/*
+>>>>>>> e8ac55f6af094788c984c7ece637d314ea3891aa

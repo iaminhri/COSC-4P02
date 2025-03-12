@@ -69,13 +69,31 @@
                 <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
             </form>
             <!-- Email App Links -->
-            <div class="d-flex justify-content-between mt-3">
+            <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center align-items-center">
                 <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
                     <i class="fa fa-envelope"></i> Gmail
                 </a>
                 <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
                     <i class="fa fa-envelope"></i> Outlook
                 </a>
+
+                <a id="facebookLink" href="#" target="_blank" class="btn btn-facebook mb-2">
+                    <i class="fa fa-facebook"></i> Facebook
+                </a>
+
+                <a id="twitterLink" href="#" target="_blank" class="btn btn-twitter mb-2">
+                    <i class="fa fa-twitter"></i> Twitter
+                </a>
+
+                <a id="redditLink" href="#" target="_blank" class="btn btn-reddit">
+                    <i class="fa fa-reddit"></i> Reddit
+                </a>
+
+
+
+
+
+
             </div>
         </div>
     </div>
@@ -122,6 +140,54 @@
         .d-flex {
             display: flex !important;
         }
+
+        .btn-facebook {
+            background-color: #4267B2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-facebook:hover {
+            background-color: #365899;
+            color: #fff;
+        }
+
+
+
+        .btn-twitter {
+            background-color: #1DA1F2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        .btn-twitter:hover {
+            background-color: #0d95e8;
+            color: #fff;
+        }
+
+
+        .btn-reddit {
+            background-color: #FF4500;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-reddit:hover {
+            background-color: #e03d00;
+            color: #fff;
+        }
+
+
     </style>
 
     <script>
@@ -143,6 +209,17 @@
 
                     document.getElementById("gmailLink").href = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
                     document.getElementById("outlookLink").href = `https://outlook.office.com/mail/deeplink/compose?subject=${subject}&body=${body}`;
+
+                    document.getElementById("facebookLink").href =
+                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+
+
+                    document.getElementById("twitterLink").href = `https://twitter.com/intent/tweet?text=${subject}&url=${encodeURIComponent(url)}`;
+
+                    document.getElementById("redditLink").href =
+                        `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${subject}`;
+
+
 
                     modal.classList.remove("d-none");
                     modal.classList.add("d-flex");
