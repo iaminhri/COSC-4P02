@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-{% comment %} 
+                        {% comment %} 
             <div class="row">
                 <div class="col-12">
                     <ul class="nav nav-tabs">
@@ -127,10 +127,10 @@
                     {% endfor %}               
                 </div>
                 <br>
-               <form action="{% url 'content_view' %}" method="POST" class="needs-validation d-flex justify-content-center">
+                <form action="{% url 'content_view' %}" method="POST" class="d-flex justify-content-center" class="needs-validation d-flex justify-content-center">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-primary">Show More</button>
-                </form>
+                </form>            
             </section>
         </div>
     </body>

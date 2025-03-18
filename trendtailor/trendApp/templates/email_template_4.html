@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,14 +80,14 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <img src="pe" alt="Logo Here" class="logo">
+            <img src="{% static 'pics_email_template/logo_white.png' %}" alt="Logo Here" class="logo">
         </div>
 
         <h1>Technology & Finance Insights</h1>
         <p>Stay updated with the latest trends in technology and financial markets.</p>
         <a href="#" class="cta-button">Subscribe Now</a>
         
-        <img src="pexels-alesiakozik-6771120.jpg" alt="Tech Image" class="image-container">
+        <img src="{% static 'pics_email_template/T4_pic1.jpg' %}" alt="Tech Image" class="image-container">
         
         <div class="article-section">
             <h2>Bitcoin ETF: Abu Dhabi Sovereign Wealth Fund Discloses $437 Million BlackRock Holdings</h2>

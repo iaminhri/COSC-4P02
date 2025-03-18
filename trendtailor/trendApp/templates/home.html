@@ -33,10 +33,17 @@
                                 <p class="card-text">{{ article.description|truncatechars:70 }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                    <div>
-                                        <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
+                                    <div> 
+                                        <!-- Share Button (Triggers Modal) -->
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
                                             <i class="fa fa-share"></i> Share
                                         </button>
+                                        
+                                        <button type="button" class="btn btn-outline-light btn-sm ms-2 share-btn" 
+                                            data-title="{{ article.title }}" data-url="{{ article.url }}">
+                                            <i class="fa fa-share"></i> Share 2
+                                        </button>
+
                                         <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
                                             <i class="fa fa-thumbs-up"></i> Like
                                         </button>
@@ -96,5 +103,257 @@
             </p>
             <p>&copy; 2025 AI Newsletter and Social Media Content Generator</p>
         </footer>
+
+        <!-- Floating Email Share Modal -->
+        <div id="customShareModal" class="custom-modal d-none">
+            <div class="custom-modal-content rounded-4 p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold">Share via Email</h5>
+                    <button type="button" class="btn-close" id="closeModalBtn"></button>
+                </div>
+                <p class="small text-muted mb-2">Enter an email address to share this article.</p>
+                <form id="shareEmailForm">
+                    <div class="mb-3">
+                        <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
+                        <input type="email" class="form-control rounded-3" id="recipientEmail" required>
+                    </div>
+                    <input type="hidden" id="articleTitle">
+                    <input type="hidden" id="articleURL">
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
+                </form>
+                
+                <!-- Email App Links -->
+                <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center align-items-center">
+                    <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
+                        <i class="fa fa-envelope"></i> Gmail
+                    </a>
+                    <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
+                        <i class="fa fa-envelope"></i> Outlook
+                    </a>
+                    <a id="facebookLink" href="#" target="_blank" class="btn btn-facebook mb-2">
+                        <i class="fa fa-facebook"></i> Facebook
+                    </a>
+        
+                    <a id="twitterLink" href="#" target="_blank" class="btn btn-twitter mb-2">
+                        <i class="fa fa-twitter"></i> Twitter
+                    </a>
+        
+                    <a id="redditLink" href="#" target="_blank" class="btn btn-reddit">
+                        <i class="fa fa-reddit"></i> Reddit
+                    </a>
+                </div> 
+            </div>
+        </div>
+
+        {% for article in articles %}
+            <!-- Share Modal for each article -->
+            <div class="modal fade" id="shareModal-{{ article.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Choose a Share Template</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-1"> 
+                                {% for template_id in "123456"|make_list %}
+                                    <div class="col-md-4 mb-1 px-1">  
+                                        <div class="card preview-card">
+                                            <div class="preview-container">
+                                                <iframe src="{% url 'share_email' article.id template_id|add:0 %}" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title">Template {{ template_id }}</h6>
+                                                <a href="{% url 'share_email' article.id template_id|add:0 %}" class="btn btn-primary btn-sm">Select</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>                                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    <style>
+        /* Custom Modal Styling */
+        .custom-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .custom-modal-content input[type="email"] {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: 1px solid #ccc;
+        }
+
+        .custom-modal-content input::placeholder {
+            color: #666 !important;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+
+        .btn-facebook {
+            background-color: #4267B2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-facebook:hover {
+            background-color: #365899;
+            color: #fff;
+        }
+
+        .btn-twitter {
+            background-color: #1DA1F2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        .btn-twitter:hover {
+            background-color: #0d95e8;
+            color: #fff;
+        }
+
+        .btn-reddit {
+            background-color: #FF4500;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-reddit:hover {
+            background-color: #e03d00;
+            color: #fff;
+        }
+
+
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var shareButtons = document.querySelectorAll(".share-btn");
+            var modal = document.getElementById("customShareModal");
+            var closeModalBtn = document.getElementById("closeModalBtn");
+
+            shareButtons.forEach(button => {
+                button.addEventListener("click", function(event) {
+                    let title = button.getAttribute("data-title");
+                    let url = button.getAttribute("data-url");
+
+                    document.getElementById("articleTitle").value = title;
+                    document.getElementById("articleURL").value = url;
+
+                    let subject = encodeURIComponent("Check out this article: " + title);
+                    let body = encodeURIComponent("Hey! I found this interesting article: " + url);
+
+                    document.getElementById("gmailLink").href = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+                    document.getElementById("outlookLink").href = `https://outlook.office.com/mail/deeplink/compose?subject=${subject}&body=${body}`;
+
+                    document.getElementById("facebookLink").href =
+                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+
+
+                    document.getElementById("twitterLink").href = `https://twitter.com/intent/tweet?text=${subject}&url=${encodeURIComponent(url)}`;
+
+                    document.getElementById("redditLink").href =
+                        `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${subject}`;
+
+
+
+                    modal.classList.remove("d-none");
+                    modal.classList.add("d-flex");
+                });
+            });
+
+            // Close modal when clicking the close button
+            closeModalBtn.addEventListener("click", function() {
+                modal.classList.remove("d-flex");
+                modal.classList.add("d-none");
+            });
+
+            // Close modal when clicking outside it
+            modal.addEventListener("click", function(event) {
+                if (event.target === modal) {
+                    modal.classList.remove("d-flex");
+                    modal.classList.add("d-none");
+                }
+            });
+
+            document.getElementById("shareEmailForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                fetch("/send-email/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("recipientEmail").value,
+                        title: document.getElementById("articleTitle").value,
+                        url: document.getElementById("articleURL").value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("❌ " + data.error);
+                    } else {
+                        alert("✅ " + data.message);
+                        document.getElementById("shareEmailForm").reset();
+                        closeModal();
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+
+            function getCSRFToken() {
+                let cookieValue = null;
+                const cookies = document.cookie.split(";");
+                cookies.forEach(cookie => {
+                    if (cookie.trim().startsWith("csrftoken=")) {
+                        cookieValue = cookie.split("=")[1];
+                    }
+                });
+                return cookieValue;
+            }
+        });
+    </script>
 
     {% endblock body %}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +26,9 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
+        }
+        .logo {
+            max-width: 200px;
         }
         .button {
             display: inline-block;
@@ -73,6 +77,10 @@
 <body>
     <div class="container">
         <div class="header">
+            <img src="{% static 'pics_email_template/logo_white.png' %}" alt="Logo Here" class="logo">
+        </div>
+
+        <div class="header">
             <h1>Join the Leading Experts in Your Industry – Build Your Future with Us!</h1>
             <a href="#" class="button">Stay Ahead – Subscribe for Exclusive Insights</a>
         </div>
@@ -83,7 +91,7 @@
         <div class="content">
             <h2>We’re Hiring the Best Talents</h2>
             <p>Are you passionate about making an impact in your industry? We’re looking for driven individuals to join our growing team and help shape the future.</p>
-            <img src="team-photo.jpg" alt="Team Photo" width="100%">
+            <img src="{% static 'pics_email_template/T5_pic1.jpg' %}" alt="Team Photo" width="100%">
         </div>
         <div class="section">
             <h2>Trusted by Top Companies Worldwide</h2>
