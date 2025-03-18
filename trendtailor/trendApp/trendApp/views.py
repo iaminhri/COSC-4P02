@@ -9,11 +9,15 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+import os
 
 def home(request):
     topics_and_keywords = {
         "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
-        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        "Science": ["Experiment", "Theory"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        
+        "Science": ["Experiment", "Theory"],
         "Technology": ["Innovation", "Gadgets"],
         "Health": ["Wellness", "Medicine"],
         "Education": ["Learning", "Schools"],
@@ -133,3 +137,97 @@ def send_email(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+# SCRUM 11 - Define 2 SNS content classes (52), html snippet
+class InstagramContent:
+    def __init__(self, title, caption, image_url, link, hashtags):
+        self.title = title
+        self.caption = caption
+        self.image_url = image_url
+        self.link = link
+        self.hashtags = hashtags
+
+    def render(self):
+        return f"""
+        <div style="max-width:600px;margin:auto;background-color:#333;color:white;padding:20px;border-radius:10px;">
+            <div style="width:100%;border-radius:10px;">
+                <img src="{self.image_url}" alt="Instagram Post Image" style="width:100%;border-radius:10px;">
+            </div>
+            <h2 style="font-size:32px;margin-top:10px;">{self.title}</h2>
+            <p style="font-size:16px;margin-top:10px;">
+                {self.caption}<br>
+                🔗 <a href="{self.link}" style="color:#8a3ab9;text-decoration:none;">Link in Bio</a>
+            </p>
+            <p style="color:#8a3ab9;">{self.hashtags}</p>
+            <a href="#" style="display:inline-block;padding:10px 20px;background-color:#8a3ab9;color:white;text-decoration:none;border-radius:5px;margin-top:20px;">Share</a>
+        </div>
+        """
+
+class RedditContent:
+    def __init__(self, title, caption, image_url):
+        self.title = title
+        self.caption = caption
+        self.image_url = image_url
+
+    def render(self):
+        return f"""
+        <div style="max-width:800px;margin:auto;background-color:#272729;color:#d7dadc;padding:20px;border-radius:10px;">
+            <p style="font-weight:bold;font-size:28px;margin-bottom:15px;text-align:center;word-wrap:break-word;">
+                {self.title}
+            </p>
+            <div style="text-align:center;margin-bottom:20px;">
+                <img src="{self.image_url}" alt="Reddit Post Image" style="width:100%;border-radius:10px;">
+            </div>
+            <p style="font-size:18px;line-height:1.6;">{self.caption}</p>
+            <div style="text-align:center;margin-top:20px;">
+                <button onclick="alert('Post link copied to clipboard!')" style="padding:10px 20px;">Share</button>
+            </div>
+        </div>
+        """
+    
+# SCRUM 11 - Preview SNS content classes (53)
+@csrf_exempt
+def preview_content(request):
+    if request.method == "POST":
+        platform = request.POST.get("platform", "")
+        title = request.POST.get("title", "")
+        caption = request.POST.get("caption", "")
+        link = request.POST.get("link", "")
+        hashtags = request.POST.get("hashtags", "")
+
+        sns_storage = FileSystemStorage(
+            location=os.path.join(settings.MEDIA_ROOT, 'SNS_content'),
+            base_url=settings.MEDIA_URL + 'SNS_content/'
+        )
+
+        image_file = request.FILES.get("image_file", None)
+        if image_file:
+            saved_filename = sns_storage.save(image_file.name, image_file)
+            image_url = sns_storage.url(saved_filename) 
+        else:
+            image_url = ""
+
+        if platform == "instagram":
+            content_obj = InstagramContent(title, caption, image_url, link, hashtags)
+        elif platform == "reddit":
+            content_obj = RedditContent(title, caption, image_url)
+        else:
+            return HttpResponse("Unknown platform", status=400)
+
+        preview_html = content_obj.render()
+
+        return render(request, "preview_SNScontent.html", {
+            "preview_html": preview_html,
+            "form_data": {
+                "platform": platform,
+                "title": title,
+                "caption": caption,
+                "link": link,
+                "hashtags": hashtags,
+            }
+        })
+    else:
+        return render(request, "preview_SNScontent.html", {
+            "preview_html": None,
+            "form_data": {}
+        })
