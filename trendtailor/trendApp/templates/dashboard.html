@@ -1,137 +1,253 @@
 {% extends "base.html" %}
-{% load static %} 
-    {% block body %}   
-    <body class="bg-dark text-light">
+{% load static %}
 
-        <!-- Main Content Area -->
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">User Preferences</h5>
-                            <div class="card-group">
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">News Sources</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.sources }}</h5>
-                                    </div>
+{% block body %}
+<body class="bg-dark text-light">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">User Preferences</h5>
+                        <div class="card-group">
+                            <div class="card text-white bg-dark mb-3">
+                                <div class="card-header">News Sources</div>
+                                <div class="card-body text-info">
+                                    <h5 class="card-title">{{ preferences.sources }}</h5>
                                 </div>
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">Topics</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.topics }}</h5>
-                                    </div>
+                            </div>
+                            <div class="card text-white bg-dark mb-3">
+                                <div class="card-header">Topics</div>
+                                <div class="card-body text-info">
+                                    <h5 class="card-title">{{ preferences.topics }}</h5>
                                 </div>
-                                <div class="card text-white bg-dark mb-3">
-                                    <div class="card-header">Keywords</div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-title">{{ preferences.keywords }}</h5>
-                                    </div>
+                            </div>
+                            <div class="card text-white bg-dark mb-3">
+                                <div class="card-header">Keywords</div>
+                                <div class="card-body text-info">
+                                    <h5 class="card-title">{{ preferences.keywords }}</h5>
                                 </div>
                             </div>
                         </div>
-                        <form action="{% url 'preferences' %}" method="POST" class="needs-validation">
+                    </div>
+                    <form action="{% url 'preferences' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Content Button -->
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#scheduleModal">
+            Schedule Content
+        </button>
+
+        <!-- Schedule Modal -->
+        <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Schedule Content</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="scheduleForm">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
+                            <div class="mb-3">
+                                <label for="scheduleDate" class="form-label">Select Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="scheduleDate" name="schedule_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="repeatOption" class="form-label">Repeat</label>
+                                <select class="form-select" id="repeatOption" name="repeat_option">
+                                    <option value="none">No Repeat</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentSelect" class="form-label">Select Content</label>
+                                <select class="form-select" id="contentSelect" name="content_id">
+                                    {% for article in articles %}
+                                    <option value="{{ article.id|default_if_none:0 }}">{{ article.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Schedule</button>
                         </form>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">Performance Monitoring</h5>
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-                    </div>
-                </div>
-            </div>
-                        {% comment %} 
-            <div class="row">
-                <div class="col-12">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Entries</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Add Content</a>
-                        </li>
-                    </ul>
-                    <table class="table table-dark table-striped mt-3">
-                        <thead>
+        <!-- Scheduled Content List -->
+        <div class="card bg-secondary text-white mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Scheduled Content</h5>
+                <table class="table table-dark table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Scheduled Date</th>
+                            <th>Repeat</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in scheduled_contents %}
                             <tr>
-                                <th scope="col">Content ID</th>
-                                <th scope="col">Content Name</th>
-                                <th scope="col">Last Updated</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>101</td>
-                                <td>Tech Innovations</td>
-                                <td>2025-01-26</td>
+                                <td>{{ schedule.article.title }}</td>
+                                <td>{{ schedule.schedule_date|date:"F jS, Y \\a\\t g:i A" }}</td>
+                                <td>{{ schedule.get_repeat_option_display|title }}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                    <button class="btn btn-warning btn-sm edit-button"
+                                        data-bs-toggle="modal" data-bs-target="#editModal"
+                                        data-id="{{ schedule.id }}"
+                                        data-date="{{ schedule.schedule_date|date:'Y-m-d\TH:i' }}"
+                                        data-repeat="{{ schedule.repeat_option }}">Edit</button>
+                                    <form method="POST" action="{% url 'delete_schedule' schedule.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
-                            <!-- Additional rows as needed -->
-                        </tbody>
-                    </table>
-                </div>
-            </div> {% endcomment %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <section class="container-fluid my-3 px-1">
-                <div class="row ">
-                    <h2 class="text-center mb-4">My Preferred Articles</h2>
-                </div>
-                <div class="row">
-                    {% for article in articles %}
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 6px solid #000;'>
-                                {% if article.urlToImage %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                                {% else %}
-                                <div class="ratio ratio-16x9">
-                                    <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
-                                </div>
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title text-truncate">{{ article.title }}</h5>
-                                    <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                        <div>
-                                            <button class="btn btn-outline-light btn-sm ms-2" aria-label="Share">
-                                                <i class="fa fa-share"></i> Share
-                                            </button>
-                                            <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                                <i class="fa fa-thumbs-up"></i> Like
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+        <!-- Featured Articles -->
+        <section class="container-fluid my-3 px-1">
+            <div class="row">
+                <h2 class="text-center mb-4">My Preferred Articles</h2>
+            </div>
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm bg-dark bg-gradient text-white">
+                            {% if article.urlToImage %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}">
+                            </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                                <p class="card-text">{{ article.description|truncatechars:70 }}</p>
+                                <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
                             </div>
                         </div>
-                    {% endfor %}               
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Edit Schedule Modal -->
+        <div id="editModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Schedule</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="schedule_id" id="editScheduleId">
+                            <label for="editScheduleDate">New Date & Time:</label>
+                            <input type="datetime-local" name="schedule_date" id="editScheduleDate" class="form-control">
+                            <label for="editRepeatOption">Repeat Option:</label>
+                            <select name="repeat_option" id="editRepeatOption" class="form-select">
+                                <option value="none">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
-                <br>
-                <form action="{% url 'content_view' %}" method="POST" class="d-flex justify-content-center" class="needs-validation d-flex justify-content-center">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Show More</button>
-                </form>            
-            </section>
+            </div>
         </div>
-    </body>
-    {% endblock body %}
+
+           <!-- AJAX Script -->
+           <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("scheduleForm").addEventListener("submit", function(event) {
+                    event.preventDefault();  
+    
+                    let formData = new FormData(this);
+                    let csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    
+                    fetch("{% url 'schedule_content' %}", {
+                        method: "POST",
+                        headers: {"X-CSRFToken": csrfToken},
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Content Scheduled Successfully!");
+                            location.reload();  // Reload the page to update the table
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                });
+            });
+            </script>
+    
+
+        <!-- Edit Modal -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const editButtons = document.querySelectorAll(".edit-button");
+                const editScheduleId = document.getElementById("editScheduleId");
+                const editScheduleDate = document.getElementById("editScheduleDate");
+                const editRepeatOption = document.getElementById("editRepeatOption");
+                const editModal = new bootstrap.Modal(document.getElementById("editModal"));
+            
+                editButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        editScheduleId.value = this.getAttribute("data-id");
+                        editScheduleDate.value = this.getAttribute("data-date");
+                        editRepeatOption.value = this.getAttribute("data-repeat");
+                    });
+                });
+            
+                document.getElementById("editForm").addEventListener("submit", function (event) {
+                    event.preventDefault();
+            
+                    let formData = new FormData(this);
+                    let csrfToken = formData.get("csrfmiddlewaretoken");
+            
+                    fetch("{% url 'edit_schedule' %}", {
+                        method: "POST",
+                        headers: { "X-CSRFToken": csrfToken },
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Schedule Updated!");
+            
+                            const row = document.querySelector(`[data-id="${editScheduleId.value}"]`).closest("tr");
+                            row.children[1].textContent = data.new_date;  // Update the scheduled date
+                            row.children[2].textContent = data.repeat;  // Update repeat option
+                            
+                            editModal.hide(); // Close modal
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                });
+            });
+            </script>
+
+    </div>
+</body>
+{% endblock %}

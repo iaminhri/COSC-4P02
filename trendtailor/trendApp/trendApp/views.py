@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
 from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_3
@@ -9,11 +9,17 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 from django.views.decorators.clickjacking import xframe_options_exempt
+from .models import ScheduledContent  
+from django.utils import timezone  
+from datetime import datetime
+
+print("Loading views.py...")
 
 def home(request):
     topics_and_keywords = {
-        "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
-        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        "Science": ["Experiment", "Theory"],
+        "Artificial": ["Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],
+        "Science": ["Experiment", "Theory"],
         "Technology": ["Innovation", "Gadgets"],
         "Health": ["Wellness", "Medicine"],
         "Education": ["Learning", "Schools"],
@@ -32,19 +38,7 @@ def home(request):
         "Fashion": ["Trends", "Designers", "Runways", "Sustainable Fashion"]
     }
 
-    # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetch_articles_from_api_1([topics], keywords)
-
-    # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetch_articles_from_api_2([topics], keywords)
-
-    # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetch_articles_from_api_3([topics], keywords)   
-
     articles = fetch_all_articles()
-
-    print("Max Number of Pages", len(articles) / 50)
-    
     paginator = Paginator(articles, 52)
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
@@ -52,32 +46,99 @@ def home(request):
     return render(request, 'home.html', {"articles": articlePageObj})
 
 def fetch_all_articles():
-    all_articles = Article.objects.all()
-    return all_articles
+    return Article.objects.all()
 
-def check_articles(user, topics, keywords):    
+def check_articles(user, topics, keywords):
     query = Q()
-    # Assuming topics and keywords are lists
     for term in topics + keywords:
         query |= Q(title__icontains=term) | Q(description__icontains=term)
-    
+
     existingArticles = Article.objects.filter(query)
+    return list(existingArticles) if existingArticles.exists() else []
 
-    if existingArticles.exists():
-        articles_list = list(existingArticles)
-        return articles_list
-    else:
-        return []
+# Dashboard View (With Scheduling Feature)
+@login_required
+def dashboard(request):
+    articles = Article.objects.all()
+    scheduled_contents = ScheduledContent.objects.filter(user=request.user).order_by("schedule_date")
+    return render(request, "dashboard.html", {"articles": articles, "scheduled_contents": scheduled_contents})
 
-# Scrum 3 task1: Generate email template with newsletter
+# Schedule Content View 
+@login_required
+def schedule_content(request):
+    if request.method == "POST":
+        print("RAW POST Data:", request.POST)
+
+        content_id = request.POST.get("content_id")
+        print(f"Received content_id before processing: {repr(content_id)}")
+
+        schedule_date = request.POST.get("schedule_date")
+        repeat_option = request.POST.get("repeat_option", "none")
+
+        if not content_id or not schedule_date:
+            return JsonResponse({"error": "Missing content ID or schedule date"}, status=400)
+
+        try:
+            content_id = content_id.strip().replace("'", "").replace('"', '')  
+            if not content_id.isdigit():
+                return JsonResponse({"error": f"Invalid article ID format: '{content_id}'"}, status=400)
+
+            article_id = int(content_id)
+            print(f"✅ Successfully converted to article_id: {article_id}")
+            article = get_object_or_404(Article, id=article_id)
+            print(f"✅ Fetched article: {article} (Type: {type(article)})")
+
+            if not isinstance(article, Article):
+                raise TypeError(f"❌ Mismatch: Retrieved object is not a valid `Article` instance. Got {type(article)}")
+
+            # Convert schedule_date to timezone-aware datetime
+            schedule_date = timezone.make_aware(datetime.strptime(schedule_date, "%Y-%m-%dT%H:%M"))
+
+            # Create the scheduled content
+            scheduled_content = ScheduledContent.objects.create(
+                user=request.user,
+                article=article,  
+                schedule_date=schedule_date,
+                repeat_option=repeat_option
+            )
+
+            return JsonResponse({
+                "success": True,
+                "article_title": article.title,
+                "schedule_date": schedule_date,
+                "repeat_option": scheduled_content.get_repeat_option_display(),
+                "schedule_id": scheduled_content.id
+            })
+
+        except TypeError as te:
+            print(f"❌ TypeError: {str(te)}")
+            return JsonResponse({"error": str(te)}, status=500)
+        except Exception as e:
+            print(f"❌ Unexpected Error: {str(e)}")
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+# Delete Scheduled Content
+@login_required
+def delete_schedule(request, schedule_id):
+    schedule = get_object_or_404(ScheduledContent, id=schedule_id, user=request.user)
+    schedule.delete()
+    return redirect("dashboard")
+
+# Email Template Views
 def email_template_1(request):
     return render(request, 'email_template_1.html')
+
 def email_template_2(request):
     return render(request, 'email_template_2.html')
+
 def email_template_3(request):
     return render(request, 'email_template_3.html')
+
 def email_template_4(request):
     return render(request, 'email_template_4.html')
+
 def email_template_5(request):
     return render(request, 'email_template_5.html')
 
@@ -98,8 +159,7 @@ def share_email(request, article_id, template_id):
         6: "share_email6.html",
     }
     
-    template_name = template_map.get(template_id, "share_email1.html") 
-    return render(request, template_name, {"article": article})
+    return render(request, template_map.get(template_id, "share_email1.html"), {"article": article})
 
 # Send Email (Ensures only logged-in users can send emails)
 @csrf_exempt
@@ -133,3 +193,37 @@ def send_email(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@login_required
+def edit_schedule(request):
+    if request.method == "POST":
+        try:
+            schedule_id = request.POST.get("schedule_id")
+            new_date = request.POST.get("schedule_date")
+            repeat_option = request.POST.get("repeat_option").capitalize()  
+
+            print(f"Editing Schedule ID: {schedule_id}, New Date: {new_date}, Repeat: {repeat_option}")
+
+            if new_date:
+                new_date = timezone.make_aware(datetime.strptime(new_date, "%Y-%m-%dT%H:%M"))
+
+            scheduled_content = get_object_or_404(ScheduledContent, id=schedule_id, user=request.user)
+            scheduled_content.schedule_date = new_date
+            scheduled_content.repeat_option = repeat_option.lower()  
+            scheduled_content.save()
+
+            formatted_date = scheduled_content.schedule_date.strftime("%B %d, %Y at %I:%M %p")
+
+            return JsonResponse({
+                "success": True,
+                "message": "Schedule updated!",
+                "new_date": formatted_date,
+                "repeat": repeat_option  
+            })
+        
+        except Exception as e:
+            print(f"Error updating schedule: {str(e)}")
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
