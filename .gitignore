@@ -41,3 +41,5 @@ __pycache__/
 trendtailor\trendApp\db.sqlite3
 trendtailor\trendApp\venv\*
 trendtailor\venv\*
+
+.vscode
