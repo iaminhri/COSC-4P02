@@ -19,3 +19,4 @@ trendtailor/trendApp/trendApp/__pycache__/*
 myenv/*
 trendtailor/venv/
 trendtailor/trendApp/staticfiles
+.vscode
