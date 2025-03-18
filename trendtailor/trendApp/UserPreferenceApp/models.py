@@ -9,7 +9,7 @@ class UserPreference(models.Model):
     keywords = models.TextField(help_text="Comma-separated list of keywords.")
 
     def get_sources_list(self):
-        return [source.strip() for source in self.sources.spilt(',') if source.strip()]
+        return [source.strip() for source in self.sources.split(',') if source.strip()]
 
     def get_topics_list(self):
         return [topic.strip() for topic in self.topics.split(',') if topic.strip()]
