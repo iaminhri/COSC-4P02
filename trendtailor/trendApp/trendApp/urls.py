@@ -36,6 +36,8 @@ urlpatterns = [
     path('accounts/', include('accountsApp.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('share-email/<int:article_id>/<int:template_id>/', views.share_email, name='share_email'), # share email
+    path("get-template-content/<int:article_id>/<int:template_id>/", views.get_template_content, name="get_template_content"),
+    path("send-email/", views.send_email, name="send_email"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

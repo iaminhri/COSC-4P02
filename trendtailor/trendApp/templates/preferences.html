@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% load static %} 
+
+{% block head %}
     <title>Preferences</title>
     <style>
         body {
@@ -70,8 +69,9 @@
             background-color: #6284AB;
         }
     </style>
-</head>
-<body>
+{% endblock head %}
+
+{% block body %}   
     <div class="container">
         <h1>Set Your Preferences</h1>
         <form method="post">
@@ -88,6 +88,4 @@
             <div class="btn-container"><button type="submit">Save Preferences</button></div>
         </form>
     </div>
-    
-</body>
-</html>
+{% endblock body %}   

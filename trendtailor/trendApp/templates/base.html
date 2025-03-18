@@ -7,6 +7,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        {% block head %}
+        {% endblock head %}
 
         <title>Trend Tailor</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -34,6 +37,25 @@
                 height: 300px; 
                 border: none;
             }
+            /* Default Style for Nav Links */
+            .nav-link {
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            /* Hover Effect */
+            .nav-link:hover {
+                background-color: #2c4d7e; /* Bootstrap blue color */
+                color: white;
+                border-radius: 5px; /* Rounded corners */
+            }
+
+            /* Active Link Style */
+            .nav-link.active {
+                background-color: #2c4d7e;
+                color: white;
+                font-weight: bold;
+                border-radius: 5px;
+            }
         </style>
         <script>
             function resizeIframe(iframe) {
@@ -55,16 +77,11 @@
                 doc.head.appendChild(style);
             }
         </script>
-            
     </head>
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-dark bg-gradient">
             <div class="container-fluid">
-                <!-- Navbar toggler for small devices -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
                 {% if user.is_authenticated %}
                     <a class="navbar-brand text-light" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
@@ -82,39 +99,39 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active text-light" aria-current="page" href="{% url 'home' %}"><i class="fa fa-fw fa-home text-light"></i> Home</a>
+                            <a class="nav-link text-light {% if request.path == '/' %}active{% endif %}" aria-current="page" href="{% url 'home' %}"><i class="fa fa-fw fa-home text-light"></i> Home</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link text-light" href="{% url 'profile' %}"><i class="fa fa-fw fa-user text-light"></i> Profile</a>
+                                <a class="nav-link text-light {% if request.path == '/accounts/profile/' %}active{% endif %}" href="{% url 'profile' %}"><i class="fa fa-fw fa-user text-light "></i> Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" href="{% url 'dashboard' %}"><i class="fa fa-bars text-light"></i> Dashboard </a>
+                                <a class="nav-link text-light {% if request.path == '/accounts/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}"><i class="fa fa-bars text-light {% if request.path == '/accounts/dashboard/' %}active{% endif %}"></i> Dashboard </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa fa-fw fa-sign-out text-light"></i> Logout </a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link text-light" href="{% url 'login' %}"><i class="fa fa-fw fa-sign-in text-light"></i> Login</a>
+                                <a class="nav-link text-light {% if request.path == '/accounts/login/' %}active{% endif %}" href="{% url 'login' %}"><i class="fa fa-fw fa-sign-in text-light "></i> Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" href="{% url 'register' %}"><i class="fa fa-fw fa-user-plus text-light"></i> Registration</a>
+                                <a class="nav-link text-light {% if request.path == '/accounts/register/' %}active{% endif %}" href="{% url 'register' %}"><i class="fa fa-fw fa-user-plus text-light "></i> Registration</a>
                             </li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
-
+        
         <!-- Offcanvas Sidebar -->
         <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
             <div class="offcanvas-header">
-                <h2 class="offcanvas-title mb-0 flex-grow-1 text-center" id="offcanvasSidebarLabel">Menu</h2>
+                <h2 class="offcanvas-title" id="offcanvasSidebarLabel">Menu</h2>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <img src="{% static 'images/TrendTailor.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-5" style="margin-bottom: 140px;">
+                <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-5" style="margin-bottom: 140px;">
                 <div class="mb-5">
                     <a href="{% url 'dashboard' %}" class="btn btn-outline-light w-100 py-3 fs-5">Dashboard</a>
                 </div>

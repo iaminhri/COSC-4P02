@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 
 def home(request):
     topics_and_keywords = {
@@ -101,10 +103,37 @@ def share_email(request, article_id, template_id):
     template_name = template_map.get(template_id, "share_email1.html") 
     return render(request, template_name, {"article": article})
 
-# Send Email (Ensures only logged-in users can send emails)
+def get_template_content(request, article_id, template_id):
+    """Fetches the full HTML content of an email template."""
+    article = get_object_or_404(Article, id=article_id)
+
+    # Map template IDs to template filenames
+    template_map = {
+        "1": "share_email1.html",
+        "2": "share_email2.html",
+        "3": "share_email3.html",
+        "4": "share_email4.html",
+        "5": "share_email5.html",
+        "6": "share_email6.html",
+    }
+    
+    template_name = template_map.get(str(template_id), "share_email1.html") 
+
+    try:
+        email_html_content = render_to_string(template_name, {"article": article})
+    except:
+        email_html_content = "<p>Error loading template</p>"
+
+    return JsonResponse({
+        "title": article.title,
+        "url": article.url,
+        "html_content": email_html_content
+    })
+
 @csrf_exempt
 @login_required
 def send_email(request):
+    """Handles sending the email with the generated HTML template."""
     if request.method == "POST":
         try:
             user_email = request.user.email  
@@ -115,19 +144,33 @@ def send_email(request):
             recipient_email = data.get("email")
             article_title = data.get("title")
             article_url = data.get("url")
+            email_body = data.get("email_body", None)  # Generated HTML email content
 
             if not recipient_email:
                 return JsonResponse({"error": "Recipient email is required."}, status=400)
 
-            send_mail(
-                subject=f"Check out this article: {article_title}",
-                message=f"Hey! I found this interesting article: {article_url}",
-                from_email=user_email,
-                recipient_list=[recipient_email],
-                fail_silently=False,
-            )
+            if email_body:
+                # Send email with HTML content
+                email = EmailMultiAlternatives(
+                    subject=f"Check out this article: {article_title}",
+                    body="This email contains an HTML template. Please enable HTML viewing.",  # Fallback text
+                    from_email=user_email,
+                    to=[recipient_email]
+                )
+                email.attach_alternative(email_body, "text/html")
+                email.send()
 
-            return JsonResponse({"message": "Email sent successfully!"})
+            else:
+                # Send plain email if no template is selected
+                send_mail(
+                    subject=f"Check out this article: {article_title}",
+                    message=f"Hey! I found this interesting article: {article_url}",
+                    from_email=user_email,
+                    recipient_list=[recipient_email],
+                    fail_silently=False,
+                )
+
+            return JsonResponse({"message": "✅ Email with template sent successfully!"})
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)

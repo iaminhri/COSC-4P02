@@ -68,7 +68,7 @@ def dashboard(request):
             
             contents = check_articles(request.user, topics, keywords)
 
-            paginator = Paginator(contents, 4)
+            paginator = Paginator(contents, 3)
             pageNumber = request.GET.get('p', 1)
             articlePageObj = paginator.get_page(pageNumber)
 
