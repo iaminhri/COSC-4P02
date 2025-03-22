@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 from django.views.decorators.clickjacking import xframe_options_exempt
+from UserPreferenceApp.models import UserPreference, Article
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.core.files.storage import FileSystemStorage
@@ -47,15 +48,24 @@ def home(request):
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_3([topics], keywords)   
 
-    articles = fetch_all_articles()
+    articles = Article.objects.all().order_by("id")  #  Ensure consistent ordering
 
-    print("Max Number of Pages", len(articles) / 50)
-    
-    paginator = Paginator(articles, 52)
-    pageNumber = request.GET.get('p', 1)
-    articlePageObj = paginator.get_page(pageNumber)
+    paginator = Paginator(articles, 50)
+    page_number = request.GET.get("p", 1)
+    articlePageObj = paginator.get_page(page_number)
 
-    return render(request, 'home.html', {"articles": articlePageObj})
+    # Fetch user preferences if authenticated
+    if request.user.is_authenticated:
+        try:
+            user_pref = UserPreference.objects.get(user=request.user)
+            preferences = user_pref.topics.split(",")  #  Extract topics list
+        except UserPreference.DoesNotExist:
+            preferences = []
+    else:
+        preferences = []
+
+    #  Ensure preferences are passed correctly
+    return render(request, "home.html", {"articles": articlePageObj, "preferences": preferences})
 
 def fetch_all_articles():
     all_articles = Article.objects.all()
