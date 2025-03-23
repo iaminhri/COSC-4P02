@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
-from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_3
+from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_2, fetch_articles_from_api_3
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
@@ -17,8 +17,8 @@ import os
 
 def home(request):
     topics_and_keywords = {
-        "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
-        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        
+        "Artificial": ["Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],
         "Science": ["Experiment", "Theory"],
         "Technology": ["Innovation", "Gadgets"],
         "Health": ["Wellness", "Medicine"],
@@ -45,12 +45,9 @@ def home(request):
     #     articles = fetch_articles_from_api_2([topics], keywords)
 
     # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetch_articles_from_api_3([topics], keywords)   
+    #     articles = fetch_articles_from_api_3([topics], keywords)  
 
     articles = fetch_all_articles()
-
-    print("Max Number of Pages", len(articles) / 50)
-    
     paginator = Paginator(articles, 52)
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
@@ -58,32 +55,29 @@ def home(request):
     return render(request, 'home.html', {"articles": articlePageObj})
 
 def fetch_all_articles():
-    all_articles = Article.objects.all()
-    return all_articles
+    return Article.objects.all()
 
-def check_articles(user, topics, keywords):    
+def check_articles(user, topics, keywords):
     query = Q()
-    # Assuming topics and keywords are lists
     for term in topics + keywords:
         query |= Q(title__icontains=term) | Q(description__icontains=term)
-    
+
     existingArticles = Article.objects.filter(query)
+    return list(existingArticles) if existingArticles.exists() else []
 
-    if existingArticles.exists():
-        articles_list = list(existingArticles)
-        return articles_list
-    else:
-        return []
-
-# Scrum 3 task1: Generate email template with newsletter
+# Email Template Views
 def email_template_1(request):
     return render(request, 'email_template_1.html')
+
 def email_template_2(request):
     return render(request, 'email_template_2.html')
+
 def email_template_3(request):
     return render(request, 'email_template_3.html')
+
 def email_template_4(request):
     return render(request, 'email_template_4.html')
+
 def email_template_5(request):
     return render(request, 'email_template_5.html')
 
@@ -104,8 +98,7 @@ def share_email(request, article_id, template_id):
         6: "share_email6.html",
     }
     
-    template_name = template_map.get(template_id, "share_email1.html") 
-    return render(request, template_name, {"article": article})
+    return render(request, template_map.get(template_id, "share_email1.html"), {"article": article})
 
 def get_template_content(request, article_id, template_id):
     """Fetches the full HTML content of an email template."""
