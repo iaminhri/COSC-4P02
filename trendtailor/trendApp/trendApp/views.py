@@ -67,7 +67,7 @@ def home(request):
     return render(request, "home.html", {"articles": articlePageObj, "preferences": preferences})
 
 def fetch_all_articles():
-    return Article.objects.all()
+    return Article.objects.all().order_by("id")  
 
 def check_articles(user, topics, keywords):
     query = Q()
