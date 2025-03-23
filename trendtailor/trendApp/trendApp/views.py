@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from UserPreferenceApp.models import Article 
 from django.db.models import Q
 from django.views.decorators.clickjacking import xframe_options_exempt
+from UserPreferenceApp.models import UserPreference, Article
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.core.files.storage import FileSystemStorage
@@ -52,7 +53,18 @@ def home(request):
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
 
-    return render(request, 'home.html', {"articles": articlePageObj})
+    # Fetch user preferences if authenticated
+    if request.user.is_authenticated:
+        try:
+            user_pref = UserPreference.objects.get(user=request.user)
+            preferences = user_pref.topics.split(",")  #  Extract topics list
+        except UserPreference.DoesNotExist:
+            preferences = []
+    else:
+        preferences = []
+
+    #  Ensure preferences are passed correctly
+    return render(request, "home.html", {"articles": articlePageObj, "preferences": preferences})
 
 def fetch_all_articles():
     return Article.objects.all()
