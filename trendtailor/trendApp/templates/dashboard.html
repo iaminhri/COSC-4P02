@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}" id="summarize-link">
+                        <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}" id="summarize-link">
                             <i class="bi bi-grid me-2"></i> Summarize Content
                         </a>
                     </li>

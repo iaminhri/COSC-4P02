@@ -13,7 +13,8 @@ from UserPreferenceApp.models import ScheduledContent
 from django.utils import timezone  
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-
+from django.core.files.uploadedfile import UploadedFile
+from .summarization import summarize_article
 # ✅ Registration View
 def register(request):  
     if request.user.is_authenticated:
@@ -253,3 +254,30 @@ def edit_schedule(request):
             return JsonResponse({"success": False, "error": str(e)}, status=500)
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+def summarization(request):
+    summary = None
+    error = None
+
+    if request.method == 'POST':
+        article_text = ''
+
+        uploadedFile = request.FILES.get('contentFile')
+        if uploadedFile and isinstance(uploadedFile, UploadedFile):
+            try:
+                article_text = uploadedFile.read().decode('utf-8')
+            except Exception as e:
+                error = f"Error reading file: {str(e)}"
+
+        if not article_text:
+            article_text = request.POST.get('textInput', '').strip()
+
+        if article_text:
+            try:
+                summary = summarize_article(article_text)
+            except Exception as e:
+                error = f"Error Summarize Text: {str(e)}"
+        elif not error:
+            error = "Please upload a file or enter text."
+
+    return render(request, 'summarization.html', {'summary': summary, 'error': error})
