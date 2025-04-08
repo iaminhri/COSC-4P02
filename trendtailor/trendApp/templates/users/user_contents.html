@@ -46,6 +46,18 @@
                                         <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
                                             <i class="fa fa-thumbs-up"></i> Like
                                         </button>
+
+                                        <!--Scrum 10 Task 31 Archive section-->
+                                        <button class="btn btn-outline-light btn-sm ms-2 archive-btn"
+                                            data-title="{{ article.title }}"
+                                            data-content="{{ article.description|default_if_none:'' }}"
+                                            data-image-url="{{ article.urlToImage|default_if_none:'' }}"
+                                            data-url="{{ article.url }}"
+                                            data-platform="dashboard"
+                                            data-original-id="{{ article.id }}">
+                                            <i class="fa fa-save"></i> Archive
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -455,6 +467,37 @@
                 });
                 return cookieValue;
             }
+
+            // --- Archive Button Logic ---
+            document.querySelectorAll(".archive-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const title = this.getAttribute("data-title");
+                    const content = this.getAttribute("data-content");
+                    const platform = this.getAttribute("data-platform");
+                    const csrfToken = getCSRFToken();
+                    const image_url = this.getAttribute("data-image-url");
+                    const url = this.getAttribute("data-url");
+                    const original_id = this.getAttribute("data-original-id");
+
+                    fetch("{% url 'archive_content' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&platform=${platform}&image_url=${encodeURIComponent(image_url)}&url=${encodeURIComponent(url)}&original_id=${original_id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            alert("✅ Archived successfully!");
+                        } else {
+                            alert("❌ Failed to archive.");
+                        }
+                    })
+                    .catch(error => console.error("Error archiving:", error));
+                });
+            });
         });
     </script>
 

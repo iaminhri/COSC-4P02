@@ -23,6 +23,11 @@ urlpatterns = [
     path("send-email/", views.send_email, name="send_email"),
 
     path('preview/', views.preview_content, name='preview_content'), # SNS Preview
+
+    path("archived/", views.archived_contents, name="archived_contents"),
+    path("archive/", views.archive_content, name="archive_content"),
+    path("unarchive/<int:content_id>/", views.unarchive_content, name="unarchive_content"),
+    path("export-archived-pdf/", views.export_archived_contents_pdf, name="export_archived_pdf"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

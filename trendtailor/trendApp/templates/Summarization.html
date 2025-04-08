@@ -1,4 +1,4 @@
-{% extends "base1.html" %}
+{% extends "base.html" %}
 {% load static %} 
 
 {% block head %}
@@ -32,51 +32,6 @@
 
 {% block body %} 
 <body class="bg-dark text-light">
-    <!-- Sidebar -->
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark bg-gradient position-fixed" style="width: 250px;">
-        <!-- Sidebar Header -->
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 text-white text-decoration-none">
-            <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-3" style="max-width: 150px;">
-        </a>
-        
-        <hr>
-        
-        <!-- Navigation Menu -->
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}" id="dashboard-link">
-                    <i class="bi bi-house-door me-2"></i> Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}" id="contents-link">
-                    <i class="bi bi-speedometer2 me-2"></i> Contents
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}" id="preferences-link">
-                    <i class="bi bi-table me-2"></i> User Preferences
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}" id="summarize-link">
-                    <i class="bi bi-grid me-2"></i> Summarize Content
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white {% if request.path == '/templates/' %}active{% endif %}" id="templates-link">
-                    <i class="bi bi-people me-2"></i> Templates
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}" id="archived-link">
-                    <i class="bi bi-people me-2"></i> Archived Contents
-                </a>
-            </li>
-        </ul>
-        <hr>
-    </div>
-
     <!-- Main Content -->
     <div class="container mt-4 main-content">
         <div class="row">

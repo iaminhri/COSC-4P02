@@ -1,4 +1,4 @@
-{% extends "base1.html" %}
+{% extends "base.html" %}
 {% load static %} 
 
 {% block head %}
@@ -29,50 +29,7 @@
 <body class="bg-dark text-light">
     <div class="container-fluid">
         <div class="row">
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark bg-gradient position-fixed" style="width: 250px;">
-                <!-- Sidebar Header -->
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 text-white text-decoration-none">
-                    <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-3" style="max-width: 150px;">
-                </a>
-                
-                <hr>
-                
-                <!-- Navigation Menu -->
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}" id="dashboard-link">
-                            <i class="bi bi-house-door me-2"></i> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}" id="contents-link">
-                            <i class="bi bi-speedometer2 me-2"></i> Contents
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}" id="preferences-link">
-                            <i class="bi bi-table me-2"></i> User Preferences
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}" id="summarize-link">
-                            <i class="bi bi-grid me-2"></i> Summarize Content
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/templates/' %}active{% endif %}" id="templates-link">
-                            <i class="bi bi-people me-2"></i> Templates
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}" id="archived-link">
-                            <i class="bi bi-people me-2"></i> Archived Contents
-                        </a>
-                    </li>
-                </ul>
-                
-                <hr>
-            </div>
+            
             
             <!-- Main Content -->
             <div class="col ms-5">
@@ -207,6 +164,18 @@
                                                     <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
                                                         <i class="fa fa-thumbs-up"></i> Like
                                                     </button>
+                                                    
+                                                    <!--Scrum 10 Task 31 Archive section-->
+                                                    <button class="btn btn-outline-light btn-sm ms-2 archive-btn"
+                                                        data-title="{{ article.title }}"
+                                                        data-content="{{ article.description|default_if_none:'' }}"
+                                                        data-image-url="{{ article.urlToImage|default_if_none:'' }}"
+                                                        data-url="{{ article.url }}"
+                                                        data-platform="dashboard"
+                                                        data-original-id="{{ article.id }}">
+                                                        <i class="fa fa-save"></i> Archive
+                                                    </button>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -736,6 +705,39 @@
                     .catch(error => console.error("Error:", error));
                 });
             }
+
+            // --- Archive Button Logic ---
+            document.querySelectorAll(".archive-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const title = this.getAttribute("data-title");
+                    const content = this.getAttribute("data-content");
+                    const platform = this.getAttribute("data-platform");
+                    const csrfToken = getCSRFToken();
+                    const image_url = this.getAttribute("data-image-url");
+                    const url = this.getAttribute("data-url");
+                    const original_id = this.getAttribute("data-original-id");
+
+                    fetch("{% url 'archive_content' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&platform=${platform}&image_url=${encodeURIComponent(image_url)}&url=${encodeURIComponent(url)}&original_id=${original_id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            alert("✅ Archived successfully!");
+                        } else {
+                            alert("❌ Failed to archive.");
+                        }
+                    })
+                    .catch(error => console.error("Error archiving:", error));
+                });
+            });
+
+
         });
     </script>
 </body>

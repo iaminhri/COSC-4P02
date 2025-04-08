@@ -142,14 +142,17 @@
                     <a href="{% url 'preferences' %}" class="btn btn-outline-light w-100 py-3 fs-5">My Preferences</a>
                 </div>
                 <div class="mb-5">
-                    <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Summarize Content</a>
+                    <a href="{% url 'summarization' %}" class="btn btn-outline-light w-100 py-3 fs-5">Summarize Content</a>
                 </div>
                 <div class="mb-5">
                     <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Templates</a>
                 </div>
                 <div class="mb-5">
-                    <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Archived Contents</a>
+                    <a href="{% url 'archived_contents' %}" class="btn btn-outline-light w-100 py-3 fs-5">Archived Contents</a>
                 </div>
+                <div class="mb-5">
+                    <a href="{% url 'preview_content' %}" class="btn btn-outline-light w-100 py-3 fs-5">Preview</a>
+                </div>                
             </div>
         </div>
         

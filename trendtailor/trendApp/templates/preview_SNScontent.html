@@ -1,57 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Preview Content</title>
-</head>
-<body>
-  <h1>Preview Content</h1>
+{% extends "base.html" %}
+{% load static %}
 
-  <form method="POST" enctype="multipart/form-data"> 
-    {% csrf_token %}
-    <p>
-      <label for="platform">Platform:</label>
-      <select name="platform" id="platform">
-        <option value="instagram" {% if form_data.platform == "instagram" %}selected{% endif %}>Instagram</option>
-        <option value="reddit" {% if form_data.platform == "reddit" %}selected{% endif %}>Reddit</option>
-      </select>
-    </p>
+{% block head %}
+  <style>
+    .form-label {
+      font-weight: bold;
+      color: #fff;
+    }
 
-    <p>
-      <label for="title">Title:</label>
-      <input type="text" name="title" id="title" value="{{ form_data.title|default_if_none:'' }}">
-    </p>
+    .form-section {
+      background-color: #343a40;
+      padding: 20px;
+      border-radius: 10px;
+      color: #fff;
+    }
 
-    <p>
-      <label for="caption">Caption:</label><br>
-      <textarea name="caption" id="caption" rows="4" cols="50">{{ form_data.caption|default_if_none:'' }}</textarea>
-    </p>
+    .form-section h2 {
+      color: #0d6efd;
+      margin-bottom: 20px;
+    }
 
-    <p>
-      <label for="image_file">Image:</label>
-      <input type="file" name="image_file" id="image_file">
-    </p>
+    .preview-box {
+      background-color: #212529;
+      border: 1px solid #444;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      color: #fff;
+    }
+  </style>
+{% endblock head %}
 
-    <p>
-      <label for="link">Link:</label>
-      <input type="text" name="link" id="link" value="{{ form_data.link|default_if_none:'' }}">
-    </p>
+{% block body %}
+<body class="bg-dark text-light">
+  <div class="container-fluid mt-5 px-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="form-section">
+          <h2 class="text-center">Content Preview Generator</h2>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    <p>
-      <label for="hashtags">Hashtags:</label>
-      <input type="text" name="hashtags" id="hashtags" value="{{ form_data.hashtags|default_if_none:'' }}">
-    </p>
+            <div class="mb-3">
+              <label for="platform" class="form-label">Platform</label>
+              <select name="platform" id="platform" class="form-select">
+                <option value="instagram" {% if form_data.platform == "instagram" %}selected{% endif %}>Instagram</option>
+                <option value="reddit" {% if form_data.platform == "reddit" %}selected{% endif %}>Reddit</option>
+              </select>
+            </div>
 
-    <button type="submit">Generate Preview</button>
-  </form>
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" name="title" id="title" class="form-control" value="{{ form_data.title|default_if_none:'' }}">
+            </div>
 
-  <hr>
+            <div class="mb-3">
+              <label for="caption" class="form-label">Caption</label>
+              <textarea name="caption" id="caption" class="form-control" rows="4">{{ form_data.caption|default_if_none:'' }}</textarea>
+            </div>
 
-  {% if preview_html %}
-    <h2>Preview Result:</h2>
-    <div>
-      {{ preview_html|safe }}
+            <div class="mb-3">
+              <label for="image_file" class="form-label">Image</label>
+              <input type="file" name="image_file" id="image_file" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label for="link" class="form-label">Link</label>
+              <input type="text" name="link" id="link" class="form-control" value="{{ form_data.link|default_if_none:'' }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="hashtags" class="form-label">Hashtags</label>
+              <input type="text" name="hashtags" id="hashtags" class="form-control" value="{{ form_data.hashtags|default_if_none:'' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Generate Preview</button>
+          </form>
+        </div>
+
+        {% if preview_html %}
+          <div class="preview-box">
+            <h4>Preview Result:</h4>
+            <div>
+              {{ preview_html|safe }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
     </div>
-  {% endif %}
+  </div>
 </body>
-</html>
+{% endblock body %}
