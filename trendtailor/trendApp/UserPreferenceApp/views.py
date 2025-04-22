@@ -12,6 +12,9 @@ from .forms import UserPreferenceForm
 from .utils import fetch_articles_from_api_1
 from django.db.models import Q
 from UserPreferenceApp.models import Article 
+from rest_framework import viewsets
+from .serializers import ArticleSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # def preferences_success(request):
 #     return render(request, 'preferences_success.html')
@@ -145,3 +148,24 @@ def check_articles(topics, keywords):
     else:
         print("No articles found.")
         return []
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+class TypeViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Article.objects.all()
+        topic = self.request.query_params.get('topic')
+        keyword = self.request.query_params.get('keyword')
+
+        if topic:
+            queryset = queryset.filter(topic__iexact=topic)
+        if keyword:
+            queryset = queryset.filter(keyword__icontains=keyword)
+
+        return queryset

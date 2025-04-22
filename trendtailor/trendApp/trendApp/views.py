@@ -25,7 +25,6 @@ from .models import ArchivedContent
 from django.templatetags.static import static
 from django.utils.html import escape
 
-
 def home(request):
     topics_and_keywords = {
         "Artificial": ["Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
@@ -49,6 +48,25 @@ def home(request):
         "Fashion": ["Trends", "Designers", "Runways", "Sustainable Fashion"]
     }
 
+    topics_and_keywords_2 = {
+        "Astronomy": ["Stars", "Galaxies", "Telescopes", "Black Holes", "Planets"],
+        "Gaming": ["Console", "PC", "Multiplayer", "Esports", "Game Development"],
+        "Music": ["Genres", "Instruments", "Composers", "Albums", "Live Performances"],
+        "History": ["Ancient", "Medieval", "Wars", "Civilizations", "Revolutions"],
+        "Finance": ["Investments", "Banking", "Cryptocurrency", "Budgeting", "Taxes"],
+        "Mythology": ["Greek", "Norse", "Egyptian", "Legends", "Gods"],
+        "Engineering": ["Mechanical", "Electrical", "Civil", "Design", "Automation"],
+        "Photography": ["Camera", "Exposure", "Composition", "Editing", "Lenses"],
+        "Law": ["Constitution", "Contracts", "Justice", "Human Rights", "Court"],
+        "Agriculture": ["Farming", "Crops", "Irrigation", "Soil", "Harvest"],
+        "Architecture": ["Design", "Structures", "Urban Planning", "Landscaping", "Blueprints"],
+        "Languages": ["Grammar", "Vocabulary", "Translation", "Linguistics", "Bilingual"],
+        "Oceanography": ["Marine Life", "Coral Reefs", "Tides", "Currents", "Exploration"],
+        "Transportation": ["Logistics", "Aviation", "Shipping", "Public Transit", "Autonomous Vehicles"],
+        "Philosophy": ["Ethics", "Existence", "Logic", "Metaphysics", "Aesthetics"]
+    }
+
+
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_1([topics], keywords)
 
@@ -59,6 +77,12 @@ def home(request):
     #     articles = fetch_articles_from_api_3([topics], keywords)  
 
     articles = fetch_all_articles()
+
+    article_name = request.GET.get('q')
+
+    if article_name:
+        articles = articles.filter(title__icontains=article_name)   
+
     paginator = Paginator(articles, 52)
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
@@ -135,8 +159,6 @@ def share_email(request, article_id, template_id):
     }
     chosen_template = template_map.get(template_id, "share_email1.html")
     return render(request, chosen_template, {"article": article_data})
-
-
 
 def get_template_content(request, article_id, template_id):
     # Check if the request is for an archived record

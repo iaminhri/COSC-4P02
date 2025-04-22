@@ -33,8 +33,6 @@ GNEWS_API_KEY = config('GNEWS_API_KEY',default=None)
 CURRENT_API_KEY=config('CURRENT_API_KEY',default=None)
 NEWS_DATA_API=config("NEWS_DATA_API",default=None)
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trendApp',
     'UserPreferenceApp',
-    'accountsApp'
+    'accountsApp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +57,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 ROOT_URLCONF = 'trendApp.urls'
 
