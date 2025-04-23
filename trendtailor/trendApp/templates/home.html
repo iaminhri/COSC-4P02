@@ -4,8 +4,15 @@
         <header class="bg-secondary bg-gradient text-white text-center py-5">
             <h1>AI Newsletter and Social Media Content Generator</h1>
             <p class="lead">Weekly updates on trends, strategies, and platform changes.</p>
-            <form class="d-flex justify-content-center">
-                <input type="email" class="form-control w-25" placeholder="Enter your email" required>
+
+            <div class="text-center my-2">
+                <a href="?lang=en" class="btn btn-dark ms-2 btn-sm {% if lang == 'en' %}active{% endif %}">English</a>
+                <a href="?lang=fr" class="btn btn-dark ms-2 btn-sm {% if lang == 'fr' %}active{% endif %}">Français</a>
+            </div>
+
+            <form class="d-flex justify-content-center" action="{% url 'subscribe' %}" method="post">
+                {% csrf_token %}
+                <input type="email" class="form-control w-25" placeholder="Enter your email" name="email" required>
                 <button class="btn btn-light ms-2">Subscribe</button>
             </form>
         </header>

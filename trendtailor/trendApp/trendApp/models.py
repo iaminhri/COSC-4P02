@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from UserPreferenceApp.models import Article
+from django.utils import timezone
 
 # class Article(models.Model):
 #     title = models.CharField(max_length=255)
@@ -10,8 +11,6 @@ from UserPreferenceApp.models import Article
 
 #     def __str__(self):
 #         return self.title
-
-
 
 class ArchivedContent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -25,3 +24,10 @@ class ArchivedContent(models.Model):
 
     def __str__(self):
         return self.title
+    
+class SubscribedUsers(models.Model):
+    email = models.EmailField(unique=True, max_length=200)
+    created_date = models.DateTimeField('Date Created', default=timezone.now)
+
+    def __str__(self):
+        return self.email

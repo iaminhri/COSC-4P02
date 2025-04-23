@@ -34,6 +34,19 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+class ArticleFrench(models.Model):
+    original = models.OneToOneField('Article', on_delete=models.CASCADE, related_name='french')
+    title = models.CharField(max_length=500)
+    description = models.TextField(blank=True, null=True)
+    contents = models.TextField(blank=True, null=True)
+    url = models.URLField(max_length=500)
+    urlToImage = models.URLField(max_length=500, blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    topic = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
 class ScheduledContent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey("Article", on_delete=models.CASCADE)  

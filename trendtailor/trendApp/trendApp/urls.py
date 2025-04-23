@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),  # Home page
+    path('subscribe/', views.subscribeToChannel, name='subscribe'),
 
     path('email-T1/', views.email_template_1, name='email_T1'),
     path('email-T2/', views.email_template_2, name='email_T2'),

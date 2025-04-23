@@ -24,6 +24,47 @@ from tempfile import mkdtemp
 from .models import ArchivedContent
 from django.templatetags.static import static
 from django.utils.html import escape
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from .models import SubscribedUsers
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from deep_translator import GoogleTranslator
+from UserPreferenceApp.models import Article, ArticleFrench
+
+# def newsletter(request):
+#     return re
+
+def subscribeToChannel(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', None)
+
+        if not email:
+            messages.error(request, "You must type legit email address to subscribe to the news channel")
+            return redirect('/')
+        
+        if get_user_model().objects.filter(email=email).first():
+            messages.error(request, f"Found registered user with associated {email} email. You must login to subscribe or unsubscribe.")
+            return redirect(request.META.get("HTTP_REFERER", '/'))
+        
+        subscribe_users = SubscribedUsers.objects.filter(email=email).first()
+
+        if subscribe_users:
+            messages.error(request, f"{email} email address is already subscribed.")
+            return redirect(request.META.get("HTTP_REFERER", '/'))
+        
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            messages.error(request, e.messages[0])
+            return redirect('/')
+        
+        subscribe_model_instance = SubscribedUsers()
+        subscribe_model_instance.email = email
+        subscribe_model_instance.save()
+
+        messages.success(request, f'{email} email was subscribed to our newsletter!')
+        return redirect(request.META.get("HTTP_REFERER", '/'))
 
 def home(request):
     topics_and_keywords = {
@@ -66,7 +107,6 @@ def home(request):
         "Philosophy": ["Ethics", "Existence", "Logic", "Metaphysics", "Aesthetics"]
     }
 
-
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_1([topics], keywords)
 
@@ -76,29 +116,26 @@ def home(request):
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_3([topics], keywords)  
 
-    articles = fetch_all_articles()
-
+    lang = request.GET.get('lang', 'en')
     article_name = request.GET.get('q')
 
-    if article_name:
-        articles = articles.filter(title__icontains=article_name)   
+    if lang == 'fr':
+        articles = ArticleFrench.objects.all()
+        if article_name:
+            articles = articles.filter(title__icontains=article_name)
+    else:
+        articles = Article.objects.all()
+        if article_name:
+            articles = articles.filter(title__icontains=article_name)
 
     paginator = Paginator(articles, 52)
     pageNumber = request.GET.get('p', 1)
     articlePageObj = paginator.get_page(pageNumber)
 
-    # Fetch user preferences if authenticated
-    if request.user.is_authenticated:
-        try:
-            user_pref = UserPreference.objects.get(user=request.user)
-            preferences = user_pref.topics.split(",")  #  Extract topics list
-        except UserPreference.DoesNotExist:
-            preferences = []
-    else:
-        preferences = []
-
-    #  Ensure preferences are passed correctly
-    return render(request, "home.html", {"articles": articlePageObj, "preferences": preferences})
+    return render(request, "home.html", {
+        "articles": articlePageObj,
+        "lang": lang
+    })
 
 def fetch_all_articles():
     return Article.objects.all().order_by("id")  
@@ -201,8 +238,6 @@ def get_template_content(request, article_id, template_id):
         "url": article_data["url"],
         "html_content": email_html_content
     })
-
-
 
 @csrf_exempt
 @login_required
