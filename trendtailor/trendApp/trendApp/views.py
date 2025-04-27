@@ -32,9 +32,6 @@ from django.contrib.auth import get_user_model
 from deep_translator import GoogleTranslator
 from UserPreferenceApp.models import Article, ArticleFrench
 
-# def newsletter(request):
-#     return re
-
 def subscribeToChannel(request):
     if request.method == 'POST':
         email = request.POST.get('email', None)
@@ -441,7 +438,7 @@ def export_archived_contents_pdf(request):
                     file_path = os.path.join(temp_dir, file_name)
                     with open(file_path, 'wb') as f:
                         f.write(response.content)
-                    content.local_image_path = file_path  # <== NO "file://"
+                    content.local_image_path = file_path  
                 else:
                     content.local_image_path = None
             except Exception as e:
