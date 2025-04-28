@@ -121,7 +121,7 @@ def home(request):
         if article_name:
             articles = articles.filter(title__icontains=article_name)
     else:
-        articles = Article.objects.all()
+        articles = Article.objects.all().order_by('id')
         if article_name:
             articles = articles.filter(title__icontains=article_name)
 
@@ -162,6 +162,7 @@ def email_template_5(request):
     return render(request, 'email_template_5.html')
 
 # Share article with email templates
+@login_required
 @xframe_options_exempt
 def share_email(request, article_id, template_id):
     is_archived = (request.GET.get("archived") == "1")
@@ -194,6 +195,7 @@ def share_email(request, article_id, template_id):
     chosen_template = template_map.get(template_id, "share_email1.html")
     return render(request, chosen_template, {"article": article_data})
 
+@login_required
 def get_template_content(request, article_id, template_id):
     # Check if the request is for an archived record
     is_archived = (request.GET.get("archived") == "1")

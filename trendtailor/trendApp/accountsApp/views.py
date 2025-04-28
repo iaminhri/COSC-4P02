@@ -137,7 +137,8 @@ def user_settings(request):
         return redirect('home')
     else:
         return render(request, 'users/account_settings.html')
-
+    
+@login_required
 def edit_profile_image(request):
     if not request.user.is_authenticated:
         return redirect('home')
@@ -249,6 +250,7 @@ def edit_schedule(request):
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
+@login_required
 def summarization(request):
     summary = None
     error = None

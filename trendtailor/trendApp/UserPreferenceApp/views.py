@@ -45,7 +45,8 @@ def like_post(request):
             )
 
         return redirect(request.META.get('HTTP_REFERER', '/'))
-
+    
+@login_required
 def preferences(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -67,6 +68,7 @@ def preferences(request):
 
         return render(request, 'set_preferences.html', {'form': form})
 
+@login_required
 def aggregate_content(request):
     topics = ["AI", "Quantum Computing"]
     keywords = ["Technology"]
@@ -74,6 +76,7 @@ def aggregate_content(request):
     articles = fetch_articles_from_api_1(topics, keywords)
     return render(request, 'news_results.html', {"articles": articles})
 
+@login_required
 def user_contents(request):
     preferences, _ = UserPreference.objects.get_or_create(user=request.user)
     
