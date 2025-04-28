@@ -8,6 +8,7 @@ cffi==1.17.1
 chardet==3.0.4
 charset-normalizer==3.4.1
 click==8.1.8
+coverage==7.8.0
 cryptography==44.0.2
 cssselect2==0.8.0
 deep-translator==1.11.4
