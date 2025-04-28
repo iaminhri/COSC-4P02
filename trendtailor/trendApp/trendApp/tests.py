@@ -3,6 +3,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from UserPreferenceApp.models import Article, UserPreference
 from UserPreferenceApp.forms import UserPreferenceForm
+from django.core.files.uploadedfile import SimpleUploadedFile
+import os
+import json
+
 
 class HomePageTests(TestCase):
     """Test cases for the homepage functionality."""
@@ -138,3 +142,108 @@ class PaginationTests(TestCase):
 
         response_page_2 = self.client.get(reverse("home") + "?p=2")
         self.assertContains(response_page_2, "Tech News 50")  # Next page should contain remaining articles
+
+
+class EmailTemplateTests(TestCase):
+    """Tests for Sprint 3: Email templates and article sharing"""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", email="test@example.com", password="password123")
+        self.client.login(username="testuser", password="password123")
+
+        self.article = Article.objects.create(
+            title="Email Test Article",
+            description="This is a test description for email template.",
+            url="https://example.com/test-article",
+            #urlToImage="https://example.com/image.jpg"
+        )
+
+    def test_email_template_views(self):
+        """Check if all email template views return 200"""
+        for i in range(1, 6):  # email-T1 to email-T5
+            response = self.client.get(reverse(f"email_T{i}"))
+            self.assertEqual(response.status_code, 200, f"Failed at email_T{i}")
+
+    def test_share_email_view(self):
+        """Ensure share_email view renders correctly with article and template"""
+        response = self.client.get(reverse("share_email", args=[self.article.id, 1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Welcome to TrendTailor", response.content.decode())
+
+    def test_get_template_content_ajax(self):
+        """Check if AJAX call for getting email template content works"""
+        response = self.client.get(reverse("get_template_content", args=[self.article.id, 1]))
+        data = response.json()
+        self.assertIn("html_content", data)
+        self.assertIn(self.article.title, data["html_content"])
+
+    def test_send_email_post(self):
+        """Simulate sending an email with article and template content"""
+        response = self.client.post(
+            reverse("send_email"),
+            data=json.dumps({
+                "email": "recipient@example.com",
+                "title": self.article.title,
+                "url": self.article.url,
+                "email_body": "<p>This is a test email</p>"
+            }),
+            content_type="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("message", response.json())
+
+class SNSPreviewTests(TestCase):
+    """Test SNS content generation and preview page functionality."""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="snsuser", password="testpass")
+        self.client.login(username="snsuser", password="testpass")
+
+    def test_preview_page_get(self):
+        """Ensure the preview page loads with a GET request."""
+        response = self.client.get(reverse("preview_content"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Preview Content")
+
+    def test_instagram_preview_post(self):
+        """Test SNS preview for Instagram with form data."""
+        with open(os.path.join(os.path.dirname(__file__), 'test_image.jpg'), 'rb') as img:
+            image = SimpleUploadedFile("test.jpg", img.read(), content_type="image/jpeg")
+            response = self.client.post(reverse("preview_content"), {
+                "platform": "instagram",
+                "title": "Insta Title",
+                "caption": "Cool caption",
+                "link": "https://example.com",
+                "hashtags": "#AI #Tech",
+                "image_file": image
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Insta Title")
+        self.assertContains(response, "#AI #Tech")
+        self.assertContains(response, "Link in Bio")
+
+    def test_reddit_preview_post(self):
+        """Test SNS preview for Reddit with form data."""
+        with open(os.path.join(os.path.dirname(__file__), 'test_image.jpg'), 'rb') as img:
+            image = SimpleUploadedFile("test.jpg", img.read(), content_type="image/jpeg")
+            response = self.client.post(reverse("preview_content"), {
+                "platform": "reddit",
+                "title": "Reddit Title",
+                "caption": "Reddit description here",
+                "image_file": image
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reddit Title")
+        self.assertContains(response, "Reddit description here")
+
+    def test_preview_invalid_platform(self):
+        """Test that invalid platform returns 400."""
+        response = self.client.post(reverse("preview_content"), {
+        "platform": "myspace",  # Invalid platform
+        "title": "Should Fail"
+             })
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Unknown platform", response.content.decode())
