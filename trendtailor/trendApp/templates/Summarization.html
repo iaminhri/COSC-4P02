@@ -1,23 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Summarization</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</head>
+{% extends "base1.html" %}
+{% load static %} 
+
+{% block head %}
+    <style>
+        /* Default Style for Nav Links */
+        .nav-link {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hover Effect */
+        .nav-link:hover {
+            background-color: #0d6efd; /* Bootstrap blue color */
+            color: white;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        /* Active Link Style */
+        .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Make room for sidebar */
+        .main-content {
+            margin-left: 250px;
+        }
+    </style>
+{% endblock head %}
+
+{% block sidebar %}
+    <nav class="col-12 col-md-3 col-lg-2 d-md-block bg-dark bg-gradient sidebar py-3">
+        <div class="position-sticky">
+            <a href="/" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
+                <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded" style="max-width: 150px;">
+            </a>
+            <hr class="text-secondary">
+            <ul class="nav nav-pills flex-column mb-auto px-3">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}">
+                        <i class="bi bi-house-door me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'profile' %}" class="nav-link text-white {% if request.path == '/accounts/profile/' %}active{% endif %}">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}">
+                        <i class="bi bi-speedometer2 me-2"></i> Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}">
+                        <i class="bi bi-table me-2"></i> User Preferences
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/accounts/summarization/' %}active{% endif %}">
+                        <i class="bi bi-grid me-2"></i> Summarize Content
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'archived_contents' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Archived Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preview_content' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Preview
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock sidebar %}
+
+{% block body %} 
 <body class="bg-dark text-light">
-    <div class="container mt-4">
+    <!-- Main Content -->
+    <div class="container mt-4 main-content">
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card bg-secondary text-white">
                     <div class="card-body">
                         <h5 class="card-title">Upload Content</h5>
-                        <form action="{% url 'summarize' %}" method="POST" enctype="multipart/form-data" class="needs-validation">
+                        <form action="{% url 'summarization' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="mb-3">
                                 <label for="contentFile" class="form-label">Upload a File</label>
-                                <input type="file" class="form-control" id="contentFile" name="contentFile" required>
+                                <input type="file" class="form-control" id="contentFile" name="contentFile">
                             </div>
                             <div class="mb-3">
                                 <label for="textInput" class="form-label">Or Paste Text</label>
@@ -33,21 +107,35 @@
                     <div class="card-body">
                         <h5 class="card-title">Summary Output</h5>
                         <div class="card bg-dark text-white p-3">
-                            <p id="summaryText">Your summarized content will appear here...</p>
+                            {% if summary %}
+                                <div class="alert alert-success mt-3">
+                                    <h5>Summary:</h5>
+                                    <p>{{ summary }}</p>
+                                </div>
+                            {% endif %}
+                            {% if error %}
+                                <div class="alert alert-danger mt-3">
+                                    <p>{{ error }}</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Recent Summaries
         <div class="row">
             <div class="col-12 mb-3">
                 <h2 class="text-center">Recent Summaries</h2>
             </div>
+
+            {% for summary in summaries %}
             <div class="col-md-4 mb-3">
                 <div class="card shadow-sm bg-dark text-white">
                     <div class="card-body">
-                        <h5 class="card-title text-truncate">Nvidia Stock Price Down</h5>
-                        <p class="card-text">Recent fluctuations in Nvidia's stock price have investors concerned...</p>
+                        <h5 class="card-title text-truncate">{{ summary.title }}</h5>
+                        <p class="card-text">{{ summary.preview }}</p>
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-primary">View</button>
                             <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
@@ -55,56 +143,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm bg-dark text-white">
-                    <div class="card-body">
-                        <h5 class="card-title text-truncate">iPhone 16 Release</h5>
-                        <p class="card-text">Apple is set to unveil the iPhone 16 with groundbreaking new features...</p>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary">View</button>
-                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm bg-dark text-white">
-                    <div class="card-body">
-                        <h5 class="card-title text-truncate">DeepSeek Takes Over OpenAI</h5>
-                        <p class="card-text">DeepSeek's acquisition of OpenAI is shaking up the AI industry...</p>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary">View</button>
-                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm bg-dark text-white">
-                    <div class="card-body">
-                        <h5 class="card-title text-truncate">Microsoft Releases New Chipset</h5>
-                        <p class="card-text">Microsoft has announced its latest in-house chipset for better performance...</p>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary">View</button>
-                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm bg-dark text-white">
-                    <div class="card-body">
-                        <h5 class="card-title text-truncate">Brightspace Server Issues</h5>
-                        <p class="card-text">Students are reporting widespread outages in Brightspace servers...</p>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary">View</button>
-                            <button class="btn btn-outline-light btn-sm"><i class="fa fa-share"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% endfor %}
+        </div> -->
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+{% endblock body %}

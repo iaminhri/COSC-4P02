@@ -117,38 +117,20 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Offcanvas Sidebar -->
-    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
-        <div class="offcanvas-header">
-            <h2 class="offcanvas-title" id="offcanvasSidebarLabel">Menu</h2>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-5" style="margin-bottom: 140px;">
-            <div class="mb-5">
-                <a href="{% url 'dashboard' %}" class="btn btn-outline-light w-100 py-3 fs-5">Dashboard</a>
-            </div>
-            <div class="mb-5">
-                <a href="{% url 'content_view' %}" class="btn btn-outline-light w-100 py-3 fs-5">Contents</a>
-            </div>
-            <div class="mb-5">
-                <a href="{% url 'preferences' %}" class="btn btn-outline-light w-100 py-3 fs-5">My Preferences</a>
-            </div>
-            <div class="mb-5">
-                <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Summarize Content</a>
-            </div>
-            <div class="mb-5">
-                <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Templates</a>
-            </div>
-            <div class="mb-5">
-                <a href="#" class="btn btn-outline-light w-100 py-3 fs-5">Archived Contents</a>
-            </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% block sidebar %}
+            <!-- Default empty sidebar -->
+            {% endblock sidebar %}
+
+            <main class="col">
+            {% block body %}
+            {% endblock body %}
+            </main>
         </div>
     </div>
-    
-    {% block body %}
-    {% endblock body %}
+
     <script>
     </script>
 </body>

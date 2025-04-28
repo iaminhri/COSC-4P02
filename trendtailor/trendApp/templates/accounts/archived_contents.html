@@ -1,0 +1,492 @@
+{% extends "base1.html" %}
+{% load static %}
+
+{% block sidebar %}
+    <nav class="col-12 col-md-3 col-lg-2 d-md-block bg-dark bg-gradient sidebar py-3">
+        <div class="position-sticky">
+            <a href="/" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
+                <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded" style="max-width: 150px;">
+            </a>
+            <hr class="text-secondary">
+            <ul class="nav nav-pills flex-column mb-auto px-3">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}">
+                        <i class="bi bi-house-door me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'profile' %}" class="nav-link text-white {% if request.path == '/accounts/profile/' %}active{% endif %}">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}">
+                        <i class="bi bi-speedometer2 me-2"></i> Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}">
+                        <i class="bi bi-table me-2"></i> User Preferences
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}">
+                        <i class="bi bi-grid me-2"></i> Summarize Content
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'archived_contents' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Archived Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preview_content' %}" class="nav-link text-white {% if request.path == '/preview/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Preview
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock sidebar %}
+
+{% block body %}
+<body class="bg-dark text-white">
+    {% csrf_token %}
+    <div class="container py-4">
+        <h2 class="text-center mb-4">Archived Contents</h2>
+        <form method="get" action="" class="mb-4 d-flex justify-content-center">
+            <input type="text" name="q" class="form-control w-50" placeholder="Search archived content..." value="{{ query }}">
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
+        <div class="d-flex justify-content-end mb-3 justify-content-center">
+            <a href="{% url 'export_archived_pdf' %}" class="btn btn-success">Export All to PDF</a>
+        </div>
+
+        <div class="row">
+            {% for content in contents %}
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm bg-dark bg-gradient text-white" style="border: 8px solid #000;">
+                        {% if content.image_url %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{{ content.image_url }}" class="card-img-top" alt="{{ content.title }}" style="object-fit: cover;">
+                            </div>
+                        {% else %}
+                            <div class="ratio ratio-16x9">
+                                <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ content.title }}" style="object-fit: cover;">
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">{{ content.title }}</h5>
+                            <p class="card-text">{{ content.content|truncatechars:70 }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <a href="{{ content.url }}" class="btn btn-primary">Read More</a>
+                                <div>
+                                    <div class="btn-group mt-2">
+                                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle ms-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-share"></i> Share
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#shareModal-{{ content.id }}">
+                                                    <i class="fa fa-plus-circle"></i> Select Templates
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item share-btn" data-title="{{ content.title }}" data-url="{{ content.url }}">
+                                                    <i class="fa fa-share"></i> Share Via
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button class="btn btn-outline-light btn-sm ms-2 mt-2" aria-label="Like">
+                                        <i class="fa fa-thumbs-up"></i> Like
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm ms-2 unarchive-btn mt-2" data-id="{{ content.id }}">
+                                        <i class="fa fa-times-circle"></i> Unarchive
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Modal always rendered -->
+                <div class="modal fade" id="shareModal-{{ content.id }}" tabindex="-1" aria-labelledby="shareModalLabel-{{ content.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content text-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="shareModalLabel-{{ content.id }}">Choose a Share Template</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row g-1">
+                                    {% for template_id in "123456"|make_list %}
+                                        <div class="col-md-4 mb-1 px-1">
+                                            <div class="card preview-card">
+                                                <div class="preview-container">
+                                                    {# Use content.id and add archived parameter #}
+                                                    <iframe src="{% url 'share_email' content.id template_id %}?archived=1" style="margin-top: -25%" class="scaled-iframe" onload="resizeIframe(this)"></iframe>
+                                                </div>
+                                                <div class="card-body text-center">
+                                                    <h6 class="card-title">Template {{ template_id }}</h6>
+                                                    {# "Select" link using content.id and archived parameter #}
+                                                    <a href="{% url 'share_email' content.id template_id %}?archived=1" class="btn btn-primary btn-sm">Select</a>
+                                                    {# Button to trigger the email input modal #}
+                                                    <button type="button" class="btn btn-secondary btn-sm select-template-btn"
+                                                            data-article-id="{{ content.id }}"
+                                                            data-template-id="{{ template_id }}"
+                                                            data-bs-dismiss="modal">
+                                                        Share
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Floating Email Share Modal -->
+    <div id="customShareModal" class="custom-modal d-none">
+        <div class="custom-modal-content rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold">Share via Email</h5>
+                <button type="button" class="btn-close" id="closeModalBtn"></button>
+            </div>
+            <p class="small text-muted mb-2">Enter an email address to share this article.</p>
+            <form id="shareEmailForm">
+                <div class="mb-3">
+                    <label for="recipientEmail" class="form-label fw-medium">Recipient Email</label>
+                    <input type="email" class="form-control rounded-3" id="recipientEmail" required>
+                </div>
+                <input type="hidden" id="articleTitle">
+                <input type="hidden" id="articleURL">
+                <button type="submit" class="btn btn-success w-100 fw-bold">Send Email</button>
+            </form>
+            <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center align-items-center">
+                <a id="gmailLink" href="#" target="_blank" class="btn btn-outline-danger w-50 me-2">
+                    <i class="fa fa-envelope"></i> Gmail
+                </a>
+                <a id="outlookLink" href="#" target="_blank" class="btn btn-outline-primary w-50">
+                    <i class="fa fa-envelope"></i> Outlook
+                </a>
+                <a id="facebookLink" href="#" target="_blank" class="btn btn-facebook mb-2">
+                    <i class="fa fa-facebook"></i> Facebook
+                </a>
+                <a id="twitterLink" href="#" target="_blank" class="btn btn-twitter mb-2">
+                    <i class="fa fa-twitter"></i> Twitter
+                </a>
+                <a id="redditLink" href="#" target="_blank" class="btn btn-reddit">
+                    <i class="fa fa-reddit"></i> Reddit
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Input Modal -->
+    <div class="modal fade" id="emailInputModal" tabindex="-1" aria-labelledby="emailInputModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailInputModalLabel">Enter Recipient Email</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="emailSuccessMessage" class="alert alert-success d-none" role="alert">
+                        Email sent successfully!
+                    </div>
+                    <form id="emailForm">
+                        <div class="mb-3">
+                            <label for="recipientEmailInput" class="form-label">Recipient Email</label>
+                            <input type="email" class="form-control" id="recipientEmailInput" required>
+                        </div>
+                        <input type="hidden" id="selectedArticleId">
+                        <input type="hidden" id="selectedTemplateId">
+                        <button type="submit" class="btn btn-primary w-100">Send Email</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.CSRF_TOKEN = '{{ csrf_token }}';
+    </script>
+
+    <style>
+        .custom-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+        .custom-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        .custom-modal-content input[type="email"] {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: 1px solid #ccc;
+        }
+        .custom-modal-content input::placeholder {
+            color: #666 !important;
+        }
+        .d-none {
+            display: none !important;
+        }
+        .d-flex {
+            display: flex !important;
+        }
+        .btn-facebook {
+            background-color: #4267B2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-facebook:hover {
+            background-color: #365899;
+            color: #fff;
+        }
+        .btn-twitter {
+            background-color: #1DA1F2;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        .btn-twitter:hover {
+            background-color: #0d95e8;
+            color: #fff;
+        }
+        .btn-reddit {
+            background-color: #FF4500;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-reddit:hover {
+            background-color: #e03d00;
+            color: #fff;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Social share functionality
+            const shareButtons = document.querySelectorAll(".share-btn");
+            const emailForm = document.getElementById("emailForm");
+            const customShareModal = document.getElementById("customShareModal");
+            const closeModalBtn = document.getElementById("closeModalBtn");
+            const successMessage = document.getElementById("emailSuccessMessage");
+
+            shareButtons.forEach(button => {
+                button.addEventListener("click", function(event) {
+                    let title = button.getAttribute("data-title");
+                    let url = button.getAttribute("data-url");
+                    document.getElementById("articleTitle").value = title;
+                    document.getElementById("articleURL").value = url;
+                    let subject = encodeURIComponent("Check out this article: " + title);
+                    let body = encodeURIComponent("Hey! I found this interesting article: " + url);
+                    document.getElementById("gmailLink").href = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+                    document.getElementById("outlookLink").href = `https://outlook.office.com/mail/deeplink/compose?subject=${subject}&body=${body}`;
+                    document.getElementById("facebookLink").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    document.getElementById("twitterLink").href = `https://twitter.com/intent/tweet?text=${subject}&url=${encodeURIComponent(url)}`;
+                    document.getElementById("redditLink").href = `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${subject}`;
+                    customShareModal.classList.remove("d-none");
+                    customShareModal.classList.add("d-flex");
+                });
+            });
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener("click", function() {
+                    customShareModal.classList.remove("d-flex");
+                    customShareModal.classList.add("d-none");
+                });
+            }
+            if (customShareModal) {
+                customShareModal.addEventListener("click", function(event) {
+                    if (event.target === customShareModal) {
+                        customShareModal.classList.remove("d-flex");
+                        customShareModal.classList.add("d-none");
+                    }
+                });
+            }
+
+            document.getElementById("shareEmailForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                fetch("/send-email/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("recipientEmail").value,
+                        title: document.getElementById("articleTitle").value,
+                        url: document.getElementById("articleURL").value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("Error: " + data.error);
+                    } else {
+                        alert("Success: " + data.message);
+                        document.getElementById("shareEmailForm").reset();
+                        closeCustomModal();
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+
+            // Handle select-template-btn click to open the email input modal
+            const selectTemplateBtns = document.querySelectorAll(".select-template-btn");
+            console.log("Found select-template-btn buttons:", selectTemplateBtns.length);
+            const emailModalEl = document.getElementById("emailInputModal");
+            const hiddenArticle = document.getElementById("selectedArticleId");
+            const hiddenTemplate = document.getElementById("selectedTemplateId");
+            selectTemplateBtns.forEach(btn => {
+                btn.addEventListener("click", function () {
+                    console.log("Select Template button clicked:", btn);
+                    const articleId = btn.getAttribute("data-article-id");
+                    const templateId = btn.getAttribute("data-template-id");
+                    console.log("Article ID:", articleId, " Template ID:", templateId);
+                    hiddenArticle.value = articleId;
+                    hiddenTemplate.value = templateId;
+                    successMessage.classList.add("d-none");
+                    emailForm.classList.remove("d-none");
+                    if (typeof bootstrap !== "undefined") {
+                        new bootstrap.Modal(emailModalEl).show();
+                        console.log("Email Input Modal shown.");
+                    } else {
+                        console.error("Bootstrap not loaded!");
+                    }
+                });
+            });
+
+            if (emailForm) {
+                emailForm.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    let recipientEmail = document.getElementById("recipientEmailInput").value;
+                    let articleId = document.getElementById("selectedArticleId").value;
+                    let templateId = document.getElementById("selectedTemplateId").value;
+                    if (!recipientEmail) {
+                        alert("Email is required!");
+                        return;
+                    }
+                    fetch(`/get-template-content/${articleId}/${templateId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert("Error: " + data.error);
+                                return;
+                            }
+                            let emailBody = data.html_content;
+                            let emailSubject = "Check out this article: " + data.title;
+                            let articleURL = data.url;
+                            fetch("/send-email/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRFToken": getCSRFToken()
+                                },
+                                body: JSON.stringify({
+                                    email: recipientEmail,
+                                    title: emailSubject,
+                                    url: articleURL,
+                                    email_body: emailBody
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    alert("Error: " + data.error);
+                                } else {
+                                    emailForm.classList.add("d-none");
+                                    successMessage.classList.remove("d-none");
+                                    setTimeout(() => {
+                                        var modalInstance = bootstrap.Modal.getInstance(emailModalEl);
+                                        modalInstance.hide();
+                                        emailForm.reset();
+                                    }, 3000);
+                                }
+                            })
+                            .catch(error => console.error("Error:", error));
+                        })
+                        .catch(error => console.error("Error fetching template:", error));
+                });
+            }
+
+            function getCSRFToken() {
+                let cookieValue = null;
+                const cookies = document.cookie.split(";");
+                cookies.forEach(cookie => {
+                    if (cookie.trim().startsWith("csrftoken=")) {
+                        cookieValue = cookie.split("=")[1];
+                    }
+                });
+                return cookieValue;
+            }
+
+            function closeCustomModal() {
+                customShareModal.classList.remove("d-flex");
+                customShareModal.classList.add("d-none");
+            }
+
+            document.querySelectorAll(".unarchive-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const contentId = button.getAttribute("data-id");
+                    const card = button.closest(".col-md-3");
+                    fetch(`/unarchive/${contentId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": getCSRFToken(),
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            card.remove();
+                        } else {
+                            alert("Failed to unarchive.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Error occurred while unarchiving.");
+                        console.error("Unarchive error:", error);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+{% endblock body %}

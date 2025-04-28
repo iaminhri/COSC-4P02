@@ -12,80 +12,9 @@ from .forms import UserPreferenceForm
 from .utils import fetch_articles_from_api_1
 from django.db.models import Q
 from UserPreferenceApp.models import Article 
-
-# def preferences_success(request):
-#     return render(request, 'preferences_success.html')
-
-"""def fetch_news_view(request):
-    try:
-        user_pref = UserPreference.objects.get(user=request.user)
-    except UserPreference.DoesNotExist:
-        sources = ['https://www.cnn.com','https://www.bbc.com']
-        topics = []
-        keywords = []
-    else:
-        sources = user_pref.get_sources_list()
-        topics = user_pref.get_topics_list()
-        keywords = user_pref.get_keywords_list()
-
-    filter_terms = [term.lower() for term in (topics + keywords)]
-    relevant_articles = []
-
-    for source in sources:
-        try:
-            paper = newspaper.build(source, memoize_articles=False)
-        except Exception as e:
-            print(f"Error accessing {source}: {e}")
-            continue
-
-        for article in paper.articles:
-            try:
-                article.download()
-                article.parse()
-            except Exception as e:
-                print(f"Error parsing article {article.url}: {e}")
-                continue
-
-            title = article.title.lower() if article.title else ''
-            content = article.text.lower()
-            if any(term in title or term in content for term in filter_terms):
-                relevant_articles.append({
-                    'title':article.title,
-                    'url': article.url,
-                    'summary': article.text[:200]
-                })
-
-    return render(request, 'news_results.html', {'articles' : relevant_articles})
-
-"""
-
-# @login_required
-# def set_preferences_view(request):
-#     # Try to get existing preferences or create a blank record
-#     preference, created = UserPreference.objects.get_or_create(user=request.user)
-
-#     if request.method == 'POST':
-#         form = UserPreferenceForm(request.POST, instance=preference)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('preferences_success')  # or wherever you want
-#     else:
-#         form = UserPreferenceForm(instance=preference)
-
-#     return render(request, 'set_preferences.html', {'form': form})
-
-# def preferences(request):
-#     if request.method == "POST":
-#         sources = request.POST.get('sources')
-#         topics = request.POST.get('topics')
-#         keywords = request.POST.get('keywords')
-
-#         UserPreference.objects.create(sources=sources, topics=topics, keywords=keywords)
-
-#         messages.success(request, f'Preferences Saved Successfully !!!')
-#         redirect('preferences')
-
-#     return render(request, 'set_preferences.html')
+from rest_framework import viewsets
+from .serializers import ArticleSerializer
+from rest_framework.permissions import IsAuthenticated
 
 def preferences(request):
     if not request.user.is_authenticated:
@@ -145,3 +74,24 @@ def check_articles(topics, keywords):
     else:
         print("No articles found.")
         return []
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+class TypeViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Article.objects.all()
+        topic = self.request.query_params.get('topic')
+        keyword = self.request.query_params.get('keyword') 
+
+        if topic:
+            queryset = queryset.filter(topic__iexact=topic)
+        if keyword:
+            queryset = queryset.filter(keyword__icontains=keyword)
+
+        return queryset

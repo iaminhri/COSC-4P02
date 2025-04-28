@@ -1,45 +1,27 @@
-{% extends "base.html" %}
-{% load static %} 
+{% extends "base1.html" %}
+{% load static %}
 
 {% block head %}
     <title>Preferences</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
+        .form-container {
             background-color: white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 350px;
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 40px;
         }
 
         label {
             font-weight: bold;
-            display: block;
-            margin-top: 10px;
-            text-align: left;
             font-size: 14px;
+            margin-top: 10px;
         }
 
         input {
-            width: 90%;
+            width: 100%;
             padding: 8px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -48,13 +30,8 @@
             font-size: 14px;
         }
 
-        .btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
         button {
-            width: 80%;
+            width: 100%;
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -63,29 +40,87 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 20px;
         }
 
         button:hover {
             background-color: #6284AB;
         }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
     </style>
 {% endblock head %}
 
-{% block body %}   
-    <div class="container">
-        <h1>Set Your Preferences</h1>
-        <form method="post">
-            {% csrf_token %}
-            <label for="sources">Preferred News Sources:</label>
-            <input type="text" id="sources" name="sources" placeholder="e.g., BBC, CNN"><br><br>
-                
-            <label for="topics">Preferred Topics:</label>
-            <input type="text" id="topics" name="topics" placeholder="e.g., Technology, Politics"><br><br>
-    
-            <label for="keywords">Preferred Keywords:</label>
-            <input type="text" id="keywords" name="keywords" placeholder="e.g., AI, Blockchain"><br><br>
-    
-            <div class="btn-container"><button type="submit">Save Preferences</button></div>
-        </form>
-    </div>
-{% endblock body %}   
+{% block sidebar %}
+    <nav class="col-12 col-md-3 col-lg-2 d-md-block bg-dark bg-gradient sidebar py-3">
+        <div class="position-sticky">
+            <a href="/" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
+                <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded" style="max-width: 150px;">
+            </a>
+            <hr class="text-secondary">
+            <ul class="nav nav-pills flex-column mb-auto px-3">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}">
+                        <i class="bi bi-house-door me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'profile' %}" class="nav-link text-white {% if request.path == '/accounts/profile/' %}active{% endif %}">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}">
+                        <i class="bi bi-speedometer2 me-2"></i> Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}">
+                        <i class="bi bi-table me-2"></i> User Preferences
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/accounts/summarization/' %}active{% endif %}">
+                        <i class="bi bi-grid me-2"></i> Summarize Content
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white {% if request.path == '/templates/' %}active{% endif %}">
+                        <i class="bi bi-layout-text-window-reverse me-2"></i> Templates
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'archived_contents' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Archived Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preview_content' %}" class="nav-link text-white {% if request.path == '/preview/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Preview
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock sidebar %}
+
+{% block body %}
+<div class="form-container bg-light text-dark">
+    <h1 class="mb-3 text-center">Set Your Preferences</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="sources">Preferred News Sources:</label>
+        <input type="text" id="sources" name="sources" placeholder="e.g., BBC, CNN">
+        <label for="topics">Preferred Topics:</label>
+        <input type="text" id="topics" name="topics" placeholder="e.g., Technology, Politics">
+        <label for="keywords">Preferred Keywords:</label>
+        <input type="text" id="keywords" name="keywords" placeholder="e.g., AI, Blockchain">
+        <button type="submit">Save Preferences</button>
+    </form>
+</div>
+{% endblock body %}

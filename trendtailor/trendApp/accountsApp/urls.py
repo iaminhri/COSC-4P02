@@ -10,4 +10,10 @@ urlpatterns = [
     path('edit/profile/image', views.edit_profile_image, name = 'edit_image'),
     path('profile/settings', views.user_settings, name = 'settings'),
     path('logout/', views.auth_logout, name = 'logout'),
+
+    path('schedule/', views.schedule_content, name='schedule_content'),
+    path('delete-schedule/<int:schedule_id>/', views.delete_schedule, name='delete_schedule'),
+    path('edit-schedule/', views.edit_schedule, name='edit_schedule'),
+
+    path('summarization/', views.summarization, name='summarization'),
 ]

@@ -29,6 +29,8 @@ def fetch_articles_from_api_1(topics, keywords):
                             'contents': article.get('content', ''),
                             'url': article.get('url'),
                             'urlToImage': article.get('urlToImage'),
+                            'topic': topics[0],
+                            'keyword': keywords,
                         }
                     )
                     all_articles.append(new_article)
@@ -66,6 +68,8 @@ def fetch_articles_from_api_2(topics, keywords):
                             'description': article['description'],
                             'url': article.get('url'), 
                             'urlToImage': article.get('image'),
+                            'topic': topics[0],
+                            'keyword': keywords,
                         })
             else:
                 return -1
@@ -109,6 +113,8 @@ def fetch_articles_from_api_3(topics, keywords):
                             'contents': article.get('content', ''),
                             'url': article.get('url'),
                             'urlToImage': article.get('image'),
+                            'topic': topics[0],
+                            'keyword': keywords,
                         }
                     )
                     all_articles.append(new_article)

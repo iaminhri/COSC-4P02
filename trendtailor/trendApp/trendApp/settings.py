@@ -33,8 +33,6 @@ GNEWS_API_KEY = config('GNEWS_API_KEY',default=None)
 CURRENT_API_KEY=config('CURRENT_API_KEY',default=None)
 NEWS_DATA_API=config("NEWS_DATA_API",default=None)
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trendApp',
     'UserPreferenceApp',
-    'accountsApp'
+    'accountsApp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +57,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 ROOT_URLCONF = 'trendApp.urls'
 
@@ -127,20 +132,25 @@ USE_TZ = True
 import os
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS=(os.path.join('static'),)
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Development static path
+]
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Collected files for production
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "iamin.hri@gmail.com"  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = "brha ydph alga alew"  # Not your normal password, use an App Password!
+EMAIL_HOST_PASSWORD = ""  # Not your normal password, use gmail App Password!

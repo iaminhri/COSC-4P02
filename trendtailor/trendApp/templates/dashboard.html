@@ -25,65 +25,70 @@
     </style>
 {% endblock head %}
 
+{% block sidebar %}
+    <nav class="col-12 col-md-3 col-lg-2 d-md-block bg-dark bg-gradient sidebar py-3">
+        <div class="position-sticky">
+            <a href="/" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
+                <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded" style="max-width: 150px;">
+            </a>
+            <hr class="text-secondary">
+            <ul class="nav nav-pills flex-column mb-auto px-3">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}">
+                        <i class="bi bi-house-door me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'profile' %}" class="nav-link text-white {% if request.path == '/accounts/profile/' %}active{% endif %}">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}">
+                        <i class="bi bi-speedometer2 me-2"></i> Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}">
+                        <i class="bi bi-table me-2"></i> User Preferences
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/accounts/summarization/' %}active{% endif %}">
+                        <i class="bi bi-grid me-2"></i> Summarize Content
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'archived_contents' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Archived Contents
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'preview_content' %}" class="nav-link text-white {% if request.path == '/preview/' %}active{% endif %}">
+                        <i class="bi bi-archive me-2"></i> Preview
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock sidebar %}
+
 {% block body %}   
 <body class="bg-dark text-light">
     <div class="container-fluid">
         <div class="row">
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark bg-gradient position-fixed vh-100" style="width: 250px;">
-                <!-- Sidebar Header -->
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 text-white text-decoration-none">
-                    <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded mb-3" style="max-width: 150px;">
-                </a>
-                
-                <hr>
-                
-                <!-- Navigation Menu -->
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}" id="dashboard-link">
-                            <i class="bi bi-house-door me-2"></i> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/content_view/' %}active{% endif %}" id="contents-link">
-                            <i class="bi bi-speedometer2 me-2"></i> Contents
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}" id="preferences-link">
-                            <i class="bi bi-table me-2"></i> User Preferences
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/summarize/' %}active{% endif %}" id="summarize-link">
-                            <i class="bi bi-grid me-2"></i> Summarize Content
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/templates/' %}active{% endif %}" id="templates-link">
-                            <i class="bi bi-people me-2"></i> Templates
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}" id="archived-link">
-                            <i class="bi bi-people me-2"></i> Archived Contents
-                        </a>
-                    </li>
-                </ul>
-                
-                <hr>
-            </div>
             
             <!-- Main Content -->
-            <div class="col ms-5">
-                <!-- Existing Content -->
-                <div class="container mt-2">
+            <main class="col py-3">
+                <div class="container">
                     <div class="row">
+                        <!-- Preferences -->
                         <div class="col-md-6 mb-3">
                             <div class="card bg-secondary text-white">
                                 <div class="card-body">
                                     <h5 class="card-title">User Preferences</h5>
-                                    <div class="card-group">
+                                    <div class="card-group mt-3">
+                                        <!-- Each Preference Card -->
                                         <div class="card text-white bg-dark mb-3">
                                             <div class="card-header">News Sources</div>
                                             <div class="card-body text-info">
@@ -104,38 +109,64 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{% url 'preferences' %}" method="POST" class="needs-validation">
+                                <form action="{% url 'preferences' %}" method="POST">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary w-100">Edit Preferences</button>
+                                    <button type="submit" class="btn btn-primary mt-2 w-100">Edit Preferences</button>
                                 </form>
                             </div>
                         </div>
+
+                        <!-- Scheduled Content -->
                         <div class="col-md-6 mb-3">
                             <div class="card bg-secondary text-white">
                                 <div class="card-body">
-                                    <h5 class="card-title">Performance Monitoring</h5>
+                                    <h5 class="card-title">Scheduled Content</h5>
+                                    <table class="table table-dark table-striped mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Content Topics</th>
+                                                <th>Scheduled Date</th>
+                                                <th>Repeat</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for schedule in scheduled_contents %}
+                                                <tr>
+                                                    <td>{{ schedule.article.title }}</td>
+                                                    <td>{{ schedule.schedule_date|date:"F jS, Y \\a\\t g:i A" }}</td>
+                                                    <td>{{ schedule.get_repeat_option_display|title }}</td>
+                                                    <td>
+                                                        <button class="btn btn-warning btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                                data-id="{{ schedule.id }}"
+                                                                data-date="{{ schedule.schedule_date|date:'Y-m-d\TH:i' }}"
+                                                                data-repeat="{{ schedule.repeat_option }}">Edit</button>
+                                                        <form method="POST" action="{% url 'delete_schedule' schedule.id %}" class="d-inline">
+                                                            {% csrf_token %}
+                                                            <button class="btn btn-danger btn-sm">Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#scheduleModal">
+                                        Schedule Content
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-                            </div>
+                    <!-- Article Cards -->
+                    <section class="container-fluid">
+                        <div class="row mb-3">
+                            <h2 class="text-center">My Preferred Articles</h2>
                         </div>
-                    </div>
-                    
-                    <section class="container-fluid my-4 px-1">
-                        <div class="row ">
-                            <h2 class="text-center mb-4">My Preferred Articles</h2>
-                        </div>
-                        <div class="row">
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                             {% for article in articles %}
-                                <div class="col-md-4">
-                                    <div class="card shadow-sm bg-dark bg-gradient text-white" style='border: 8px solid #000;'>
+                                <div class="col">
+                                    <div class="card shadow-sm bg-dark text-white h-100">
                                         {% if article.urlToImage %}
                                             <div class="ratio ratio-16x9">
                                                 <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
@@ -145,48 +176,50 @@
                                                 <img src="{% static 'images/TrendTailor.png' %}" class="card-img-top" alt="{{ article.title }}" style="object-fit: cover;">
                                             </div>
                                         {% endif %}
-                                        <div class="card-body">
-                                            <h5 class="card-title text-truncate">{{ article.title }}</h5>
-                                            <p class="card-text">{{ article.description|truncatechars:70 }}</p>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                                <div> 
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle ms-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-share"></i> Share
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li>
-                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
-                                                                    <i class="fa fa-plus-circle"></i> Select Templates
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="dropdown-item share-btn" data-title="{{ article.title }}" data-url="{{ article.url }}">
-                                                                    <i class="fa fa-share"></i> Share Via
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-
-                                                    <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                                        <i class="fa fa-thumbs-up"></i> Like
+                                        <div class="card-body d-flex flex-column justify-content-between">
+                                            <div>
+                                                <h5 class="card-title text-truncate">{{ article.title }}</h5>
+                                                <p class="card-text">{{ article.description|truncatechars:70 }}</p>
+                                            </div>
+                                            <div>
+                                                <a href="{{ article.url }}" class="btn btn-primary mt-1">Read More</a>
+                                                <!-- Action Buttons -->
+                                                <div class="btn-group mt-1 mx-1">
+                                                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                                        <i class="fa fa-share"></i> Share
                                                     </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}"><i class="fa fa-plus-circle"></i> Select Templates</button></li>
+                                                        <li><button type="button" class="dropdown-item share-btn" data-title="{{ article.title }}" data-url="{{ article.url }}"><i class="fa fa-share"></i> Share Via</button></li>
+                                                    </ul>
                                                 </div>
+                                                <button class="btn btn-outline-light btn-sm ms-2 mx-1 mt-1"><i class="fa fa-thumbs-up"></i> Like</button>
+                                                <button class="btn btn-outline-light btn-sm ms-2 archive-btn mt-1"
+                                                    data-title="{{ article.title }}"
+                                                    data-content="{{ article.description|default_if_none:'' }}"
+                                                    data-image-url="{{ article.urlToImage|default_if_none:'' }}"
+                                                    data-url="{{ article.url }}"
+                                                    data-platform="dashboard"
+                                                    data-original-id="{{ article.id }}">
+                                                    <i class="fa fa-save"></i> Archive
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}               
+                            {% endfor %}
                         </div>
-                        <br>
-                        <form action="{% url 'content_view' %}" method="POST" class="d-flex justify-content-center" class="needs-validation d-flex justify-content-center">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Show More</button>
-                        </form>            
+
+                        <!-- Show More Button -->
+                        <div class="row mt-4 justify-content-center">
+                            <form action="{% url 'content_view' %}" method="POST" class="col-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Show More</button>
+                            </form>
+                        </div>
                     </section>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 
@@ -230,6 +263,73 @@
             </div>
         </div>
     {% endfor %}
+
+    <!-- Schedule Modal -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title">Schedule Content</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="scheduleDate" class="form-label">Select Date & Time</label>
+                            <input type="datetime-local" class="form-control" id="scheduleDate" name="schedule_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="repeatOption" class="form-label">Repeat</label>
+                            <select class="form-select" id="repeatOption" name="repeat_option">
+                                <option value="none">No Repeat</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contentSelect" class="form-label">Select Content</label>
+                            <select class="form-select" id="contentSelect" name="content_id">
+                                {% for article in articles %}
+                                <option value="{{ article.id|default_if_none:0 }}">{{ article.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Schedule</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Schedule Modal -->
+    <div id="editModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="schedule_id" id="editScheduleId">
+                        <label for="editScheduleDate">New Date & Time:</label>
+                        <input type="datetime-local" name="schedule_date" id="editScheduleDate" class="form-control">
+                        <label for="editRepeatOption">Repeat Option:</label>
+                        <select name="repeat_option" id="editRepeatOption" class="form-select">
+                            <option value="none">None</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Floating Email Share Modal -->
     <div id="customShareModal" class="custom-modal d-none">
@@ -300,7 +400,7 @@
             </div>
         </div>
     </div>
-
+    
     <style>
        
         .custom-modal {
@@ -560,8 +660,114 @@
                 });
                 return cookieValue;
             }
+
+             // --- Second Script (Schedule Form Submission) ---
+            const scheduleForm = document.getElementById("scheduleForm");
+            if (scheduleForm) {
+                scheduleForm.addEventListener("submit", function(event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(this);
+                    let csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+                    fetch("{% url 'schedule_content' %}", {
+                        method: "POST",
+                        headers: { "X-CSRFToken": csrfToken },
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Content Scheduled Successfully!");
+                            location.reload();
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                });
+            }
+
+            // --- Edit Modal Script ---
+            const editButtons = document.querySelectorAll(".edit-button");
+            const editScheduleId = document.getElementById("editScheduleId");
+            const editScheduleDate = document.getElementById("editScheduleDate");
+            const editRepeatOption = document.getElementById("editRepeatOption");
+            const editModalElement = document.getElementById("editModal");
+
+            if (editModalElement) {
+                const editModal = new bootstrap.Modal(editModalElement);
+
+                editButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        editScheduleId.value = this.getAttribute("data-id");
+                        editScheduleDate.value = this.getAttribute("data-date");
+                        editRepeatOption.value = this.getAttribute("data-repeat");
+                    });
+                });
+
+                document.getElementById("editForm").addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(this);
+                    let csrfToken = formData.get("csrfmiddlewaretoken");
+
+                    fetch("{% url 'edit_schedule' %}", {
+                        method: "POST",
+                        headers: { "X-CSRFToken": csrfToken },
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Schedule Updated!");
+
+                            const row = document.querySelector(`[data-id="${editScheduleId.value}"]`).closest("tr");
+                            row.children[1].textContent = data.new_date;
+                            row.children[2].textContent = data.repeat;
+
+                            editModal.hide();
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                });
+            }
+
+            // --- Archive Button Logic ---
+            document.querySelectorAll(".archive-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const title = this.getAttribute("data-title");
+                    const content = this.getAttribute("data-content");
+                    const platform = this.getAttribute("data-platform");
+                    const csrfToken = getCSRFToken();
+                    const image_url = this.getAttribute("data-image-url");
+                    const url = this.getAttribute("data-url");
+                    const original_id = this.getAttribute("data-original-id");
+
+                    fetch("{% url 'archive_content' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&platform=${platform}&image_url=${encodeURIComponent(image_url)}&url=${encodeURIComponent(url)}&original_id=${original_id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            alert("✅ Archived successfully!");
+                        } else {
+                            alert("❌ Failed to archive.");
+                        }
+                    })
+                    .catch(error => console.error("Error archiving:", error));
+                });
+            });
+
+
         });
     </script>
-
 </body>
 {% endblock body %}

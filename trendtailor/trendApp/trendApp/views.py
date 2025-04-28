@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
-from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_3
+from UserPreferenceApp.utils import fetch_articles_from_api_1, fetch_articles_from_api_2, fetch_articles_from_api_3
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
@@ -15,11 +15,58 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import os
+from .models import ArchivedContent
+from django.views.decorators.http import require_GET
+from xhtml2pdf import pisa
+import requests
+from io import BytesIO
+from tempfile import mkdtemp
+from .models import ArchivedContent
+from django.templatetags.static import static
+from django.utils.html import escape
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from .models import SubscribedUsers
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from deep_translator import GoogleTranslator
+from UserPreferenceApp.models import Article, ArticleFrench
+
+def subscribeToChannel(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', None)
+
+        if not email:
+            messages.error(request, "You must type legit email address to subscribe to the news channel")
+            return redirect('/')
+        
+        if get_user_model().objects.filter(email=email).first():
+            messages.error(request, f"Found registered user with associated {email} email. You must login to subscribe or unsubscribe.")
+            return redirect(request.META.get("HTTP_REFERER", '/'))
+        
+        subscribe_users = SubscribedUsers.objects.filter(email=email).first()
+
+        if subscribe_users:
+            messages.error(request, f"{email} email address is already subscribed.")
+            return redirect(request.META.get("HTTP_REFERER", '/'))
+        
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            messages.error(request, e.messages[0])
+            return redirect('/')
+        
+        subscribe_model_instance = SubscribedUsers()
+        subscribe_model_instance.email = email
+        subscribe_model_instance.save()
+
+        messages.success(request, f'{email} email was subscribed to our newsletter!')
+        return redirect(request.META.get("HTTP_REFERER", '/'))
 
 def home(request):
     topics_and_keywords = {
-        "Artificial": ["Artificial", "Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
-        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],        
+        "Artificial": ["Artificial", "Intelligence", "AI", "Research", "University", "Medical", "Stock", "Market"],
+        "technology": ["web", "development", "softwares", "Blockchain", "Cyber Security", "Internet of Things", "Machine Learning"],
         "Science": ["Experiment", "Theory"],
         "Technology": ["Innovation", "Gadgets"],
         "Health": ["Wellness", "Medicine"],
@@ -39,6 +86,24 @@ def home(request):
         "Fashion": ["Trends", "Designers", "Runways", "Sustainable Fashion"]
     }
 
+    topics_and_keywords_2 = {
+        "Astronomy": ["Stars", "Galaxies", "Telescopes", "Black Holes", "Planets"],
+        "Gaming": ["Console", "PC", "Multiplayer", "Esports", "Game Development"],
+        "Music": ["Genres", "Instruments", "Composers", "Albums", "Live Performances"],
+        "History": ["Ancient", "Medieval", "Wars", "Civilizations", "Revolutions"],
+        "Finance": ["Investments", "Banking", "Cryptocurrency", "Budgeting", "Taxes"],
+        "Mythology": ["Greek", "Norse", "Egyptian", "Legends", "Gods"],
+        "Engineering": ["Mechanical", "Electrical", "Civil", "Design", "Automation"],
+        "Photography": ["Camera", "Exposure", "Composition", "Editing", "Lenses"],
+        "Law": ["Constitution", "Contracts", "Justice", "Human Rights", "Court"],
+        "Agriculture": ["Farming", "Crops", "Irrigation", "Soil", "Harvest"],
+        "Architecture": ["Design", "Structures", "Urban Planning", "Landscaping", "Blueprints"],
+        "Languages": ["Grammar", "Vocabulary", "Translation", "Linguistics", "Bilingual"],
+        "Oceanography": ["Marine Life", "Coral Reefs", "Tides", "Currents", "Exploration"],
+        "Transportation": ["Logistics", "Aviation", "Shipping", "Public Transit", "Autonomous Vehicles"],
+        "Philosophy": ["Ethics", "Existence", "Logic", "Metaphysics", "Aesthetics"]
+    }
+
     # for topics, keywords in topics_and_keywords.items():
     #     articles = fetch_articles_from_api_1([topics], keywords)
 
@@ -46,64 +111,77 @@ def home(request):
     #     articles = fetch_articles_from_api_2([topics], keywords)
 
     # for topics, keywords in topics_and_keywords.items():
-    #     articles = fetch_articles_from_api_3([topics], keywords)   
+    #     articles = fetch_articles_from_api_3([topics], keywords)  
 
-    articles = Article.objects.all().order_by("id")  #  Ensure consistent ordering
+    lang = request.GET.get('lang', 'en')
+    article_name = request.GET.get('q')
 
-    paginator = Paginator(articles, 50)
-    page_number = request.GET.get("p", 1)
-    articlePageObj = paginator.get_page(page_number)
-
-    # Fetch user preferences if authenticated
-    if request.user.is_authenticated:
-        try:
-            user_pref = UserPreference.objects.get(user=request.user)
-            preferences = user_pref.topics.split(",")  #  Extract topics list
-        except UserPreference.DoesNotExist:
-            preferences = []
+    if lang == 'fr':
+        articles = ArticleFrench.objects.all()
+        if article_name:
+            articles = articles.filter(title__icontains=article_name)
     else:
-        preferences = []
+        articles = Article.objects.all()
+        if article_name:
+            articles = articles.filter(title__icontains=article_name)
 
-    #  Ensure preferences are passed correctly
-    return render(request, "home.html", {"articles": articlePageObj, "preferences": preferences})
+    paginator = Paginator(articles, 52)
+    pageNumber = request.GET.get('p', 1)
+    articlePageObj = paginator.get_page(pageNumber)
+
+    return render(request, "home.html", {
+        "articles": articlePageObj,
+        "lang": lang
+    })
 
 def fetch_all_articles():
-    all_articles = Article.objects.all()
-    return all_articles
+    return Article.objects.all().order_by("id")  
 
-def check_articles(user, topics, keywords):    
+def check_articles(user, topics, keywords):
     query = Q()
-    # Assuming topics and keywords are lists
     for term in topics + keywords:
         query |= Q(title__icontains=term) | Q(description__icontains=term)
-    
+
     existingArticles = Article.objects.filter(query)
+    return list(existingArticles) if existingArticles.exists() else []
 
-    if existingArticles.exists():
-        articles_list = list(existingArticles)
-        return articles_list
-    else:
-        return []
-
-# Scrum 3 task1: Generate email template with newsletter
+# Email Template Views
 def email_template_1(request):
     return render(request, 'email_template_1.html')
+
 def email_template_2(request):
     return render(request, 'email_template_2.html')
+
 def email_template_3(request):
     return render(request, 'email_template_3.html')
+
 def email_template_4(request):
     return render(request, 'email_template_4.html')
+
 def email_template_5(request):
     return render(request, 'email_template_5.html')
 
 # Share article with email templates
 @xframe_options_exempt
 def share_email(request, article_id, template_id):
-    try:
-        article = Article.objects.get(id=article_id)
-    except Article.DoesNotExist:
-        return HttpResponse("Article not found", status=404)
+    is_archived = (request.GET.get("archived") == "1")
+    
+    if is_archived:
+        archived_obj = get_object_or_404(ArchivedContent, id=article_id)
+        article_data = {
+            "title": archived_obj.title,
+            "description": archived_obj.content, 
+            "urlToImage": archived_obj.image_url, 
+            "url": archived_obj.url,
+        }
+    else:
+        article_obj = get_object_or_404(Article, id=article_id)
+        article_data = {
+            "title": article_obj.title,
+            "description": article_obj.description,
+            "urlToImage": article_obj.urlToImage,  
+            "url": article_obj.url,
+        }
 
     template_map = {
         1: "share_email1.html",
@@ -113,15 +191,30 @@ def share_email(request, article_id, template_id):
         5: "share_email5.html",
         6: "share_email6.html",
     }
-    
-    template_name = template_map.get(template_id, "share_email1.html") 
-    return render(request, template_name, {"article": article})
+    chosen_template = template_map.get(template_id, "share_email1.html")
+    return render(request, chosen_template, {"article": article_data})
 
 def get_template_content(request, article_id, template_id):
-    """Fetches the full HTML content of an email template."""
-    article = get_object_or_404(Article, id=article_id)
+    # Check if the request is for an archived record
+    is_archived = (request.GET.get("archived") == "1")
+    
+    if is_archived:
+        archived_obj = get_object_or_404(ArchivedContent, id=article_id)
+        article_data = {
+            "title": archived_obj.title,
+            "description": archived_obj.content,
+            "urlToImage": archived_obj.image_url,
+            "url": archived_obj.url,
+        }
+    else:
+        article_obj = get_object_or_404(Article, id=article_id)
+        article_data = {
+            "title": article_obj.title,
+            "description": article_obj.description,
+            "urlToImage": article_obj.urlToImage,
+            "url": article_obj.url,
+        }
 
-    # Map template IDs to template filenames
     template_map = {
         "1": "share_email1.html",
         "2": "share_email2.html",
@@ -130,17 +223,16 @@ def get_template_content(request, article_id, template_id):
         "5": "share_email5.html",
         "6": "share_email6.html",
     }
-    
-    template_name = template_map.get(str(template_id), "share_email1.html") 
+    template_name = template_map.get(str(template_id), "share_email1.html")
 
     try:
-        email_html_content = render_to_string(template_name, {"article": article})
-    except:
+        email_html_content = render_to_string(template_name, {"article": article_data})
+    except Exception as e:
         email_html_content = "<p>Error loading template</p>"
 
     return JsonResponse({
-        "title": article.title,
-        "url": article.url,
+        "title": article_data["title"],
+        "url": article_data["url"],
         "html_content": email_html_content
     })
 
@@ -284,3 +376,81 @@ def preview_content(request):
             "preview_html": None,
             "form_data": {}
         })
+    
+# Scrum10 - Task 31 33
+@login_required
+def archived_contents(request):
+    query = request.GET.get("q", "")
+    contents = ArchivedContent.objects.filter(user=request.user)
+
+    if query:
+        contents = contents.filter(title__icontains=query)
+
+    return render(request, "accounts/archived_contents.html", {"contents": contents, "query": query})
+
+@login_required
+def archive_content(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        platform = request.POST.get("platform", "newsletter")
+        image_url = request.POST.get("image_url") 
+        url = request.POST.get("url")
+        original_article_id = request.POST.get("original_id")
+
+        ArchivedContent.objects.create(
+            user=request.user,
+            title=title,
+            content=content,
+            platform=platform,
+            image_url=image_url,
+            url=url
+        )
+        return JsonResponse({"status": "success"})
+
+    return JsonResponse({"status": "failed"}, status=400)
+
+@login_required
+def unarchive_content(request, content_id):
+    if request.method == "POST":
+        ArchivedContent.objects.filter(id=content_id, user=request.user).delete()
+        return JsonResponse({"status": "success"}) 
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def link_callback(uri, rel):
+    if uri.startswith('file://'):
+        return uri[7:]
+    return uri
+
+@login_required
+def export_archived_contents_pdf(request):
+    contents = ArchivedContent.objects.filter(user=request.user).order_by("-created_at")
+    temp_dir = mkdtemp()
+
+    for content in contents:
+        if content.image_url:
+            try:
+                response = requests.get(content.image_url)
+                if response.status_code == 200:
+                    ext = content.image_url.split('.')[-1].split('?')[0]
+                    file_name = f"{content.id}.{ext}"
+                    file_path = os.path.join(temp_dir, file_name)
+                    with open(file_path, 'wb') as f:
+                        f.write(response.content)
+                    content.local_image_path = file_path  
+                else:
+                    content.local_image_path = None
+            except Exception as e:
+                print("Image download failed:", e)
+                content.local_image_path = None
+        else:
+            content.local_image_path = None
+
+    html = render_to_string("pdf_all_archived.html", {"contents": contents})
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="archived_contents.pdf"'
+    pisa.CreatePDF(BytesIO(html.encode("utf-8")), dest=response, link_callback=link_callback)
+    return response
+
+

@@ -1,5 +1,53 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
 {% load static %} 
+    {% block sidebar %}
+        <nav class="col-12 col-md-3 col-lg-2 d-md-block bg-dark bg-gradient sidebar py-3">
+            <div class="position-sticky">
+                <a href="/" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
+                    <img src="{% static 'images/TrendTailor_white.png' %}" alt="TrendTailor Logo" class="img-fluid rounded" style="max-width: 150px;">
+                </a>
+                <hr class="text-secondary">
+                <ul class="nav nav-pills flex-column mb-auto px-3">
+                    <li class="nav-item">
+                        <a href="{% url 'dashboard' %}" class="nav-link text-white {% if request.path == '/accounts/dashboard/' %}active{% endif %}">
+                            <i class="bi bi-house-door me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile' %}" class="nav-link text-white {% if request.path == '/accounts/profile/' %}active{% endif %}">
+                            <i class="bi bi-person me-2"></i> Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'content_view' %}" class="nav-link text-white {% if request.path == '/user/contents/' %}active{% endif %}">
+                            <i class="bi bi-speedometer2 me-2"></i> Contents
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'preferences' %}" class="nav-link text-white {% if request.path == '/preferences/' %}active{% endif %}">
+                            <i class="bi bi-table me-2"></i> User Preferences
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'summarization' %}" class="nav-link text-white {% if request.path == '/accounts/summarization/' %}active{% endif %}">
+                            <i class="bi bi-grid me-2"></i> Summarize Content
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'archived_contents' %}" class="nav-link text-white {% if request.path == '/archived/' %}active{% endif %}">
+                            <i class="bi bi-archive me-2"></i> Archived Contents
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'preview_content' %}" class="nav-link text-white {% if request.path == '/preview/' %}active{% endif %}">
+                            <i class="bi bi-archive me-2"></i> Preview
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    {% endblock sidebar %}
+
     {% block body %}   
         <!-- Featured Content -->
         <section class="container-fluid my-4 px-5">
@@ -25,7 +73,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
                                     <div> 
-                                        <div class="btn-group">
+                                        <div class="btn-group mt-2">
                                             <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle ms-2" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-share"></i> Share
                                             </button>
@@ -43,9 +91,21 @@
                                             </ul>
                                         </div>
 
-                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
+                                        <button class="btn btn-outline-light btn-sm ms-2 mt-2" onclick="" aria-label="Like">
                                             <i class="fa fa-thumbs-up"></i> Like
                                         </button>
+
+                                        <!--Scrum 10 Task 31 Archive section-->
+                                        <button class="btn btn-outline-light btn-sm ms-2 archive-btn mt-2"
+                                            data-title="{{ article.title }}"
+                                            data-content="{{ article.description|default_if_none:'' }}"
+                                            data-image-url="{{ article.urlToImage|default_if_none:'' }}"
+                                            data-url="{{ article.url }}"
+                                            data-platform="dashboard"
+                                            data-original-id="{{ article.id }}">
+                                            <i class="fa fa-save"></i> Archive
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -455,6 +515,37 @@
                 });
                 return cookieValue;
             }
+
+            // --- Archive Button Logic ---
+            document.querySelectorAll(".archive-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const title = this.getAttribute("data-title");
+                    const content = this.getAttribute("data-content");
+                    const platform = this.getAttribute("data-platform");
+                    const csrfToken = getCSRFToken();
+                    const image_url = this.getAttribute("data-image-url");
+                    const url = this.getAttribute("data-url");
+                    const original_id = this.getAttribute("data-original-id");
+
+                    fetch("{% url 'archive_content' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&platform=${platform}&image_url=${encodeURIComponent(image_url)}&url=${encodeURIComponent(url)}&original_id=${original_id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            alert("✅ Archived successfully!");
+                        } else {
+                            alert("❌ Failed to archive.");
+                        }
+                    })
+                    .catch(error => console.error("Error archiving:", error));
+                });
+            });
         });
     </script>
 
