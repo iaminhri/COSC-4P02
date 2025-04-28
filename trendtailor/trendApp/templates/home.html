@@ -40,9 +40,10 @@
                                 <p class="card-text">{{ article.description|truncatechars:70 }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="{{ article.url }}" class="btn btn-primary">Read More</a>
-                                    <div> 
+                                    <div class="d-flex align-items-center flex-wrap gap-2 mt-2">
+                                        <!-- Share Button Dropdown -->
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle ms-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-share"></i> Share
                                             </button>
                                             <ul class="dropdown-menu">
@@ -59,12 +60,25 @@
                                             </ul>
                                         </div>
 
-                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="" aria-label="Like">
-                                            <i class="fa fa-thumbs-up"></i> Like
-                                        </button>
+                                        <!-- Like Button and Count -->
+                                        <form method="POST" action="{% url 'like' %}" class="d-flex align-items-center">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="article_id" value="{{ article.id }}">
+                                            
+                                            <button type="submit" class="btn btn-outline-light btn-sm d-flex align-items-center">
+                                                <i class="fa fa-thumbs-up me-1"></i> Like
+                                                <span id="like-count-{{ article.id }}" class="badge bg-light text-dark ms-2">
+                                                    {% if lang == "fr" %}
+                                                        {{ article.likes_article_french.count }}
+                                                    {% else %}
+                                                        {{ article.likes_article.count }}
+                                                    {% endif %}
+                                                </span>
+                                            </button>
+                                        </form>
 
-                                        <!--Scrum 10 Task 31 Archive section-->
-                                        <button class="btn btn-outline-light btn-sm ms-2 archive-btn"
+                                        <!-- Archive Button -->
+                                        <button class="btn btn-outline-light btn-sm archive-btn"
                                             data-title="{{ article.title }}"
                                             data-content="{{ article.description|default_if_none:'' }}"
                                             data-image-url="{{ article.urlToImage|default_if_none:'' }}"
@@ -73,7 +87,6 @@
                                             data-original-id="{{ article.id }}">
                                             <i class="fa fa-save"></i> Archive
                                         </button>
-
                                     </div>
                                 </div>
                             </div>

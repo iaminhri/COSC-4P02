@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import JSONField
+from django.conf import settings
 
 class UserPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -30,6 +31,13 @@ class Article(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True) 
     topic = models.CharField(max_length=200, default='news')
     keyword = models.JSONField(default=list, blank=True, null=True)
+
+    # Many-to-Many Relationship
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='LikedBy',
+        related_name='liked_articles'
+    )
     
     def __str__(self):
         return self.title
@@ -44,8 +52,38 @@ class ArticleFrench(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     topic = models.CharField(max_length=200)
 
+    # Many-to-Many Relationship
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='LikedBy',
+        related_name='liked_articles_french'
+    )
+
     def __str__(self):
         return self.title
+    
+class LikedBy(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likes_user'
+    )
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, blank=True, 
+        null=True, related_name='likes_article'
+    )
+    article_french = models.ForeignKey(
+        ArticleFrench, on_delete=models.CASCADE, 
+        blank=True, null=True,
+        related_name='likes_article_french'
+    )
+    liked_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.article:
+            return f"{self.user.username} liked {self.article.title} (EN)"
+        elif self.article_french:
+            return f"{self.user.username} liked {self.article_french.title} (FR)"
+        else:
+            return f"{self.user.username} liked unknown article"
 
 class ScheduledContent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

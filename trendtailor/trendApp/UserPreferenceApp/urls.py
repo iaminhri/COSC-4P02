@@ -12,4 +12,5 @@ urlpatterns = [
     path('user/contents/', views.user_contents, name='content_view'),
     path('news-api/', views.aggregate_content, name='news_api_view'),
     path('api/', include(router.urls)),
+    path('like/', views.like_post, name="like"),
 ]

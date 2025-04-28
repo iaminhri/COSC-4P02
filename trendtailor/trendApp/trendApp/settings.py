@@ -153,4 +153,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "iamin.hri@gmail.com"  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = ""  # Not your normal password, use gmail App Password!
+EMAIL_HOST_PASSWORD = "fbzi qsfp yegz dvhr"  # Not your normal password, use gmail App Password!
+
+
+RUN_SERVER_TASKS = True

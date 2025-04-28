@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from UserPreferenceApp.models import Article
 from django.utils import timezone
+from django.conf import settings
 
 class ArchivedContent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

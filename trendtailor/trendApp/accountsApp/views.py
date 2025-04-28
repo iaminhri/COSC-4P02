@@ -15,6 +15,8 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import UploadedFile
 from .summarization import summarize_article
+from django.db.models import Count
+
 # ✅ Registration View
 def register(request):  
     if request.user.is_authenticated:
@@ -158,61 +160,53 @@ def auth_logout(request):
     logout(request)
     return redirect('login')
 
-# Schedule Content View 
 @login_required
 def schedule_content(request):
-    if request.method == "POST":
-        print("RAW POST Data:", request.POST)
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method."}, status=400)
 
-        content_id = request.POST.get("content_id")
-        print(f"Received content_id before processing: {repr(content_id)}")
+    schedule_date_str = request.POST.get("schedule_date")
+    repeat_option = request.POST.get("repeat_option", "none").lower()
 
-        schedule_date = request.POST.get("schedule_date")
-        repeat_option = request.POST.get("repeat_option", "none")
+    if not schedule_date_str:
+        return JsonResponse({"error": "Missing schedule date."}, status=400)
 
-        if not content_id or not schedule_date:
-            return JsonResponse({"error": "Missing content ID or schedule date"}, status=400)
-
+    try:
+        # Parse the datetime safely
         try:
-            content_id = content_id.strip().replace("'", "").replace('"', '')  
-            if not content_id.isdigit():
-                return JsonResponse({"error": f"Invalid article ID format: '{content_id}'"}, status=400)
+            schedule_date = timezone.make_aware(datetime.strptime(schedule_date_str, "%Y-%m-%dT%H:%M"))
+        except ValueError:
+            return JsonResponse({"error": "Invalid date format. Expected format: YYYY-MM-DDTHH:MM"}, status=400)
 
-            article_id = int(content_id)
-            print(f"✅ Successfully converted to article_id: {article_id}")
-            article = get_object_or_404(Article, id=article_id)
-            print(f"✅ Fetched article: {article} (Type: {type(article)})")
+        # Fetch the Top 1 liked Article freshly
+        top_article = (Article.objects
+                       .annotate(like_count=Count('likes_article'))
+                       .order_by('-like_count')
+                       .first())
 
-            if not isinstance(article, Article):
-                raise TypeError(f"❌ Mismatch: Retrieved object is not a valid `Article` instance. Got {type(article)}")
+        if not top_article:
+            return JsonResponse({"error": "No articles available to schedule."}, status=404)
 
-            # Convert schedule_date to timezone-aware datetime
-            schedule_date = timezone.make_aware(datetime.strptime(schedule_date, "%Y-%m-%dT%H:%M"))
+        # Create the Scheduled Content
+        scheduled_content = ScheduledContent.objects.create(
+            user=request.user,
+            article=top_article,
+            schedule_date=schedule_date,
+            repeat_option=repeat_option
+        )
 
-            # Create the scheduled content
-            scheduled_content = ScheduledContent.objects.create(
-                user=request.user,
-                article=article,  
-                schedule_date=schedule_date,
-                repeat_option=repeat_option
-            )
+        return JsonResponse({
+            "success": True,
+            "message": "Content scheduled successfully!",
+            "article_title": top_article.title,
+            "schedule_date": scheduled_content.schedule_date.strftime("%B %d, %Y at %I:%M %p"),
+            "repeat_option": scheduled_content.get_repeat_option_display(),
+            "schedule_id": scheduled_content.id
+        })
 
-            return JsonResponse({
-                "success": True,
-                "article_title": article.title,
-                "schedule_date": schedule_date,
-                "repeat_option": scheduled_content.get_repeat_option_display(),
-                "schedule_id": scheduled_content.id
-            })
-
-        except TypeError as te:
-            print(f"❌ TypeError: {str(te)}")
-            return JsonResponse({"error": str(te)}, status=500)
-        except Exception as e:
-            print(f"❌ Unexpected Error: {str(e)}")
-            return JsonResponse({"error": str(e)}, status=500)
-
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    except Exception as e:
+        print(f"❌ Unexpected Error: {str(e)}")
+        return JsonResponse({"error": "An unexpected server error occurred."}, status=500)
 
 # Delete Scheduled Content
 @login_required

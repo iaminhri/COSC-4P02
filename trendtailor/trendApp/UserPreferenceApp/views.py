@@ -11,10 +11,40 @@ from .models import UserPreference
 from .forms import UserPreferenceForm
 from .utils import fetch_articles_from_api_1
 from django.db.models import Q
-from UserPreferenceApp.models import Article 
+from UserPreferenceApp.models import Article, ArticleFrench
 from rest_framework import viewsets
 from .serializers import ArticleSerializer
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from UserPreferenceApp.models import LikedBy
+
+@login_required
+def like_post(request):
+    if request.method == 'POST':
+        article_id = request.POST.get('article_id')
+        article = get_object_or_404(Article, id=article_id)
+        user = request.user
+
+        try:
+            article_french = article.french  
+        except ArticleFrench.DoesNotExist:
+            article_french = None
+
+        # Check if already liked
+        liked_obj = LikedBy.objects.filter(user=user, article=article).first()
+
+        if liked_obj:
+            # Unlike 
+            liked_obj.delete()
+        else:
+            # Like 
+            LikedBy.objects.create(
+                user=user,
+                article=article,
+                article_french=article_french  
+            )
+
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def preferences(request):
     if not request.user.is_authenticated:

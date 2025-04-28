@@ -124,7 +124,7 @@
                                     <table class="table table-dark table-striped mt-3">
                                         <thead>
                                             <tr>
-                                                <th>Content Topics</th>
+                                                <th>Top Liked Contents</th>
                                                 <th>Scheduled Date</th>
                                                 <th>Repeat</th>
                                                 <th>Actions</th>
@@ -181,20 +181,50 @@
                                                 <h5 class="card-title text-truncate">{{ article.title }}</h5>
                                                 <p class="card-text">{{ article.description|truncatechars:70 }}</p>
                                             </div>
-                                            <div>
-                                                <a href="{{ article.url }}" class="btn btn-primary mt-1">Read More</a>
-                                                <!-- Action Buttons -->
-                                                <div class="btn-group mt-1 mx-1">
+                                            <div class="d-flex align-items-center flex-wrap gap-2 mt-2">
+                                                <!-- Read More Button -->
+                                                <a href="{{ article.url }}" class="btn btn-primary btn-sm">
+                                                    Read More
+                                                </a>
+
+                                                <!-- Share Button Dropdown -->
+                                                <div class="btn-group">
                                                     <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                         <i class="fa fa-share"></i> Share
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}"><i class="fa fa-plus-circle"></i> Select Templates</button></li>
-                                                        <li><button type="button" class="dropdown-item share-btn" data-title="{{ article.title }}" data-url="{{ article.url }}"><i class="fa fa-share"></i> Share Via</button></li>
+                                                        <li>
+                                                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#shareModal-{{ article.id }}">
+                                                                <i class="fa fa-plus-circle"></i> Select Templates
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" class="dropdown-item share-btn" data-title="{{ article.title }}" data-url="{{ article.url }}">
+                                                                <i class="fa fa-share"></i> Share Via
+                                                            </button>
+                                                        </li>
                                                     </ul>
                                                 </div>
-                                                <button class="btn btn-outline-light btn-sm ms-2 mx-1 mt-1"><i class="fa fa-thumbs-up"></i> Like</button>
-                                                <button class="btn btn-outline-light btn-sm ms-2 archive-btn mt-1"
+
+                                                <!-- Like Button and Count -->
+                                                <form method="POST" action="{% url 'like' %}" class="d-flex align-items-center">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="article_id" value="{{ article.id }}">
+                                                    
+                                                    <button type="submit" class="btn btn-outline-light btn-sm d-flex align-items-center">
+                                                        <i class="fa fa-thumbs-up me-1"></i> Like
+                                                        <span id="like-count-{{ article.id }}" class="badge bg-light text-dark ms-2">
+                                                            {% if lang == "fr" %}
+                                                                {{ article.likes_article_french.count }}
+                                                            {% else %}
+                                                                {{ article.likes_article.count }}
+                                                            {% endif %}
+                                                        </span>
+                                                    </button>
+                                                </form>
+
+                                                <!-- Archive Button -->
+                                                <button class="btn btn-outline-light btn-sm archive-btn"
                                                     data-title="{{ article.title }}"
                                                     data-content="{{ article.description|default_if_none:'' }}"
                                                     data-image-url="{{ article.urlToImage|default_if_none:'' }}"
@@ -269,7 +299,7 @@
         <div class="modal-dialog">
             <div class="modal-content bg-dark text-light">
                 <div class="modal-header">
-                    <h5 class="modal-title">Schedule Content</h5>
+                    <h5 class="modal-title">Schedule Top Article</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -288,20 +318,13 @@
                                 <option value="monthly">Monthly</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="contentSelect" class="form-label">Select Content</label>
-                            <select class="form-select" id="contentSelect" name="content_id">
-                                {% for article in articles %}
-                                <option value="{{ article.id|default_if_none:0 }}">{{ article.title }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Schedule</button>
+                        <button type="submit" class="btn btn-success w-100">Schedule Top Article</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Edit Schedule Modal -->
     <div id="editModal" class="modal fade" tabindex="-1">

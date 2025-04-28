@@ -7,3 +7,5 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         result = email_top_article()
         self.stdout.write(self.style.SUCCESS(result))
+
+    
