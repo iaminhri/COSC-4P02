@@ -78,7 +78,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/iaminhri/COSC-4P02/blob/master/1.PNG)
+![Product Screenshot](https://raw.githubusercontent.com/iaminhri/COSC-4P02/master/1.PNG)
 
 ## Project Summary  
 
