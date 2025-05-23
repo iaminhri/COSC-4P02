@@ -230,9 +230,9 @@ Distributed under the Unlicense License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Your Name - [Hridoy Rahman](https://www.linkedin.com/in/hridoy-rahman/) - iamin.hri@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/iaminhri/COSC-4P02](https://github.com/iaminhri/COSC-4P02)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
